@@ -34,3 +34,7 @@ pnpm-debug.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Lemni local data (MCP token, audit log); .basboard/ is the folder before the rename
+/.lemni/
+/.basboard/

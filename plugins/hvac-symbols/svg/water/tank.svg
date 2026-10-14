@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 120" width="80" height="120" class="nx">
+<title>Tank</title>
+<style>
+.nx{--ink3:#A9B0B9;--face:#FFFFFF;--side:#DCE0E5;--shadow:#D3D8DE;--water:#3D8FE0}
+.nx.dk{--ink3:#59616B;--face:#242930;--side:#1A1D22;--shadow:#0B0D10;--water:#4FA3F7}
+.nx .sh{fill:var(--shadow)}
+.nx .fc{fill:var(--face)}
+.nx .so{fill:var(--side);stroke:var(--ink3);stroke-width:1.5;stroke-linejoin:round}
+.nx .ol{fill:none;stroke:var(--ink3);stroke-width:1.5;stroke-linejoin:round}
+.nx .hl{fill:none;stroke:var(--ink3);stroke-width:1}
+.nx .liq{fill:var(--water);transform-box:fill-box;transform-origin:50% 100%;transition:transform .6s}
+.nx .liq-b{transform:scaleY(min(1, var(--level,.6) * 8.611))}
+.nx .liq-s{transform:scaleY(max(0, var(--level,.6) * 1.1314 - .1314))}
+</style>
+<g class="body"><rect class="so" x="20" y="98" width="6" height="12" rx="1"/><rect class="so" x="54" y="98" width="6" height="12" rx="1"/><rect class="sh" x="14" y="14" width="60" height="94" rx="30" ry="12"/><rect class="fc" x="10" y="10" width="60" height="94" rx="30" ry="12"/><path class="liq liq-b" d="M14 92A26 9 0 0 0 66 92Z"/><rect class="liq liq-s" x="14" y="24" width="52" height="68.5"/><rect class="ol" x="10" y="10" width="60" height="94" rx="30" ry="12"/><line class="hl" x1="61" y1="40" x2="66" y2="40"/><line class="hl" x1="61" y1="58" x2="66" y2="58"/><line class="hl" x1="61" y1="76" x2="66" y2="76"/></g>
+</svg>

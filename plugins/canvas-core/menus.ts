@@ -1,0 +1,473 @@
+import {
+  newBoard,
+  openBoard,
+  saveBoard,
+  supportsFileAccess,
+} from "@/studio/files/board-files"
+import { pasteSpecialOpen } from "@/studio/editor/paste"
+import { isHidden, setHidden } from "@/studio/lib/shape-names"
+import type { MenuItemContribution } from "@/studio/plugins/types"
+import { studioState } from "@/studio/state"
+
+type Item = Omit<MenuItemContribution, "order"> & { order?: number }
+
+const items: Item[] = [
+  {
+    id: "file-new-board",
+    menu: "file",
+    group: "board",
+    label: "New board",
+    onSelect: ({ editor }) => void newBoard(editor),
+  },
+  {
+    id: "file-open",
+    menu: "file",
+    group: "board",
+    label: "Open…",
+    kbd: "cmd+o",
+    onSelect: ({ editor }) => void openBoard(editor),
+  },
+  {
+    id: "file-open-recent",
+    menu: "file",
+    group: "board",
+    label: "Open recent…",
+    disabled: () => !supportsFileAccess(),
+    onSelect: () => studioState.commandPalette.set("recent"),
+  },
+  {
+    id: "file-save",
+    menu: "file",
+    group: "save",
+    label: "Save",
+    kbd: "cmd+s",
+    onSelect: ({ editor }) => void saveBoard(editor),
+  },
+  {
+    id: "file-save-as",
+    menu: "file",
+    group: "save",
+    label: "Save as…",
+    kbd: "cmd+shift+s",
+    onSelect: ({ editor }) => void saveBoard(editor, { as: true }),
+  },
+  {
+    id: "file-new-page",
+    menu: "file",
+    group: "page",
+    label: "New page",
+    onSelect: ({ editor }) => {
+      const count = editor.getPages().length
+      editor.run(() => {
+        editor.createPage({ name: `Page ${count + 1}` })
+        const pages = editor.getPages()
+        editor.setCurrentPage(pages[pages.length - 1].id)
+      })
+    },
+  },
+  {
+    id: "file-export-png",
+    menu: "file",
+    group: "export",
+    label: "Export PNG",
+    action: "export-as-png",
+  },
+  {
+    id: "file-export-svg",
+    menu: "file",
+    group: "export",
+    label: "Export SVG",
+    action: "export-as-svg",
+  },
+  {
+    id: "file-print",
+    menu: "file",
+    group: "print",
+    label: "Print…",
+    action: "print",
+  },
+
+  {
+    id: "edit-undo",
+    menu: "edit",
+    group: "history",
+    label: "Undo",
+    action: "undo",
+    disabled: (e) => !e.getCanUndo(),
+  },
+  {
+    id: "edit-redo",
+    menu: "edit",
+    group: "history",
+    label: "Redo",
+    action: "redo",
+    disabled: (e) => !e.getCanRedo(),
+  },
+  {
+    id: "edit-cut",
+    menu: "edit",
+    group: "clipboard",
+    label: "Cut",
+    action: "cut",
+    disabled: (e) => !e.getSelectedShapeIds().length,
+  },
+  {
+    id: "edit-copy",
+    menu: "edit",
+    group: "clipboard",
+    label: "Copy",
+    action: "copy",
+    disabled: (e) => !e.getSelectedShapeIds().length,
+  },
+  {
+    id: "edit-paste",
+    menu: "edit",
+    group: "clipboard",
+    label: "Paste",
+    action: "paste",
+  },
+  {
+    id: "edit-paste-special",
+    menu: "edit",
+    group: "clipboard",
+    label: "Paste special…",
+    kbd: "cmd+shift+v",
+    onSelect: () => pasteSpecialOpen.set(true),
+  },
+  {
+    id: "edit-duplicate",
+    menu: "edit",
+    group: "clipboard",
+    label: "Duplicate",
+    action: "duplicate",
+    disabled: (e) => !e.getSelectedShapeIds().length,
+  },
+  {
+    id: "edit-delete",
+    menu: "edit",
+    group: "clipboard",
+    label: "Delete",
+    action: "delete",
+    disabled: (e) => !e.getSelectedShapeIds().length,
+  },
+  {
+    id: "edit-select-all",
+    menu: "edit",
+    group: "select",
+    label: "Select all",
+    action: "select-all",
+  },
+  {
+    id: "edit-select-none",
+    menu: "edit",
+    group: "select",
+    label: "Deselect",
+    action: "select-none",
+  },
+
+  {
+    id: "object-group",
+    menu: "object",
+    group: "group",
+    label: "Group",
+    action: "group",
+    disabled: (e) => e.getSelectedShapeIds().length < 2,
+  },
+  {
+    id: "object-ungroup",
+    menu: "object",
+    group: "group",
+    label: "Ungroup",
+    action: "ungroup",
+    disabled: (e) => !e.getSelectedShapes().some((s) => s.type === "group"),
+  },
+  {
+    id: "object-frame",
+    menu: "object",
+    group: "group",
+    label: "Frame selection",
+    action: "frame-selection",
+    disabled: (e) => !e.getSelectedShapeIds().length,
+  },
+  {
+    id: "object-lock",
+    menu: "object",
+    group: "lock",
+    label: "Lock / unlock",
+    action: "toggle-lock",
+    disabled: (e) => !e.getSelectedShapeIds().length,
+  },
+  {
+    id: "object-hide",
+    menu: "object",
+    group: "lock",
+    label: "Hide selection",
+    kbd: "cmd+shift+h",
+    disabled: (e) => !e.getSelectedShapeIds().length,
+    onSelect: ({ editor }) =>
+      setHidden(editor, editor.getSelectedShapeIds(), true),
+  },
+  {
+    id: "object-show-all",
+    menu: "object",
+    group: "lock",
+    label: "Show all hidden",
+    disabled: (e) =>
+      ![...e.getCurrentPageShapeIds()].some((id) => {
+        const shape = e.getShape(id)
+        return shape ? isHidden(shape) : false
+      }),
+    onSelect: ({ editor }) =>
+      setHidden(
+        editor,
+        [...editor.getCurrentPageShapeIds()].filter((id) => {
+          const shape = editor.getShape(id)
+          return shape ? isHidden(shape) : false
+        }),
+        false
+      ),
+  },
+  {
+    id: "object-unlock-all",
+    menu: "object",
+    group: "lock",
+    label: "Unlock all",
+    action: "unlock-all",
+  },
+  {
+    id: "object-flip-h",
+    menu: "object",
+    group: "transform",
+    label: "Flip horizontal",
+    action: "flip-horizontal",
+    disabled: (e) => !e.getSelectedShapeIds().length,
+  },
+  {
+    id: "object-flip-v",
+    menu: "object",
+    group: "transform",
+    label: "Flip vertical",
+    action: "flip-vertical",
+    disabled: (e) => !e.getSelectedShapeIds().length,
+  },
+  {
+    id: "object-rotate-cw",
+    menu: "object",
+    group: "transform",
+    label: "Rotate 90° clockwise",
+    action: "rotate-cw",
+    disabled: (e) => !e.getSelectedShapeIds().length,
+  },
+
+  {
+    id: "arrange-front",
+    menu: "arrange",
+    group: "order",
+    label: "Bring to front",
+    action: "bring-to-front",
+  },
+  {
+    id: "arrange-forward",
+    menu: "arrange",
+    group: "order",
+    label: "Bring forward",
+    action: "bring-forward",
+  },
+  {
+    id: "arrange-backward",
+    menu: "arrange",
+    group: "order",
+    label: "Send backward",
+    action: "send-backward",
+  },
+  {
+    id: "arrange-back",
+    menu: "arrange",
+    group: "order",
+    label: "Send to back",
+    action: "send-to-back",
+  },
+  {
+    id: "arrange-align-left",
+    menu: "arrange",
+    group: "align",
+    label: "Align left",
+    action: "align-left",
+  },
+  {
+    id: "arrange-align-center-h",
+    menu: "arrange",
+    group: "align",
+    label: "Align horizontal centers",
+    action: "align-center-horizontal",
+  },
+  {
+    id: "arrange-align-right",
+    menu: "arrange",
+    group: "align",
+    label: "Align right",
+    action: "align-right",
+  },
+  {
+    id: "arrange-align-top",
+    menu: "arrange",
+    group: "align",
+    label: "Align top",
+    action: "align-top",
+  },
+  {
+    id: "arrange-align-center-v",
+    menu: "arrange",
+    group: "align",
+    label: "Align vertical centers",
+    action: "align-center-vertical",
+  },
+  {
+    id: "arrange-align-bottom",
+    menu: "arrange",
+    group: "align",
+    label: "Align bottom",
+    action: "align-bottom",
+  },
+  {
+    id: "arrange-distribute-h",
+    menu: "arrange",
+    group: "distribute",
+    label: "Distribute horizontally",
+    action: "distribute-horizontal",
+  },
+  {
+    id: "arrange-distribute-v",
+    menu: "arrange",
+    group: "distribute",
+    label: "Distribute vertically",
+    action: "distribute-vertical",
+  },
+  {
+    id: "arrange-stack-h",
+    menu: "arrange",
+    group: "distribute",
+    label: "Stack horizontally",
+    action: "stack-horizontal",
+  },
+  {
+    id: "arrange-stack-v",
+    menu: "arrange",
+    group: "distribute",
+    label: "Stack vertically",
+    action: "stack-vertical",
+  },
+
+  {
+    id: "view-zoom-in",
+    menu: "view",
+    group: "zoom",
+    label: "Zoom in",
+    action: "zoom-in",
+  },
+  {
+    id: "view-zoom-out",
+    menu: "view",
+    group: "zoom",
+    label: "Zoom out",
+    action: "zoom-out",
+  },
+  {
+    id: "view-zoom-100",
+    menu: "view",
+    group: "zoom",
+    label: "Actual size",
+    action: "zoom-to-100",
+  },
+  {
+    id: "view-zoom-fit",
+    menu: "view",
+    group: "zoom",
+    label: "Zoom to fit",
+    action: "zoom-to-fit",
+  },
+  {
+    id: "view-zoom-selection",
+    menu: "view",
+    group: "zoom",
+    label: "Zoom to selection",
+    action: "zoom-to-selection",
+  },
+  {
+    id: "view-grid",
+    menu: "view",
+    group: "guides",
+    label: "Show grid",
+    action: "toggle-grid",
+    checked: (e) => e.getInstanceState().isGridMode,
+  },
+  {
+    id: "view-snap",
+    menu: "view",
+    group: "guides",
+    label: "Always snap",
+    action: "toggle-snap-mode",
+    checked: (e) => e.user.getIsSnapMode(),
+  },
+  {
+    id: "view-focus",
+    menu: "view",
+    group: "mode",
+    label: "Focus mode",
+    action: "toggle-focus-mode",
+    checked: (e) => e.getInstanceState().isFocusMode,
+  },
+  {
+    id: "view-reduce-motion",
+    menu: "view",
+    group: "mode",
+    label: "Reduce motion",
+    action: "toggle-reduce-motion",
+    checked: (e) => e.user.getAnimationSpeed() === 0,
+  },
+
+  {
+    id: "insert-media",
+    menu: "insert",
+    group: "files",
+    label: "Image or video…",
+    action: "insert-media",
+  },
+
+  {
+    id: "window-properties",
+    menu: "window",
+    group: "panels",
+    label: "Properties panel",
+    checked: () => studioState.rightPanelOpen.get(),
+    onSelect: () => studioState.rightPanelOpen.update((open) => !open),
+  },
+  {
+    id: "window-plugins",
+    menu: "window",
+    group: "plugins",
+    label: "Plugins…",
+    onSelect: () => studioState.pluginManagerOpen.set(true),
+  },
+
+  {
+    id: "help-command-palette",
+    menu: "help",
+    group: "help",
+    label: "Command palette",
+    kbd: "cmd+k",
+    onSelect: () => studioState.commandPalette.set("open"),
+  },
+  {
+    id: "help-shortcuts",
+    menu: "help",
+    group: "help",
+    label: "Keyboard shortcuts",
+    kbd: "shift+/",
+    onSelect: () => studioState.shortcutSheetOpen.set(true),
+  },
+]
+
+export const coreMenuItems: MenuItemContribution[] = items.map(
+  (item, index) => ({ order: index, ...item })
+)

@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" class="nx">
+<title>Centrifugal fan</title>
+<style>
+.nx{--ink2:#7B838E;--ink3:#A9B0B9;--face:#FFFFFF;--side:#DCE0E5;--shadow:#D3D8DE;--run:#15924E;--acc:var(--ink2)}
+.nx.dk{--ink2:#8B949F;--ink3:#59616B;--face:#242930;--side:#1A1D22;--shadow:#0B0D10;--run:#3CD38A}
+.m-run{--acc:var(--run);--acc-t:none}
+.nx .sh{fill:var(--shadow)}
+.nx .fo{fill:var(--face);stroke:var(--ink3);stroke-width:1.5;stroke-linejoin:round}
+.nx .so{fill:var(--side);stroke:var(--ink3);stroke-width:1.5;stroke-linejoin:round}
+.nx .d2{fill:none;stroke:var(--ink2);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.nx .hl{fill:none;stroke:var(--ink3);stroke-width:1}
+.nx .gh{fill:none;stroke:none}
+.nx .rotor,.nx .hand{transform-box:fill-box;transform-origin:center}
+.nx.ccw .hand{transform:scaleX(-1)}
+.nx.on .ac-s{stroke:var(--acc)}
+.nx.on .rotor{animation:nx-spin 1.5s linear infinite}
+.nx.on.ccw .rotor{animation-direction:reverse}
+@keyframes nx-spin{ to{transform:rotate(360deg)} }
+@media (prefers-reduced-motion:reduce){ .nx *{animation:none !important} }
+</style>
+<g class="body m-run"><rect class="so" x="26" y="100" width="54" height="10" rx="2"/><path class="sh" d="M52 42H110V78H81.4A30 30 0 1 1 52 42Z" transform="translate(4 4)"/><path class="fo" d="M52 42H110V78H81.4A30 30 0 1 1 52 42Z"/><rect class="so" x="108" y="38" width="4" height="44" rx="1"/><circle class="hl" cx="52" cy="72" r="25"/><g class="rotor"><g class="hand"><circle class="gh" cx="52" cy="72" r="22"/><line class="d2 ac-s" x1="65" y1="72" x2="72.54" y2="76.37"/><line class="d2 ac-s" x1="64.01" y1="76.97" x2="69.31" y2="83.89"/><line class="d2 ac-s" x1="61.19" y1="81.19" x2="63.44" y2="89.61"/><line class="d2 ac-s" x1="56.97" y1="84.01" x2="55.83" y2="92.65"/><line class="d2 ac-s" x1="52" y1="85" x2="47.63" y2="92.54"/><line class="d2 ac-s" x1="47.03" y1="84.01" x2="40.11" y2="89.31"/><line class="d2 ac-s" x1="42.81" y1="81.19" x2="34.39" y2="83.44"/><line class="d2 ac-s" x1="39.99" y1="76.97" x2="31.35" y2="75.83"/><line class="d2 ac-s" x1="39" y1="72" x2="31.46" y2="67.63"/><line class="d2 ac-s" x1="39.99" y1="67.03" x2="34.69" y2="60.11"/><line class="d2 ac-s" x1="42.81" y1="62.81" x2="40.56" y2="54.39"/><line class="d2 ac-s" x1="47.03" y1="59.99" x2="48.17" y2="51.35"/><line class="d2 ac-s" x1="52" y1="59" x2="56.37" y2="51.46"/><line class="d2 ac-s" x1="56.97" y1="59.99" x2="63.89" y2="54.69"/><line class="d2 ac-s" x1="61.19" y1="62.81" x2="69.61" y2="60.56"/><line class="d2 ac-s" x1="64.01" y1="67.03" x2="72.65" y2="68.17"/></g></g><circle class="fo" cx="52" cy="72" r="6"/></g>
+</svg>

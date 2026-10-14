@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 10" width="100" height="10" class="nx">
+<title>Pipe</title>
+<style>
+.nx{--pipe:#8D949D}
+.nx.dk{--pipe:#6B737D}
+.nx .pp{fill:var(--pipe)}
+.nx .pfl{display:none}
+.nx.flow .pfl{display:inline;fill:none;stroke:#FFFFFF;stroke-opacity:.8;stroke-width:2;stroke-dasharray:3 12;stroke-linecap:round;animation:nx-d15 .9s linear infinite}
+@keyframes nx-d15{ to{stroke-dashoffset:-15} }
+@media (prefers-reduced-motion:reduce){ .nx *{animation:none !important} }
+</style>
+<g class="body"><rect class="pp" x="0" y="0" width="100" height="10"/><path class="pfl" d="M0 5H100"/></g>
+</svg>

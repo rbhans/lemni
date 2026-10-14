@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 100" width="120" height="100" class="nx">
+<title>Plug fan</title>
+<style>
+.nx{--ink2:#7B838E;--ink3:#A9B0B9;--face:#FFFFFF;--side:#DCE0E5;--shadow:#D3D8DE;--run:#15924E;--acc:var(--ink2)}
+.nx.dk{--ink2:#8B949F;--ink3:#59616B;--face:#242930;--side:#1A1D22;--shadow:#0B0D10;--run:#3CD38A}
+.m-run{--acc:var(--run);--acc-t:none}
+.nx .sh{fill:var(--shadow)}
+.nx .fo{fill:var(--face);stroke:var(--ink3);stroke-width:1.5;stroke-linejoin:round}
+.nx .so{fill:var(--side);stroke:var(--ink3);stroke-width:1.5;stroke-linejoin:round}
+.nx .hl{fill:none;stroke:var(--ink3);stroke-width:1}
+.nx.on .ac-s{stroke:var(--acc)}
+.nx .wb{fill:none;stroke:var(--ink3);stroke-width:28;stroke-dasharray:2 5}
+.nx.on .wb{stroke:var(--acc);animation:nx-d7 .3s linear infinite}
+.nx.on.ccw .wb{animation-direction:reverse}
+@keyframes nx-d7{ to{stroke-dashoffset:-7} }
+@media (prefers-reduced-motion:reduce){ .nx *{animation:none !important} }
+</style>
+<g class="body m-run"><rect class="so" x="10" y="14" width="4" height="72" rx="1"/><path class="fo" d="M14 20Q26 22 30 34V66Q26 78 14 80Z"/><rect class="sh" x="34" y="30" width="32" height="48" rx="3"/><rect class="fo" x="30" y="26" width="32" height="48" rx="3"/><path class="wb ac-s" d="M46 29V71"/><rect class="so" x="62" y="22" width="4" height="56" rx="1"/><rect class="so" x="76" y="66" width="16" height="14" rx="1"/><rect class="so" x="62" y="80" width="42" height="6" rx="1.5"/><rect class="sh" x="70" y="38" width="34" height="32" rx="4"/><rect class="fo" x="66" y="34" width="34" height="32" rx="4"/><line class="hl" x1="72" y1="38" x2="72" y2="62"/><line class="hl" x1="77" y1="38" x2="77" y2="62"/><line class="hl" x1="82" y1="38" x2="82" y2="62"/><line class="hl" x1="87" y1="38" x2="87" y2="62"/><line class="hl" x1="92" y1="38" x2="92" y2="62"/><line class="hl" x1="97" y1="38" x2="97" y2="62"/></g>
+</svg>

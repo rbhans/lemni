@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 120" width="60" height="120" class="nx">
+<title>Humidifier</title>
+<style>
+.nx{--ink2:#7B838E;--ink3:#A9B0B9;--face:#FFFFFF;--shadow:#D3D8DE;--hum:#1896A8;--acc:var(--ink2)}
+.nx.dk{--ink2:#8B949F;--ink3:#59616B;--face:#242930;--shadow:#0B0D10;--hum:#45C8D8}
+.m-hum{--acc:var(--hum);--acc-t:none}
+.nx .sh{fill:var(--shadow)}
+.nx .fo{fill:var(--face);stroke:var(--ink3);stroke-width:1.5;stroke-linejoin:round}
+.nx .d2{fill:none;stroke:var(--ink2);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.nx .d3{fill:none;stroke:var(--ink3);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.nx .mani{stroke-width:5}
+.nx .puff{opacity:.5}
+.nx.on .ac-s{stroke:var(--acc)}
+.nx.on .puff{animation:nx-puff 1.6s ease-out infinite}
+.nx.on .p2{animation-delay:.5s}
+.nx.on .p3{animation-delay:1s}
+@keyframes nx-puff{ 0%{opacity:0;transform:translateX(-2px)} 35%{opacity:1} 100%{opacity:0;transform:translateX(6px)} }
+@media (prefers-reduced-motion:reduce){ .nx *{animation:none !important} }
+</style>
+<g class="body m-hum"><rect class="sh" x="14" y="14" width="40" height="100" rx="4"/><rect class="fo" x="10" y="10" width="40" height="100" rx="4"/><line class="d2 mani" x1="20" y1="20" x2="20" y2="100"/><line class="d2" x1="21" y1="28" x2="27" y2="28"/><path class="d3 ac-s puff p1" d="M31 24Q35 28 31 32"/><path class="d3 ac-s puff p1" d="M37 22Q43 28 37 34"/><line class="d2" x1="21" y1="44" x2="27" y2="44"/><path class="d3 ac-s puff p2" d="M31 40Q35 44 31 48"/><path class="d3 ac-s puff p2" d="M37 38Q43 44 37 50"/><line class="d2" x1="21" y1="60" x2="27" y2="60"/><path class="d3 ac-s puff p3" d="M31 56Q35 60 31 64"/><path class="d3 ac-s puff p3" d="M37 54Q43 60 37 66"/><line class="d2" x1="21" y1="76" x2="27" y2="76"/><path class="d3 ac-s puff p1" d="M31 72Q35 76 31 80"/><path class="d3 ac-s puff p1" d="M37 70Q43 76 37 82"/><line class="d2" x1="21" y1="92" x2="27" y2="92"/><path class="d3 ac-s puff p2" d="M31 88Q35 92 31 96"/><path class="d3 ac-s puff p2" d="M37 86Q43 92 37 98"/></g>
+</svg>

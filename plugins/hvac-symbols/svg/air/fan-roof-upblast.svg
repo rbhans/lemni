@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" class="nx">
+<title>Roof fan · upblast</title>
+<style>
+.nx{--ink2:#7B838E;--ink3:#A9B0B9;--face:#FFFFFF;--side:#DCE0E5;--shadow:#D3D8DE;--run:#15924E;--acc:var(--ink2)}
+.nx.dk{--ink2:#8B949F;--ink3:#59616B;--face:#242930;--side:#1A1D22;--shadow:#0B0D10;--run:#3CD38A}
+.m-run{--acc:var(--run);--acc-t:none}
+.nx .sh{fill:var(--shadow)}
+.nx .fo{fill:var(--face);stroke:var(--ink3);stroke-width:1.5;stroke-linejoin:round}
+.nx .so{fill:var(--side);stroke:var(--ink3);stroke-width:1.5;stroke-linejoin:round}
+.nx .hl{fill:none;stroke:var(--ink3);stroke-width:1}
+.nx.on .ac-s{stroke:var(--acc)}
+.nx .exh{display:none}
+.nx.on .exh{display:inline;fill:none;stroke-width:2;stroke-dasharray:3 6;stroke-linecap:round;animation:nx-d9 .7s linear infinite}
+@keyframes nx-d9{ to{stroke-dashoffset:-9} }
+@media (prefers-reduced-motion:reduce){ .nx *{animation:none !important} }
+</style>
+<g class="body m-run"><rect class="so" x="34" y="92" width="52" height="18" rx="2"/><rect class="fo" x="26" y="86" width="68" height="6" rx="1.5"/><rect class="sh" x="34" y="54" width="60" height="36" rx="3"/><rect class="fo" x="30" y="50" width="60" height="36" rx="3"/><line class="hl" x1="30" y1="60" x2="90" y2="60"/><rect class="sh" x="46" y="30" width="36" height="24" rx="2"/><rect class="fo" x="42" y="26" width="36" height="24" rx="2"/><rect class="so" x="40" y="24" width="40" height="4" rx="1"/><path class="exh ac-s" d="M50 26V12"/><path class="exh ac-s" d="M60 26V12"/><path class="exh ac-s" d="M70 26V12"/></g>
+</svg>

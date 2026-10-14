@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 140" width="100" height="140" class="nx">
+<title>Inline pump</title>
+<style>
+.nx{--ink2:#7B838E;--ink3:#A9B0B9;--face:#FFFFFF;--side:#DCE0E5;--shadow:#D3D8DE;--glass:#E4EBF2;--run:#15924E;--acc:var(--ink2)}
+.nx.dk{--ink2:#8B949F;--ink3:#59616B;--face:#242930;--side:#1A1D22;--shadow:#0B0D10;--glass:#2B3540;--run:#3CD38A}
+.m-run{--acc:var(--run);--acc-t:none}
+.nx .sh{fill:var(--shadow)}
+.nx .fo{fill:var(--face);stroke:var(--ink3);stroke-width:1.5;stroke-linejoin:round}
+.nx .so{fill:var(--side);stroke:var(--ink3);stroke-width:1.5;stroke-linejoin:round}
+.nx .f2{fill:var(--ink2)}
+.nx .hl{fill:none;stroke:var(--ink3);stroke-width:1}
+.nx .gh{fill:none;stroke:none}
+.nx .win{fill:var(--glass);stroke:var(--ink3);stroke-width:1.5}
+.nx .rotor,.nx .hand{transform-box:fill-box;transform-origin:center}
+.nx.ccw .hand{transform:scaleX(-1)}
+.nx.on .ac-f{fill:var(--acc)}
+.nx.on .rotor{animation:nx-spin 1.5s linear infinite}
+.nx.on .rotor.fast{animation-duration:.9s}
+.nx.on.ccw .rotor{animation-direction:reverse}
+@keyframes nx-spin{ to{transform:rotate(360deg)} }
+@media (prefers-reduced-motion:reduce){ .nx *{animation:none !important} }
+</style>
+<g class="body m-run"><rect class="so" x="10" y="58" width="8" height="24" rx="1.5"/><rect class="so" x="82" y="58" width="8" height="24" rx="1.5"/><rect class="so" x="18" y="62" width="12" height="16" rx="1"/><rect class="so" x="70" y="62" width="12" height="16" rx="1"/><rect class="sh" x="32" y="58" width="44" height="32" rx="10"/><rect class="fo" x="28" y="54" width="44" height="32" rx="10"/><path class="so" d="M36 54L40 44H60L64 54Z"/><rect class="so" x="40" y="38" width="20" height="6" rx="1"/><rect class="sh" x="34" y="14" width="40" height="28" rx="4"/><rect class="fo" x="30" y="10" width="40" height="28" rx="4"/><line class="hl" x1="36" y1="14" x2="36" y2="34"/><line class="hl" x1="41" y1="14" x2="41" y2="34"/><line class="hl" x1="46" y1="14" x2="46" y2="34"/><line class="hl" x1="51" y1="14" x2="51" y2="34"/><line class="hl" x1="56" y1="14" x2="56" y2="34"/><line class="hl" x1="61" y1="14" x2="61" y2="34"/><circle class="win" cx="50" cy="70" r="11"/><g class="rotor fast"><g class="hand"><circle class="gh" cx="50" cy="70" r="9.92"/><path class="f2 ac-f" d="M49.36 66.8Q52 61.6 57.44 63.6Q53.6 64.4 51.44 67.76Z" transform="rotate(0 50 70)"/><path class="f2 ac-f" d="M49.36 66.8Q52 61.6 57.44 63.6Q53.6 64.4 51.44 67.76Z" transform="rotate(120 50 70)"/><path class="f2 ac-f" d="M49.36 66.8Q52 61.6 57.44 63.6Q53.6 64.4 51.44 67.76Z" transform="rotate(240 50 70)"/></g></g><circle class="fo" cx="50" cy="70" r="2.5"/></g>
+</svg>

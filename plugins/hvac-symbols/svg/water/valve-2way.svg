@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 100" width="80" height="100" class="nx">
+<title>2-way valve</title>
+<style>
+.nx{--ink2:#7B838E;--ink3:#A9B0B9;--face:#FFFFFF;--shadow:#D3D8DE}
+.nx.dk{--ink2:#8B949F;--ink3:#59616B;--face:#242930;--shadow:#0B0D10}
+.nx .sh{fill:var(--shadow)}
+.nx .fo{fill:var(--face);stroke:var(--ink3);stroke-width:1.5;stroke-linejoin:round}
+.nx .d2{fill:none;stroke:var(--ink2);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+</style>
+<g class="body"><rect class="sh" x="29" y="14" width="30" height="16" rx="3"/><rect class="fo" x="25" y="10" width="30" height="16" rx="3"/><polygon class="sh" points="13,36 43,53 13,70"/><polygon class="sh" points="73,36 43,53 73,70"/><polygon class="fo" points="10,33 40,50 10,67"/><polygon class="fo" points="70,33 40,50 70,67"/><line class="d2" x1="40" y1="26" x2="40" y2="50"/></g>
+</svg>

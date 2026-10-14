@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 120" width="50" height="120" class="nx">
+<title>Filter</title>
+<style>
+.nx{--ink:#2A2F36;--ink2:#7B838E;--ink3:#A9B0B9;--face:#FFFFFF;--shadow:#D3D8DE;--dirt:#8F98A3}
+.nx.dk{--ink:#D3D8DE;--ink2:#8B949F;--ink3:#59616B;--face:#242930;--shadow:#0B0D10;--dirt:#6B737D}
+.nx .sh{fill:var(--shadow)}
+.nx .fo{fill:var(--face);stroke:var(--ink3);stroke-width:1.5;stroke-linejoin:round}
+.nx .d2{fill:none;stroke:var(--ink2);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.nx .dirt{display:none;fill:var(--dirt);fill-opacity:.55}
+.nx.loaded .dirt{display:inline}
+.nx.loaded .pleat{stroke:var(--ink)}
+</style>
+<g class="body"><rect class="sh" x="14" y="14" width="30" height="100" rx="4"/><rect class="fo" x="10" y="10" width="30" height="100" rx="4"/><polygon class="dirt" points="12.5,16 16,16 34,23.5 16,31 34,38.5 16,46 34,53.5 16,61 34,68.5 16,76 34,83.5 16,91 34,98.5 16,106 12.5,106"/><path class="d2 pleat" d="M16 16L34 23.5L16 31L34 38.5L16 46L34 53.5L16 61L34 68.5L16 76L34 83.5L16 91L34 98.5L16 106"/></g>
+</svg>

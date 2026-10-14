@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 140" width="50" height="140" class="nx">
+<title>Damper</title>
+<style>
+.nx{--ink:#2A2F36;--ink2:#7B838E;--ink3:#A9B0B9;--face:#FFFFFF;--shadow:#D3D8DE;--run:#15924E;--acc:var(--ink2)}
+.nx.dk{--ink:#D3D8DE;--ink2:#8B949F;--ink3:#59616B;--face:#242930;--shadow:#0B0D10;--run:#3CD38A}
+.m-run{--acc:var(--run);--acc-t:none}
+.nx .sh{fill:var(--shadow)}
+.nx .fo{fill:var(--face);stroke:var(--ink3);stroke-width:1.5;stroke-linejoin:round}
+.nx .fi{fill:var(--ink)}
+.nx .f2{fill:var(--ink2)}
+.nx .blade{transform-box:fill-box;transform-origin:center}
+.nx .blade{transform:rotate(var(--blade,45deg));transition:transform .6s}
+.nx .blade.alt{transform:rotate(calc(var(--blade,45deg) * -1))}
+.nx.parallel .blade.alt{transform:rotate(var(--blade,45deg))}
+.nx.on .ac-f{fill:var(--acc)}
+</style>
+<g class="body m-run"><rect class="sh" x="19" y="14" width="20" height="10" rx="2"/><rect class="fo" x="15" y="10" width="20" height="10" rx="2"/><rect class="sh" x="14" y="24" width="30" height="100" rx="4"/><rect class="fo" x="10" y="20" width="30" height="100" rx="4"/><g class="blade"><rect class="f2 ac-f" x="12.5" y="30" width="25" height="5" rx="2.5"/></g><circle class="fi" cx="25" cy="32.5" r="2"/><g class="blade alt"><rect class="f2 ac-f" x="12.5" y="55" width="25" height="5" rx="2.5"/></g><circle class="fi" cx="25" cy="57.5" r="2"/><g class="blade"><rect class="f2 ac-f" x="12.5" y="80" width="25" height="5" rx="2.5"/></g><circle class="fi" cx="25" cy="82.5" r="2"/><g class="blade alt"><rect class="f2 ac-f" x="12.5" y="105" width="25" height="5" rx="2.5"/></g><circle class="fi" cx="25" cy="107.5" r="2"/></g>
+</svg>

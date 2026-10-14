@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 120" width="60" height="120" class="nx">
+<title>Heat coil</title>
+<style>
+.nx{--ink2:#7B838E;--ink3:#A9B0B9;--face:#FFFFFF;--shadow:#D3D8DE;--heat:#DA4136;--heat-t:rgba(218,65,54,.11);--acc:var(--ink2);--acc-t:none}
+.nx.dk{--ink2:#8B949F;--ink3:#59616B;--face:#242930;--shadow:#0B0D10;--heat:#FF6A5C;--heat-t:rgba(255,106,92,.16)}
+.m-heat{--acc:var(--heat);--acc-t:var(--heat-t)}
+.nx .sh{fill:var(--shadow)}
+.nx .fo{fill:var(--face);stroke:var(--ink3);stroke-width:1.5;stroke-linejoin:round}
+.nx .d2{fill:none;stroke:var(--ink2);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.nx .tint{fill:none}
+.nx .shim{display:none}
+.nx.on .tint{fill:var(--acc-t)}
+.nx.on .ac-s{stroke:var(--acc)}
+.nx.on .ac-w{stroke-width:3}
+.nx.on .shim{display:inline;fill:none;stroke:#FFFFFF;stroke-width:1.2;stroke-dasharray:2 10;stroke-linecap:round;opacity:0;animation:nx-shim 1.8s ease-in-out infinite}
+.nx.on .shim2{stroke-dashoffset:-6;animation-delay:-.9s}
+@keyframes nx-shim{ 0%,100%{opacity:0} 50%{opacity:.85} }
+@media (prefers-reduced-motion:reduce){ .nx *{animation:none !important} }
+</style>
+<g class="body m-heat"><rect class="sh" x="14" y="14" width="40" height="100" rx="4"/><rect class="fo" x="10" y="10" width="40" height="100" rx="4"/><rect class="tint" x="10" y="10" width="40" height="100" rx="4"/><path class="d2 ac-s ac-w" d="M17 38H43"/><path class="shim" d="M17 38H43"/><path class="shim shim2" d="M17 38H43"/><path class="d2 ac-s ac-w" d="M17 48H43"/><path class="shim" d="M17 48H43"/><path class="shim shim2" d="M17 48H43"/><path class="d2 ac-s ac-w" d="M17 58H43"/><path class="shim" d="M17 58H43"/><path class="shim shim2" d="M17 58H43"/><path class="d2 ac-s ac-w" d="M17 68H43"/><path class="shim" d="M17 68H43"/><path class="shim shim2" d="M17 68H43"/><path class="d2 ac-s ac-w" d="M17 78H43"/><path class="shim" d="M17 78H43"/><path class="shim shim2" d="M17 78H43"/><path class="d2 ac-s ac-w" d="M17 88H43"/><path class="shim" d="M17 88H43"/><path class="shim shim2" d="M17 88H43"/><path class="d2 ac-s ac-w" d="M17 98H43"/><path class="shim" d="M17 98H43"/><path class="shim shim2" d="M17 98H43"/></g>
+</svg>

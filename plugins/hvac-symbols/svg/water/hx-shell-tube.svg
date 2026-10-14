@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 70" width="140" height="70" class="nx">
+<title>Shell &amp; tube HX</title>
+<style>
+.nx{--ink3:#A9B0B9;--face:#FFFFFF;--side:#DCE0E5;--shadow:#D3D8DE}
+.nx.dk{--ink3:#59616B;--face:#242930;--side:#1A1D22;--shadow:#0B0D10}
+.nx .sh{fill:var(--shadow)}
+.nx .fo{fill:var(--face);stroke:var(--ink3);stroke-width:1.5;stroke-linejoin:round}
+.nx .so{fill:var(--side);stroke:var(--ink3);stroke-width:1.5;stroke-linejoin:round}
+.nx .hl{fill:none;stroke:var(--ink3);stroke-width:1}
+</style>
+<g class="body"><rect class="sh" x="28" y="24" width="92" height="30" rx="4"/><rect class="fo" x="24" y="20" width="92" height="30" rx="4"/><line class="hl" x1="30" y1="28" x2="110" y2="28"/><line class="hl" x1="30" y1="35" x2="110" y2="35"/><line class="hl" x1="30" y1="42" x2="110" y2="42"/><rect class="so" x="34" y="10" width="12" height="10" rx="1.5"/><rect class="so" x="94" y="50" width="12" height="10" rx="1.5"/><rect class="so" x="10" y="22" width="16" height="26" rx="7"/><rect class="so" x="114" y="22" width="16" height="26" rx="7"/></g>
+</svg>

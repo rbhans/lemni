@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 100" width="120" height="100" class="nx">
+<title>Plate HX</title>
+<style>
+.nx{--ink2:#7B838E;--ink3:#A9B0B9;--face:#FFFFFF;--side:#DCE0E5;--shadow:#D3D8DE}
+.nx.dk{--ink2:#8B949F;--ink3:#59616B;--face:#242930;--side:#1A1D22;--shadow:#0B0D10}
+.nx .sh{fill:var(--shadow)}
+.nx .fo{fill:var(--face);stroke:var(--ink3);stroke-width:1.5;stroke-linejoin:round}
+.nx .so{fill:var(--side);stroke:var(--ink3);stroke-width:1.5;stroke-linejoin:round}
+.nx .f3{fill:var(--ink3)}
+.nx .d2{fill:none;stroke:var(--ink2);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.nx .pl{fill:none;stroke:var(--ink2);stroke-width:2}
+</style>
+<g class="body"><rect class="so" x="100" y="10" width="10" height="80" rx="2"/><line class="d2" x1="20" y1="14" x2="104" y2="14"/><line class="d2" x1="20" y1="86" x2="104" y2="86"/><line class="pl" x1="26" y1="18" x2="26" y2="82"/><line class="pl" x1="30" y1="18" x2="30" y2="82"/><line class="pl" x1="34" y1="18" x2="34" y2="82"/><line class="pl" x1="38" y1="18" x2="38" y2="82"/><line class="pl" x1="42" y1="18" x2="42" y2="82"/><line class="pl" x1="46" y1="18" x2="46" y2="82"/><line class="pl" x1="50" y1="18" x2="50" y2="82"/><line class="pl" x1="54" y1="18" x2="54" y2="82"/><line class="pl" x1="58" y1="18" x2="58" y2="82"/><line class="pl" x1="62" y1="18" x2="62" y2="82"/><line class="pl" x1="66" y1="18" x2="66" y2="82"/><rect class="so" x="68" y="14" width="8" height="72" rx="2"/><rect class="sh" x="14" y="14" width="12" height="80" rx="2"/><rect class="fo" x="10" y="10" width="12" height="80" rx="2"/><circle class="f3" cx="16" cy="24" r="3"/><circle class="f3" cx="16" cy="76" r="3"/></g>
+</svg>

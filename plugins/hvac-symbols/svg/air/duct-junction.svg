@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" width="30" height="30" class="nx">
+<title>Duct junction</title>
+<style>
+.nx{--duct:#C3C9D0;--duct-lo:#A9B0B9}
+.nx.dk{--duct:#363D46;--duct-lo:#2A3038}
+.nx .du-lo{fill:var(--duct-lo)}
+.nx .du{fill:var(--duct)}
+</style>
+<g class="body"><circle class="du-lo" cx="15" cy="15" r="15"/><circle class="du" cx="15" cy="15" r="13"/></g>
+</svg>

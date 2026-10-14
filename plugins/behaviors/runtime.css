@@ -1,0 +1,49 @@
+/* Behavior runtime: presentation-only styles applied inside a shape's wrapper. */
+
+.bb-layer {
+  position: absolute;
+  inset: 0;
+}
+
+.bb-tint-stroke
+  :is(path, line, polyline, polygon, rect, ellipse, circle)[stroke]:not(
+    [stroke="none"]
+  ) {
+  stroke: var(--bb-stroke) !important;
+  transition: stroke 0.3s ease;
+}
+
+.bb-tint-fill
+  :is(path, rect, ellipse, circle, polygon)[fill]:not([fill="none"]):not(
+    [fill="transparent"]
+  ) {
+  fill: var(--bb-fill) !important;
+  transition: fill 0.3s ease;
+}
+
+.bb-flow
+  :is(path, line, polyline, polygon, rect, ellipse, circle)[stroke]:not(
+    [stroke="none"]
+  ) {
+  stroke-dasharray: 10 8;
+  animation: bb-flow var(--bb-flow-duration, 1s) linear infinite;
+}
+
+.bb-flow-reverse
+  :is(path, line, polyline, polygon, rect, ellipse, circle)[stroke]:not(
+    [stroke="none"]
+  ) {
+  animation-direction: reverse;
+}
+
+@keyframes bb-flow {
+  to {
+    stroke-dashoffset: -18;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bb-flow :is(path, line, polyline, polygon, rect, ellipse, circle) {
+    animation: none;
+  }
+}

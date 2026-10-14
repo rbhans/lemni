@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 80" width="60" height="80" class="nx">
+<title>Sensor</title>
+<style>
+.nx{--ink:#2A2F36;--ink2:#7B838E;--ink3:#A9B0B9;--face:#FFFFFF;--shadow:#D3D8DE}
+.nx.dk{--ink:#D3D8DE;--ink2:#8B949F;--ink3:#59616B;--face:#242930;--shadow:#0B0D10}
+.nx .sh{fill:var(--shadow)}
+.nx .fo{fill:var(--face);stroke:var(--ink3);stroke-width:1.5;stroke-linejoin:round}
+.nx .fi{fill:var(--ink)}
+.nx .d2{fill:none;stroke:var(--ink2);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.nx .tx{font-family:sans-serif;font-size:13px;font-weight:600;fill:var(--ink);text-anchor:middle;dominant-baseline:central}
+</style>
+<g class="body"><line class="d2" x1="30" y1="30" x2="30" y2="45"/><circle class="fi" cx="30" cy="46" r="2.5"/><rect class="sh" x="13" y="13" width="40" height="20" rx="10"/><rect class="fo" x="10" y="10" width="40" height="20" rx="10"/></g><g class="label"><text class="tx" x="30" y="20.5">T</text></g>
+</svg>

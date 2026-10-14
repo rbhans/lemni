@@ -1,0 +1,37 @@
+/*
+ * Categorical series colors, in a fixed order that keeps neighbors apart for
+ * color-blind readers (checked against the light and dark card surfaces). Each mode
+ * has its own steps of the same eight hues.
+ */
+.bas-chart {
+  --series-0: #2a78d6;
+  --series-1: #eb6834;
+  --series-2: #1baf7a;
+  --series-3: #eda100;
+  --series-4: #e87ba4;
+  --series-5: #008300;
+  --series-6: #4a3aa7;
+  --series-7: #e34948;
+}
+
+.dark .bas-chart,
+.tl-theme__dark .bas-chart {
+  --series-0: #3987e5;
+  --series-1: #d95926;
+  --series-2: #199e70;
+  --series-3: #c98500;
+  --series-4: #d55181;
+  --series-5: #008300;
+  --series-6: #9085e9;
+  --series-7: #e66767;
+}
+
+/*
+ * Status colors are reserved for meaning (never a series color) and always appear with
+ * an icon and a label. The same steps work on both surfaces.
+ */
+.bas-chart {
+  --status-good: #0ca30c;
+  --status-warning: #fab219;
+  --status-critical: #d03b3b;
+}

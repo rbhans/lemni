@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 130" width="120" height="130" class="nx">
+<title>Cooling tower</title>
+<style>
+.nx{--ink2:#7B838E;--ink3:#A9B0B9;--face:#FFFFFF;--side:#DCE0E5;--shadow:#D3D8DE;--run:#15924E;--acc:var(--ink2)}
+.nx.dk{--ink2:#8B949F;--ink3:#59616B;--face:#242930;--side:#1A1D22;--shadow:#0B0D10;--run:#3CD38A}
+.m-run{--acc:var(--run);--acc-t:none}
+.nx .sh{fill:var(--shadow)}
+.nx .fo{fill:var(--face);stroke:var(--ink3);stroke-width:1.5;stroke-linejoin:round}
+.nx .so{fill:var(--side);stroke:var(--ink3);stroke-width:1.5;stroke-linejoin:round}
+.nx .d2{fill:none;stroke:var(--ink2);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.nx .d3{fill:none;stroke:var(--ink3);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.nx .hl{fill:none;stroke:var(--ink3);stroke-width:1}
+.nx .twirl{transform-box:fill-box;transform-origin:center}
+.nx .rain{display:none}
+.nx.on .ac-s{stroke:var(--acc)}
+.nx.on .ac-w{stroke-width:3}
+.nx.on .twirl{animation:nx-twirl .45s linear infinite}
+.nx.on .rain{display:inline;fill:none;stroke:var(--p-cws);stroke-width:1.5;stroke-dasharray:4 6;stroke-linecap:round;animation:nx-d10 .6s linear infinite}
+@keyframes nx-twirl{ 0%{transform:scaleX(1)} 50%{transform:scaleX(.12)} 100%{transform:scaleX(1)} }
+@keyframes nx-d10{ to{stroke-dashoffset:-10} }
+@media (prefers-reduced-motion:reduce){ .nx *{animation:none !important} }
+</style>
+<g class="body m-run"><rect class="sh" x="38" y="14" width="52" height="20" rx="3"/><rect class="fo" x="34" y="10" width="52" height="20" rx="3"/><g class="twirl"><line class="d2 ac-s ac-w" x1="42" y1="18" x2="78" y2="18"/></g><rect class="sh" x="18" y="34" width="92" height="76" rx="3"/><rect class="fo" x="14" y="30" width="92" height="76" rx="3"/><line class="hl" x1="22" y1="36" x2="22" y2="64"/><line class="hl" x1="28" y1="36" x2="28" y2="64"/><line class="hl" x1="34" y1="36" x2="34" y2="64"/><line class="hl" x1="40" y1="36" x2="40" y2="64"/><line class="hl" x1="46" y1="36" x2="46" y2="64"/><line class="hl" x1="52" y1="36" x2="52" y2="64"/><line class="hl" x1="58" y1="36" x2="58" y2="64"/><line class="hl" x1="64" y1="36" x2="64" y2="64"/><line class="hl" x1="70" y1="36" x2="70" y2="64"/><line class="hl" x1="76" y1="36" x2="76" y2="64"/><line class="hl" x1="82" y1="36" x2="82" y2="64"/><line class="hl" x1="88" y1="36" x2="88" y2="64"/><line class="hl" x1="94" y1="36" x2="94" y2="64"/><path class="rain" d="M31 38V64"/><path class="rain" d="M49 38V64"/><path class="rain" d="M67 38V64"/><path class="rain" d="M85 38V64"/><line class="d3" x1="14" y1="68" x2="106" y2="68"/><line class="d3" x1="20" y1="80" x2="27" y2="74"/><line class="d3" x1="30" y1="80" x2="37" y2="74"/><line class="d3" x1="40" y1="80" x2="47" y2="74"/><line class="d3" x1="50" y1="80" x2="57" y2="74"/><line class="d3" x1="60" y1="80" x2="67" y2="74"/><line class="d3" x1="70" y1="80" x2="77" y2="74"/><line class="d3" x1="80" y1="80" x2="87" y2="74"/><line class="d3" x1="90" y1="80" x2="97" y2="74"/><line class="d3" x1="20" y1="89" x2="27" y2="83"/><line class="d3" x1="30" y1="89" x2="37" y2="83"/><line class="d3" x1="40" y1="89" x2="47" y2="83"/><line class="d3" x1="50" y1="89" x2="57" y2="83"/><line class="d3" x1="60" y1="89" x2="67" y2="83"/><line class="d3" x1="70" y1="89" x2="77" y2="83"/><line class="d3" x1="80" y1="89" x2="87" y2="83"/><line class="d3" x1="90" y1="89" x2="97" y2="83"/><line class="d3" x1="20" y1="98" x2="27" y2="92"/><line class="d3" x1="30" y1="98" x2="37" y2="92"/><line class="d3" x1="40" y1="98" x2="47" y2="92"/><line class="d3" x1="50" y1="98" x2="57" y2="92"/><line class="d3" x1="60" y1="98" x2="67" y2="92"/><line class="d3" x1="70" y1="98" x2="77" y2="92"/><line class="d3" x1="80" y1="98" x2="87" y2="92"/><line class="d3" x1="90" y1="98" x2="97" y2="92"/><rect class="so" x="10" y="104" width="100" height="16" rx="2"/></g>
+</svg>

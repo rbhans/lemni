@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 120" width="50" height="120" class="nx">
+<title>UV filter</title>
+<style>
+.nx{--ink2:#7B838E;--ink3:#A9B0B9;--face:#FFFFFF;--shadow:#D3D8DE;--uv:#7C4DFF;--uv-t:rgba(124,77,255,.12);--acc:var(--ink2);--acc-t:none}
+.nx.dk{--ink2:#8B949F;--ink3:#59616B;--face:#242930;--shadow:#0B0D10;--uv:#A78BFA;--uv-t:rgba(167,139,250,.16)}
+.m-uv{--acc:var(--uv);--acc-t:var(--uv-t)}
+.nx .sh{fill:var(--shadow)}
+.nx .fo{fill:var(--face);stroke:var(--ink3);stroke-width:1.5;stroke-linejoin:round}
+.nx .f3{fill:var(--ink3)}
+.nx .tint{fill:none}
+.nx.on .tint{fill:var(--acc-t)}
+.nx.on .ac-s{stroke:var(--acc)}
+.nx.on .ac-f{fill:var(--acc)}
+.nx.on .glow{animation:nx-pulse 2.4s ease-in-out infinite}
+@keyframes nx-pulse{ 50%{opacity:.55} }
+@media (prefers-reduced-motion:reduce){ .nx *{animation:none !important} }
+</style>
+<g class="body m-uv"><rect class="sh" x="14" y="14" width="30" height="100" rx="4"/><rect class="fo" x="10" y="10" width="30" height="100" rx="4"/><rect class="tint" x="10" y="10" width="30" height="100" rx="4"/><rect class="f3" x="14" y="14" width="6" height="5" rx="1"/><rect class="f3" x="14" y="101" width="6" height="5" rx="1"/><rect class="fo ac-f ac-s glow" x="14.5" y="19" width="5" height="82" rx="2.5"/><rect class="f3" x="22" y="14" width="6" height="5" rx="1"/><rect class="f3" x="22" y="101" width="6" height="5" rx="1"/><rect class="fo ac-f ac-s glow" x="22.5" y="19" width="5" height="82" rx="2.5"/><rect class="f3" x="30" y="14" width="6" height="5" rx="1"/><rect class="f3" x="30" y="101" width="6" height="5" rx="1"/><rect class="fo ac-f ac-s glow" x="30.5" y="19" width="5" height="82" rx="2.5"/></g>
+</svg>

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" class="nx">
+<title>Heat wheel</title>
+<style>
+.nx{--ink2:#7B838E;--ink3:#A9B0B9;--face:#FFFFFF;--shadow:#D3D8DE;--run:#15924E;--acc:var(--ink2)}
+.nx.dk{--ink2:#8B949F;--ink3:#59616B;--face:#242930;--shadow:#0B0D10;--run:#3CD38A}
+.m-run{--acc:var(--run);--acc-t:none}
+.nx .sh{fill:var(--shadow)}
+.nx .fo{fill:var(--face);stroke:var(--ink3);stroke-width:1.5;stroke-linejoin:round}
+.nx .d3{fill:none;stroke:var(--ink3);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.nx .hl{fill:none;stroke:var(--ink3);stroke-width:1}
+.nx .gh{fill:none;stroke:none}
+.nx .rotor{transform-box:fill-box;transform-origin:center}
+.nx.on .ac-s{stroke:var(--acc)}
+.nx.on .rotor{animation:nx-spin 1.5s linear infinite}
+.nx.on .rotor.slow{animation-duration:8s}
+.nx.on.ccw .rotor{animation-direction:reverse}
+@keyframes nx-spin{ to{transform:rotate(360deg)} }
+@media (prefers-reduced-motion:reduce){ .nx *{animation:none !important} }
+</style>
+<g class="body m-run"><circle class="sh" cx="64" cy="64" r="50"/><circle class="fo" cx="60" cy="60" r="50"/><circle class="hl" cx="60" cy="60" r="46"/><g class="rotor slow"><circle class="gh" cx="60" cy="60" r="45"/><circle class="hl" cx="60" cy="60" r="28"/><line class="d3 ac-s" x1="70" y1="60" x2="105" y2="60"/><line class="d3 ac-s" x1="68.66" y1="65" x2="98.97" y2="82.5"/><line class="d3 ac-s" x1="65" y1="68.66" x2="82.5" y2="98.97"/><line class="d3 ac-s" x1="60" y1="70" x2="60" y2="105"/><line class="d3 ac-s" x1="55" y1="68.66" x2="37.5" y2="98.97"/><line class="d3 ac-s" x1="51.34" y1="65" x2="21.03" y2="82.5"/><line class="d3 ac-s" x1="50" y1="60" x2="15" y2="60"/><line class="d3 ac-s" x1="51.34" y1="55" x2="21.03" y2="37.5"/><line class="d3 ac-s" x1="55" y1="51.34" x2="37.5" y2="21.03"/><line class="d3 ac-s" x1="60" y1="50" x2="60" y2="15"/><line class="d3 ac-s" x1="65" y1="51.34" x2="82.5" y2="21.03"/><line class="d3 ac-s" x1="68.66" y1="55" x2="98.97" y2="37.5"/></g><circle class="fo" cx="60" cy="60" r="8"/></g>
+</svg>

@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 120" width="180" height="120" class="nx">
+<title>Centrifugal chiller</title>
+<style>
+.nx{--ink2:#7B838E;--ink3:#A9B0B9;--face:#FFFFFF;--side:#DCE0E5;--shadow:#D3D8DE;--cool:#1F78DC;--cool-t:rgba(31,120,220,.12);--run:#15924E;--cw:#1F9E66;--cw-t:rgba(31,158,102,.13);--acc:var(--ink2);--acc-t:none}
+.nx.dk{--ink2:#8B949F;--ink3:#59616B;--face:#242930;--side:#1A1D22;--shadow:#0B0D10;--cool:#4CA4FF;--cool-t:rgba(76,164,255,.17);--run:#3CD38A;--cw:#4FD39A;--cw-t:rgba(79,211,154,.16)}
+.m-cool{--acc:var(--cool);--acc-t:var(--cool-t)}
+.m-cw{--acc:var(--cw);--acc-t:var(--cw-t)}
+.m-run{--acc:var(--run);--acc-t:none}
+.nx .sh{fill:var(--shadow)}
+.nx .fo{fill:var(--face);stroke:var(--ink3);stroke-width:1.5;stroke-linejoin:round}
+.nx .so{fill:var(--side);stroke:var(--ink3);stroke-width:1.5;stroke-linejoin:round}
+.nx .f2{fill:var(--ink2)}
+.nx .hl{fill:none;stroke:var(--ink3);stroke-width:1}
+.nx .gh{fill:none;stroke:none}
+.nx .tint{fill:none}
+.nx .tube{fill:none;stroke:var(--ink3);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.nx .rotor,.nx .hand{transform-box:fill-box;transform-origin:center}
+.nx.ccw .hand{transform:scaleX(-1)}
+.nx .shim{display:none}
+.nx.on .tint{fill:var(--acc-t)}
+.nx.on .ac-s{stroke:var(--acc)}
+.nx.on .ac-f{fill:var(--acc)}
+.nx.on .rotor{animation:nx-spin 1.5s linear infinite}
+.nx.on .rotor.fast{animation-duration:.9s}
+.nx.on.ccw .rotor{animation-direction:reverse}
+.nx.on .shim{display:inline;fill:none;stroke:#FFFFFF;stroke-width:1.2;stroke-dasharray:2 10;stroke-linecap:round;opacity:0;animation:nx-shim 1.8s ease-in-out infinite}
+.nx.on .shim2{stroke-dashoffset:-6;animation-delay:-.9s}
+.nx.on .tube{stroke-width:2.5}
+@keyframes nx-spin{ to{transform:rotate(360deg)} }
+@keyframes nx-shim{ 0%,100%{opacity:0} 50%{opacity:.85} }
+@media (prefers-reduced-motion:reduce){ .nx *{animation:none !important} }
+</style>
+<g class="body m-run"><rect class="so" x="12" y="46" width="12" height="22" rx="2"/><rect class="so" x="156" y="46" width="12" height="22" rx="2"/><rect class="so" x="12" y="76" width="12" height="22" rx="2"/><rect class="so" x="156" y="76" width="12" height="22" rx="2"/><rect class="so" x="40" y="100" width="16" height="10" rx="1.5"/><rect class="so" x="124" y="100" width="16" height="10" rx="1.5"/><rect class="sh" x="26" y="48" width="136" height="26" rx="13"/><rect class="fo" x="22" y="44" width="136" height="26" rx="13"/><rect class="sh" x="26" y="78" width="136" height="26" rx="13"/><rect class="fo" x="22" y="74" width="136" height="26" rx="13"/><g class="m-cw"><rect class="tint" x="22" y="44" width="136" height="26" rx="13"/><path class="tube ac-s" d="M32 51H148"/><path class="shim" d="M32 51H148"/><path class="shim shim2" d="M32 51H148"/><path class="tube ac-s" d="M32 57H148"/><path class="shim" d="M32 57H148"/><path class="shim shim2" d="M32 57H148"/><path class="tube ac-s" d="M32 63H148"/><path class="shim" d="M32 63H148"/><path class="shim shim2" d="M32 63H148"/></g><g class="m-cool"><rect class="tint" x="22" y="74" width="136" height="26" rx="13"/><path class="tube ac-s" d="M32 81H148"/><path class="shim" d="M32 81H148"/><path class="shim shim2" d="M32 81H148"/><path class="tube ac-s" d="M32 87H148"/><path class="shim" d="M32 87H148"/><path class="shim shim2" d="M32 87H148"/><path class="tube ac-s" d="M32 93H148"/><path class="shim" d="M32 93H148"/><path class="shim shim2" d="M32 93H148"/></g><rect class="sh" x="88" y="22" width="48" height="26" rx="4"/><rect class="fo" x="84" y="18" width="48" height="26" rx="4"/><line class="hl" x1="92" y1="22" x2="92" y2="40"/><line class="hl" x1="100" y1="22" x2="100" y2="40"/><line class="hl" x1="108" y1="22" x2="108" y2="40"/><line class="hl" x1="116" y1="22" x2="116" y2="40"/><line class="hl" x1="124" y1="22" x2="124" y2="40"/><circle class="sh" cx="68" cy="32" r="16"/><circle class="fo" cx="64" cy="28" r="16"/><g class="rotor fast"><g class="hand"><circle class="gh" cx="64" cy="28" r="13.02"/><path class="f2 ac-f" d="M63.16 23.8Q66.62 16.98 73.77 19.6Q68.72 20.65 65.89 25.06Z" transform="rotate(0 64 28)"/><path class="f2 ac-f" d="M63.16 23.8Q66.62 16.98 73.77 19.6Q68.72 20.65 65.89 25.06Z" transform="rotate(120 64 28)"/><path class="f2 ac-f" d="M63.16 23.8Q66.62 16.98 73.77 19.6Q68.72 20.65 65.89 25.06Z" transform="rotate(240 64 28)"/></g></g><circle class="fo" cx="64" cy="28" r="4"/></g>
+</svg>

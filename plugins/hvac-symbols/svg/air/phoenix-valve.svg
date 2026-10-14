@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 80" width="100" height="80" class="nx">
+<title>Phoenix valve</title>
+<style>
+.nx{--ink:#2A2F36;--ink2:#7B838E;--ink3:#A9B0B9;--face:#FFFFFF;--side:#DCE0E5;--shadow:#D3D8DE;--run:#15924E;--acc:var(--ink2)}
+.nx.dk{--ink:#D3D8DE;--ink2:#8B949F;--ink3:#59616B;--face:#242930;--side:#1A1D22;--shadow:#0B0D10;--run:#3CD38A}
+.m-run{--acc:var(--run);--acc-t:none}
+.nx .sh{fill:var(--shadow)}
+.nx .fo{fill:var(--face);stroke:var(--ink3);stroke-width:1.5;stroke-linejoin:round}
+.nx .so{fill:var(--side);stroke:var(--ink3);stroke-width:1.5;stroke-linejoin:round}
+.nx .fi{fill:var(--ink)}
+.nx .f2{fill:var(--ink2)}
+.nx .f3{fill:var(--ink3)}
+.nx .d3{fill:none;stroke:var(--ink3);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.nx.on .ac-s{stroke:var(--acc)}
+.nx.on .ac-f{fill:var(--acc)}
+.nx .cone,.nx .spring{transform-box:fill-box}
+.nx .spring{transform-origin:100% 50%}
+.nx .spring path{vector-effect:non-scaling-stroke}
+.nx.on .cone{animation:nx-cone 3.2s ease-in-out infinite}
+.nx.on .spring{animation:nx-spring 3.2s ease-in-out infinite}
+@keyframes nx-cone{ 0%,100%{transform:translateX(0)} 30%{transform:translateX(5px)} 55%{transform:translateX(2px)} 80%{transform:translateX(6px)} }
+@keyframes nx-spring{ 0%,100%{transform:scaleX(1)} 30%{transform:scaleX(.8)} 55%{transform:scaleX(.92)} 80%{transform:scaleX(.76)} }
+@media (prefers-reduced-motion:reduce){ .nx *{animation:none !important} }
+</style>
+<g class="body m-run"><rect class="sh" x="26" y="14" width="20" height="10" rx="2"/><rect class="fo" x="22" y="10" width="20" height="10" rx="2"/><rect class="so" x="10" y="17" width="6" height="46" rx="1.5"/><rect class="so" x="84" y="17" width="6" height="46" rx="1.5"/><polygon class="sh" points="20,24 50,24 62,33 68,33 88,24 88,64 68,55 62,55 50,64 20,64"/><polygon class="fo" points="16,20 46,20 58,29 64,29 84,20 84,60 64,51 58,51 46,60 16,60"/><line class="d3" x1="20" y1="40" x2="82" y2="40"/><circle class="fi" cx="22" cy="40" r="2"/><rect class="f3" x="76" y="36" width="3" height="8" rx="1"/><g class="spring"><path class="d3 ac-s" d="M51 40L53 36L56 44L59 36L62 44L65 36L68 44L71 36L74 44L76 40"/></g><g class="cone"><path class="f2 ac-f" d="M32 40L48 30Q51 40 48 50Z"/></g></g>
+</svg>
