@@ -1,6 +1,6 @@
 import "server-only"
 
-// Lemni's API talks to building systems, so it only answers the local browser app:
+// Lemscape's API talks to building systems, so it only answers the local browser app:
 // loopback hosts by default (DNS-rebinding protection), same-origin requests only
 // (CSRF protection), and JSON bodies for writes (no simple-form posts).
 
@@ -8,7 +8,11 @@ const DEFAULT_HOSTS = ["localhost", "127.0.0.1", "[::1]", "::1"]
 
 function allowedHosts(): string[] {
   const extra =
-    (process.env.LEMNI_ALLOWED_HOSTS ?? process.env.BASBOARD_ALLOWED_HOSTS)
+    (
+      process.env.LEMSCAPE_ALLOWED_HOSTS ??
+      process.env.LEMNI_ALLOWED_HOSTS ??
+      process.env.BASBOARD_ALLOWED_HOSTS
+    )
       ?.split(",")
       .map((h) => h.trim().toLowerCase()) ?? []
   return [...DEFAULT_HOSTS, ...extra.filter(Boolean)]
@@ -31,7 +35,7 @@ export function guardHost(request: Request): Response | null {
   const host = request.headers.get("host") ?? ""
   if (!allowedHosts().includes(hostnameOf(host))) {
     return deny(
-      "This API only answers requests to a local address. Set LEMNI_ALLOWED_HOSTS to allow others."
+      "This API only answers requests to a local address. Set LEMSCAPE_ALLOWED_HOSTS to allow others."
     )
   }
 

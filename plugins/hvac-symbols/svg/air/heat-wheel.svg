@@ -16,6 +16,17 @@
 .nx.on.ccw .rotor{animation-direction:reverse}
 @keyframes nx-spin{ to{transform:rotate(360deg)} }
 @media (prefers-reduced-motion:reduce){ .nx *{animation:none !important} }
+.nx .plate{transition:transform .2s}
+.nx.st-alarm{--shadow:#CF1624}
+.nx.st-fault{--shadow:#FC7734}
+.nx.st-down{--shadow:#FAC600}
+.nx.st-overridden{--shadow:#BFADDD}
+.nx.st-stale{--shadow:#D9C09D}
+.nx.st-disabled{--shadow:#D6D6D6}
+.nx.st-alarm .plate,.nx.st-fault .plate,.nx.st-down .plate,.nx.st-overridden .plate,.nx.st-stale .plate,.nx.st-disabled .plate{transform:translate(6px,6px)}
+.nx.st-disabled{--ink:#B9BFC7;--ink2:#BEC4CB;--ink3:#CDD2D8}
+.nx.st-disabled.dk{--ink:#4B525B;--ink2:#454C55;--ink3:#3A4048}
+.nx.st-disabled .body{--acc:var(--ink2);--acc-t:none}
 </style>
-<g class="body m-run"><circle class="sh" cx="64" cy="64" r="50"/><circle class="fo" cx="60" cy="60" r="50"/><circle class="hl" cx="60" cy="60" r="46"/><g class="rotor slow"><circle class="gh" cx="60" cy="60" r="45"/><circle class="hl" cx="60" cy="60" r="28"/><line class="d3 ac-s" x1="70" y1="60" x2="105" y2="60"/><line class="d3 ac-s" x1="68.66" y1="65" x2="98.97" y2="82.5"/><line class="d3 ac-s" x1="65" y1="68.66" x2="82.5" y2="98.97"/><line class="d3 ac-s" x1="60" y1="70" x2="60" y2="105"/><line class="d3 ac-s" x1="55" y1="68.66" x2="37.5" y2="98.97"/><line class="d3 ac-s" x1="51.34" y1="65" x2="21.03" y2="82.5"/><line class="d3 ac-s" x1="50" y1="60" x2="15" y2="60"/><line class="d3 ac-s" x1="51.34" y1="55" x2="21.03" y2="37.5"/><line class="d3 ac-s" x1="55" y1="51.34" x2="37.5" y2="21.03"/><line class="d3 ac-s" x1="60" y1="50" x2="60" y2="15"/><line class="d3 ac-s" x1="65" y1="51.34" x2="82.5" y2="21.03"/><line class="d3 ac-s" x1="68.66" y1="55" x2="98.97" y2="37.5"/></g><circle class="fo" cx="60" cy="60" r="8"/></g>
+<g class="body m-run"><g class="plate" transform="translate(4 4)"><circle class="sh" cx="60" cy="60" r="50" /><circle class="sh" cx="60" cy="60" r="8" /></g><circle class="fo" cx="60" cy="60" r="50" /><circle class="hl" cx="60" cy="60" r="46" /><g class="rotor slow"><circle class="gh" cx="60" cy="60" r="45" /><circle class="hl" cx="60" cy="60" r="28" /><line class="d3 ac-s" x1="70" y1="60" x2="105" y2="60" /><line class="d3 ac-s" x1="68.66" y1="65" x2="98.97" y2="82.5" /><line class="d3 ac-s" x1="65" y1="68.66" x2="82.5" y2="98.97" /><line class="d3 ac-s" x1="60" y1="70" x2="60" y2="105" /><line class="d3 ac-s" x1="55" y1="68.66" x2="37.5" y2="98.97" /><line class="d3 ac-s" x1="51.34" y1="65" x2="21.03" y2="82.5" /><line class="d3 ac-s" x1="50" y1="60" x2="15" y2="60" /><line class="d3 ac-s" x1="51.34" y1="55" x2="21.03" y2="37.5" /><line class="d3 ac-s" x1="55" y1="51.34" x2="37.5" y2="21.03" /><line class="d3 ac-s" x1="60" y1="50" x2="60" y2="15" /><line class="d3 ac-s" x1="65" y1="51.34" x2="82.5" y2="21.03" /><line class="d3 ac-s" x1="68.66" y1="55" x2="98.97" y2="37.5" /></g><circle class="fo" cx="60" cy="60" r="8" /></g>
 </svg>

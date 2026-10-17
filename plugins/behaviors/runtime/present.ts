@@ -1,13 +1,8 @@
 "use client"
 
-import {
-  react,
-  type Editor,
-  type TLPageId,
-  type TLShape,
-  type TLShapeId,
-} from "tldraw"
+import { react, type Editor, type TLShape, type TLShapeId } from "tldraw"
 
+import { goTo } from "@/studio/navigation/navigate"
 import { currentPageKind, pageKindOf } from "@/studio/pages/page-categories"
 import { studioState } from "@/studio/state"
 
@@ -31,29 +26,9 @@ function clickBehavior(
   return null
 }
 
-/** `target` is a page id ("page:…") or a shape id ("shape:…"). */
+/** Follows a navigate behavior's target (any target the shared picker makes). */
 export function navigateTo(editor: Editor, target: string, framing: string) {
-  if (target.startsWith("page:")) {
-    const pageId = target as TLPageId
-    if (!editor.getPage(pageId)) return
-    editor.setCurrentPage(pageId)
-    editor.zoomToFit({ animation: { duration: 280 } })
-    return
-  }
-  if (target.startsWith("shape:")) {
-    const shapeId = target as TLShapeId
-    const shape = editor.getShape(shapeId)
-    if (!shape) return
-    const pageId = editor.getAncestorPageId(shape)
-    if (pageId && pageId !== editor.getCurrentPageId())
-      editor.setCurrentPage(pageId)
-    const bounds = editor.getShapePageBounds(shapeId)
-    if (!bounds) return
-    if (framing === "center")
-      editor.centerOnPoint(bounds.center, { animation: { duration: 280 } })
-    else
-      editor.zoomToBounds(bounds, { inset: 80, animation: { duration: 280 } })
-  }
+  goTo(editor, target, framing === "center" ? "center" : "fit")
 }
 
 /**

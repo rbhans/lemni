@@ -14,6 +14,17 @@
 .nx.on.ccw .wb{animation-direction:reverse}
 @keyframes nx-d7{ to{stroke-dashoffset:-7} }
 @media (prefers-reduced-motion:reduce){ .nx *{animation:none !important} }
+.nx .plate{transition:transform .2s}
+.nx.st-alarm{--shadow:#CF1624}
+.nx.st-fault{--shadow:#FC7734}
+.nx.st-down{--shadow:#FAC600}
+.nx.st-overridden{--shadow:#BFADDD}
+.nx.st-stale{--shadow:#D9C09D}
+.nx.st-disabled{--shadow:#D6D6D6}
+.nx.st-alarm .plate,.nx.st-fault .plate,.nx.st-down .plate,.nx.st-overridden .plate,.nx.st-stale .plate,.nx.st-disabled .plate{transform:translate(6px,6px)}
+.nx.st-disabled{--ink:#B9BFC7;--ink2:#BEC4CB;--ink3:#CDD2D8}
+.nx.st-disabled.dk{--ink:#4B525B;--ink2:#454C55;--ink3:#3A4048}
+.nx.st-disabled .body{--acc:var(--ink2);--acc-t:none}
 </style>
-<g class="body m-run"><rect class="so" x="10" y="14" width="4" height="72" rx="1"/><path class="fo" d="M14 20Q26 22 30 34V66Q26 78 14 80Z"/><rect class="sh" x="34" y="30" width="32" height="48" rx="3"/><rect class="fo" x="30" y="26" width="32" height="48" rx="3"/><path class="wb ac-s" d="M46 29V71"/><rect class="so" x="62" y="22" width="4" height="56" rx="1"/><rect class="so" x="76" y="66" width="16" height="14" rx="1"/><rect class="so" x="62" y="80" width="42" height="6" rx="1.5"/><rect class="sh" x="70" y="38" width="34" height="32" rx="4"/><rect class="fo" x="66" y="34" width="34" height="32" rx="4"/><line class="hl" x1="72" y1="38" x2="72" y2="62"/><line class="hl" x1="77" y1="38" x2="77" y2="62"/><line class="hl" x1="82" y1="38" x2="82" y2="62"/><line class="hl" x1="87" y1="38" x2="87" y2="62"/><line class="hl" x1="92" y1="38" x2="92" y2="62"/><line class="hl" x1="97" y1="38" x2="97" y2="62"/></g>
+<g class="body m-run"><g class="plate" transform="translate(4 4)"><rect class="sh" x="10" y="14" width="4" height="72" rx="1" /><path class="sh" d="M14 20Q26 22 30 34V66Q26 78 14 80Z" /><rect class="sh" x="30" y="26" width="32" height="48" rx="3" /><rect class="sh" x="62" y="22" width="4" height="56" rx="1" /><rect class="sh" x="76" y="66" width="16" height="14" rx="1" /><rect class="sh" x="62" y="80" width="42" height="6" rx="1.5" /><rect class="sh" x="66" y="34" width="34" height="32" rx="4" /></g><rect class="so" x="10" y="14" width="4" height="72" rx="1" /><path class="fo" d="M14 20Q26 22 30 34V66Q26 78 14 80Z" /><rect class="fo" x="30" y="26" width="32" height="48" rx="3" /><path class="wb ac-s" d="M46 29V71" /><rect class="so" x="62" y="22" width="4" height="56" rx="1" /><rect class="so" x="76" y="66" width="16" height="14" rx="1" /><rect class="so" x="62" y="80" width="42" height="6" rx="1.5" /><rect class="fo" x="66" y="34" width="34" height="32" rx="4" /><line class="hl" x1="72" y1="38" x2="72" y2="62" /><line class="hl" x1="77" y1="38" x2="77" y2="62" /><line class="hl" x1="82" y1="38" x2="82" y2="62" /><line class="hl" x1="87" y1="38" x2="87" y2="62" /><line class="hl" x1="92" y1="38" x2="92" y2="62" /><line class="hl" x1="97" y1="38" x2="97" y2="62" /></g>
 </svg>

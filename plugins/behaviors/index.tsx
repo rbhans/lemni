@@ -2,6 +2,7 @@
 
 import { ZapIcon } from "@hugeicons/core-free-icons"
 
+import { registerBehaviorBinder } from "@/studio/editor/behavior-binding"
 import { currentPageKind } from "@/studio/pages/page-categories"
 import type { BoardPlugin } from "@/studio/plugins/types"
 import { studioState } from "@/studio/state"
@@ -10,6 +11,7 @@ import { behaviorsAi } from "./ai-tools"
 import { BehaviorDecorator } from "./components/behavior-decorator"
 import { LabelsLayer } from "./components/labels-layer"
 import { LiveControls } from "./components/live-controls"
+import { bindPoint } from "./runtime/bind"
 import { behaviorPointDrop } from "./runtime/drop"
 import { installPresentMode } from "./runtime/present"
 import { savedBehaviors } from "./runtime/shapes"
@@ -82,6 +84,11 @@ export const behaviors: BoardPlugin = {
     },
   ],
   onEditorMount(ctx) {
-    return installPresentMode(ctx.editor)
+    const stopPresent = installPresentMode(ctx.editor)
+    const stopBinder = registerBehaviorBinder(bindPoint)
+    return () => {
+      stopPresent()
+      stopBinder()
+    }
   },
 }

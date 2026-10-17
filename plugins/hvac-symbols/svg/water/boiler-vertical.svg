@@ -16,6 +16,17 @@
 .nx.on .flame{fill:var(--heat);animation:nx-flick 1.3s ease-in-out infinite}
 @keyframes nx-flick{ 0%,100%{opacity:1} 45%{opacity:.55} 70%{opacity:.85} }
 @media (prefers-reduced-motion:reduce){ .nx *{animation:none !important} }
+.nx .plate{transition:transform .2s}
+.nx.st-alarm{--shadow:#CF1624}
+.nx.st-fault{--shadow:#FC7734}
+.nx.st-down{--shadow:#FAC600}
+.nx.st-overridden{--shadow:#BFADDD}
+.nx.st-stale{--shadow:#D9C09D}
+.nx.st-disabled{--shadow:#D6D6D6}
+.nx.st-alarm .plate,.nx.st-fault .plate,.nx.st-down .plate,.nx.st-overridden .plate,.nx.st-stale .plate,.nx.st-disabled .plate{transform:translate(6px,6px)}
+.nx.st-disabled{--ink:#B9BFC7;--ink2:#BEC4CB;--ink3:#CDD2D8}
+.nx.st-disabled.dk{--ink:#4B525B;--ink2:#454C55;--ink3:#3A4048}
+.nx.st-disabled .body{--acc:var(--ink2);--acc-t:none}
 </style>
-<g class="body m-heat"><rect class="so" x="32" y="10" width="16" height="12" rx="1.5"/><rect class="sh" x="14" y="24" width="60" height="90" rx="4"/><rect class="fo" x="10" y="20" width="60" height="90" rx="4"/><rect class="tint" x="10" y="20" width="60" height="90" rx="4"/><line class="d3" x1="10" y1="36" x2="70" y2="36"/><rect class="f3" x="18" y="24.5" width="18" height="7" rx="1.5"/><circle class="f3" cx="48" cy="28" r="2"/><circle class="f3" cx="56" cy="28" r="2"/><circle class="win" cx="40" cy="64" r="12"/><circle class="flame" cx="40" cy="64" r="9"/><line class="hl" x1="22" y1="92" x2="58" y2="92"/><line class="hl" x1="22" y1="97" x2="58" y2="97"/><line class="hl" x1="22" y1="102" x2="58" y2="102"/></g>
+<g class="body m-heat"><g class="plate" transform="translate(4 4)"><rect class="sh" x="32" y="10" width="16" height="12" rx="1.5" /><rect class="sh" x="10" y="20" width="60" height="90" rx="4" /></g><rect class="so" x="32" y="10" width="16" height="12" rx="1.5" /><rect class="fo" x="10" y="20" width="60" height="90" rx="4" /><rect class="tint" x="10" y="20" width="60" height="90" rx="4" /><line class="d3" x1="10" y1="36" x2="70" y2="36" /><rect class="f3" x="18" y="24.5" width="18" height="7" rx="1.5" /><circle class="f3" cx="48" cy="28" r="2" /><circle class="f3" cx="56" cy="28" r="2" /><circle class="win" cx="40" cy="64" r="12" /><circle class="flame" cx="40" cy="64" r="9" /><line class="hl" x1="22" y1="92" x2="58" y2="92" /><line class="hl" x1="22" y1="97" x2="58" y2="97" /><line class="hl" x1="22" y1="102" x2="58" y2="102" /></g>
 </svg>

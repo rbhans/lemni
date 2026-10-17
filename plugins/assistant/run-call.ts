@@ -225,7 +225,7 @@ export async function runCall(
     )
   if (!allows(env.access, tool.access))
     return errorOutput(
-      "The person's AI access setting doesn't allow this. They can change it in Lemni's AI panel."
+      "The person's AI access setting doesn't allow this. They can change it in Lemscape's AI panel."
     )
   const input = isRecord(call.input) ? call.input : {}
   const problems = validateInput(tool.inputSchema, input)

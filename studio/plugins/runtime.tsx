@@ -27,6 +27,8 @@ import type {
   PanelContribution,
   PasteOptionContribution,
   PointDropContribution,
+  CanvasBackgroundContribution,
+  SettingsSectionContribution,
   ShapeDecoratorContribution,
   SlotContribution,
   StatusContribution,
@@ -49,6 +51,8 @@ export interface Contributions {
   libraryCollections: Owned<LibraryCollectionContribution>[]
   canvasOverlays: Owned<SlotContribution>[]
   canvasLayers: Owned<SlotContribution>[]
+  canvasBackgrounds: Owned<CanvasBackgroundContribution>[]
+  settingsSections: Owned<SettingsSectionContribution>[]
   shapeDecorators: Owned<ShapeDecoratorContribution>[]
   pointDrops: Owned<PointDropContribution>[]
   pageCategories: Owned<PageCategoryContribution>[]
@@ -167,6 +171,8 @@ export function PluginRuntimeProvider({
       libraryCollections: collect(active, "libraryCollections"),
       canvasOverlays: collect(active, "canvasOverlays"),
       canvasLayers: collect(active, "canvasLayers"),
+      canvasBackgrounds: collect(active, "canvasBackgrounds"),
+      settingsSections: collect(active, "settingsSections"),
       shapeDecorators: collect(active, "shapeDecorators"),
       pointDrops: collect(active, "pointDrops"),
       pageCategories: collect(active, "pageCategories"),

@@ -102,7 +102,7 @@ function Connection() {
         <p className="flex items-center gap-1.5 text-muted-foreground">
           <Icon icon={Loading03Icon} className="size-3.5 animate-spin" />
           {bridge === "offline"
-            ? "Can't reach the Lemni server. Reload the page."
+            ? "Can't reach the Lemscape server. Reload the page."
             : "Connecting the board…"}
         </p>
       ) : clients.length ? (
@@ -199,11 +199,11 @@ const MASK = "••••••••"
 
 function commandsFor(setup: Setup, token: string) {
   return {
-    claude: `claude mcp add --transport http --scope user lemni ${setup.url} --header "Authorization: Bearer ${token}"`,
+    claude: `claude mcp add --transport http --scope user lemscape ${setup.url} --header "Authorization: Bearer ${token}"`,
     desktop: JSON.stringify(
       {
         mcpServers: {
-          lemni: {
+          lemscape: {
             command: "npx",
             args: [
               "-y",
@@ -211,16 +211,16 @@ function commandsFor(setup: Setup, token: string) {
               setup.url,
               "--allow-http",
               "--header",
-              "Authorization:${LEMNI_AUTH}",
+              "Authorization:${LEMSCAPE_AUTH}",
             ],
-            env: { LEMNI_AUTH: `Bearer ${token}` },
+            env: { LEMSCAPE_AUTH: `Bearer ${token}` },
           },
         },
       },
       null,
       2
     ),
-    codex: `[mcp_servers.lemni]\nurl = "${setup.url}"\nhttp_headers = { "Authorization" = "Bearer ${token}" }`,
+    codex: `[mcp_servers.lemscape]\nurl = "${setup.url}"\nhttp_headers = { "Authorization" = "Bearer ${token}" }`,
   }
 }
 
@@ -239,7 +239,7 @@ function Connect() {
           setError(data.error ?? "Couldn't load the connect details.")
         else setSetup(data)
       })
-      .catch(() => live && setError("Couldn't reach the Lemni server."))
+      .catch(() => live && setError("Couldn't reach the Lemscape server."))
     return () => {
       live = false
     }

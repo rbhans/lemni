@@ -1,5 +1,6 @@
 "use client"
 
+import type { IconSvgElement } from "@hugeicons/react"
 import { useEffect, useMemo, useState } from "react"
 import { atom, react, useValue, type Signal } from "tldraw"
 
@@ -66,10 +67,48 @@ export interface HistoryQuery {
   buckets: number
 }
 
+/** How a write changes a point: set its value, override it (optionally for a while), or release it to auto. */
+export type WriteAction = "set" | "override" | "auto"
+
+export interface PointWriteRequest {
+  point: string
+  action: WriteAction
+  /** Required for set and override. */
+  value?: boolean | number | string
+  /** Timed override, in seconds (override only). */
+  durationSec?: number
+}
+
+/** What a source says a point accepts, before offering a control for it. */
+export interface WriteCapability {
+  point: string
+  writable: boolean
+  actions: WriteAction[]
+  /** Choices for multistate points, in order. */
+  enumOptions: string[]
+  supportsDuration: boolean
+}
+
+export interface WriteOutcome {
+  point: string
+  ok: boolean
+  error?: string
+  /** Read back afterwards (a higher priority may still win). */
+  after?: LiveValue
+}
+
+/** Who asked and why; sources that keep an audit log record it. */
+export interface WriteRequester {
+  requestedBy: string
+  reason: string
+}
+
 export interface DataSource {
   /** Stable across sessions, e.g. "niagara:https://10.0.0.20". Saved in drawings. */
   id: string
   label: string
+  /** The connection's icon (`sourceIcon` in studio/shell/source-icon.ts). */
+  icon?: IconSvgElement
   /** Declares interest in live values; returns a function that releases it. */
   watch(point: string): () => void
   value(point: string): Signal<LiveValue | undefined>
@@ -81,10 +120,20 @@ export interface DataSource {
   pointsUnder?(folder: string, limit: number): Promise<PointOption[]>
   /** Shows a point or folder in the source's own panel. */
   reveal?(point: string): void
+  /** Whether points can be written, and how. Absent: the source is read only. */
+  describeWrite?(points: string[]): Promise<WriteCapability[]>
+  /**
+   * Writes points. Callers get the person's explicit approval first; the source
+   * sends once and never retries.
+   */
+  write?(
+    writes: PointWriteRequest[],
+    who: WriteRequester
+  ): Promise<WriteOutcome[]>
 }
 
 /** Drag-and-drop format for a point (station tree → canvas, behavior editor). */
-export const POINT_DRAG_TYPE = "application/x-lemni-point"
+export const POINT_DRAG_TYPE = "application/x-lemscape-point"
 
 export interface PointDragData {
   source: string
@@ -94,7 +143,7 @@ export interface PointDragData {
 }
 
 /** Drag-and-drop format for a folder of points (equipment, device, network). */
-export const FOLDER_DRAG_TYPE = "application/x-lemni-folder"
+export const FOLDER_DRAG_TYPE = "application/x-lemscape-folder"
 
 export interface FolderDragData {
   source: string

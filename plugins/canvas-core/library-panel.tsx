@@ -22,7 +22,7 @@ import { PanelHeader } from "@/studio/shell/fields"
 import { Icon } from "@/studio/shell/icon"
 import { useStudioContext } from "@/studio/studio-context"
 
-const DRAG_TYPE = "application/x-lemni-library-item"
+const DRAG_TYPE = "application/x-lemscape-library-item"
 
 /**
  * One library for every plugin: each contributes collections to a tab

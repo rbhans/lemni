@@ -13,6 +13,17 @@
 .nx .blade.alt{transform:rotate(calc(var(--blade,45deg) * -1))}
 .nx.parallel .blade.alt{transform:rotate(var(--blade,45deg))}
 .nx.on .ac-f{fill:var(--acc)}
+.nx .plate{transition:transform .2s}
+.nx.st-alarm{--shadow:#CF1624}
+.nx.st-fault{--shadow:#FC7734}
+.nx.st-down{--shadow:#FAC600}
+.nx.st-overridden{--shadow:#BFADDD}
+.nx.st-stale{--shadow:#D9C09D}
+.nx.st-disabled{--shadow:#D6D6D6}
+.nx.st-alarm .plate,.nx.st-fault .plate,.nx.st-down .plate,.nx.st-overridden .plate,.nx.st-stale .plate,.nx.st-disabled .plate{transform:translate(6px,6px)}
+.nx.st-disabled{--ink:#B9BFC7;--ink2:#BEC4CB;--ink3:#CDD2D8}
+.nx.st-disabled.dk{--ink:#4B525B;--ink2:#454C55;--ink3:#3A4048}
+.nx.st-disabled .body{--acc:var(--ink2);--acc-t:none}
 </style>
-<g class="body m-run"><rect class="sh" x="19" y="14" width="20" height="10" rx="2"/><rect class="fo" x="15" y="10" width="20" height="10" rx="2"/><rect class="sh" x="14" y="24" width="30" height="100" rx="4"/><rect class="fo" x="10" y="20" width="30" height="100" rx="4"/><g class="blade"><rect class="f2 ac-f" x="12.5" y="30" width="25" height="5" rx="2.5"/></g><circle class="fi" cx="25" cy="32.5" r="2"/><g class="blade alt"><rect class="f2 ac-f" x="12.5" y="55" width="25" height="5" rx="2.5"/></g><circle class="fi" cx="25" cy="57.5" r="2"/><g class="blade"><rect class="f2 ac-f" x="12.5" y="80" width="25" height="5" rx="2.5"/></g><circle class="fi" cx="25" cy="82.5" r="2"/><g class="blade alt"><rect class="f2 ac-f" x="12.5" y="105" width="25" height="5" rx="2.5"/></g><circle class="fi" cx="25" cy="107.5" r="2"/></g>
+<g class="body m-run"><g class="plate" transform="translate(4 4)"><rect class="sh" x="15" y="10" width="20" height="10" rx="2" /><rect class="sh" x="10" y="20" width="30" height="100" rx="4" /></g><rect class="fo" x="15" y="10" width="20" height="10" rx="2" /><rect class="fo" x="10" y="20" width="30" height="100" rx="4" /><g class="blade"><rect class="f2 ac-f" x="12.5" y="30" width="25" height="5" rx="2.5" /></g><circle class="fi" cx="25" cy="32.5" r="2" /><g class="blade alt"><rect class="f2 ac-f" x="12.5" y="55" width="25" height="5" rx="2.5" /></g><circle class="fi" cx="25" cy="57.5" r="2" /><g class="blade"><rect class="f2 ac-f" x="12.5" y="80" width="25" height="5" rx="2.5" /></g><circle class="fi" cx="25" cy="82.5" r="2" /><g class="blade alt"><rect class="f2 ac-f" x="12.5" y="105" width="25" height="5" rx="2.5" /></g><circle class="fi" cx="25" cy="107.5" r="2" /></g>
 </svg>

@@ -9,9 +9,11 @@ import {
   searchTermsFor,
   SHARED_CSS,
   stateOptionsFor,
+  STATUS,
   stretchLength,
   symbolClasses,
   symbolMarkup,
+  symbolStatus,
   symbolVars,
 } from "./library.ts"
 
@@ -60,6 +62,19 @@ test("state becomes classes and variables the piece understands", () => {
     `bas-symbol ${fan.scope} dk on ccw fx`
   )
   assert.deepEqual(symbolVars(fan, on), {})
+  assert.equal(
+    symbolClasses(fan, DEFAULT_STATE, {
+      dark: false,
+      status: "{alarm,unackedAlarm}",
+    }),
+    `bas-symbol ${fan.scope} st-alarm`
+  )
+  // Runs have no plate.
+  const duct = getSymbol("air/duct")!
+  assert.equal(
+    symbolClasses(duct, DEFAULT_STATE, { dark: false, status: "{fault}" }),
+    `bas-symbol ${duct.scope}`
+  )
 
   const damper = getSymbol("air/damper")!
   assert.deepEqual(symbolVars(damper, { ...DEFAULT_STATE, position: 100 }), {
@@ -109,4 +124,36 @@ test("symbols reset inherited SVG styles so they draw as they do standalone", ()
   assert.match(SHARED_CSS, /\.bas-symbol\{[^}]*stroke-linecap:butt/)
   assert.match(SHARED_CSS, /\.bas-symbol\{[^}]*stroke-linejoin:miter/)
   assert.match(getSymbol("air/fan-plug")!.css, /stroke-dasharray:2 5/)
+})
+
+test("status strings map to the plate by Niagara's priority", () => {
+  assert.deepEqual(STATUS.priority, [
+    "disabled",
+    "fault",
+    "down",
+    "alarm",
+    "stale",
+    "overridden",
+  ])
+  assert.equal(symbolStatus("{ok}"), null)
+  assert.equal(symbolStatus(undefined), null)
+  assert.equal(symbolStatus("{down,alarm,stale}"), "down")
+  assert.equal(symbolStatus("{disabled,fault}"), "disabled")
+  assert.equal(symbolStatus("{overridden} @ 8"), "overridden")
+  assert.equal(symbolStatus("{ok} @ 10"), "overridden")
+  // Every piece but the runs and junctions has a plate.
+  const plain = PIECES.filter((p) => !p.features.includes("status")).map(
+    (p) => p.id
+  )
+  assert.deepEqual(plain.sort(), [
+    "air/duct",
+    "air/duct-junction",
+    "water/pipe",
+    "water/pipe-junction",
+  ])
+  for (const piece of PIECES.filter((p) => p.features.includes("status")))
+    assert.ok(
+      piece.css.includes(`.${piece.scope}.st-alarm .plate`),
+      `${piece.id}: status CSS is scoped to the piece`
+    )
 })

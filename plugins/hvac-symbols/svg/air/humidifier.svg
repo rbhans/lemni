@@ -16,6 +16,17 @@
 .nx.on .p3{animation-delay:1s}
 @keyframes nx-puff{ 0%{opacity:0;transform:translateX(-2px)} 35%{opacity:1} 100%{opacity:0;transform:translateX(6px)} }
 @media (prefers-reduced-motion:reduce){ .nx *{animation:none !important} }
+.nx .plate{transition:transform .2s}
+.nx.st-alarm{--shadow:#CF1624}
+.nx.st-fault{--shadow:#FC7734}
+.nx.st-down{--shadow:#FAC600}
+.nx.st-overridden{--shadow:#BFADDD}
+.nx.st-stale{--shadow:#D9C09D}
+.nx.st-disabled{--shadow:#D6D6D6}
+.nx.st-alarm .plate,.nx.st-fault .plate,.nx.st-down .plate,.nx.st-overridden .plate,.nx.st-stale .plate,.nx.st-disabled .plate{transform:translate(6px,6px)}
+.nx.st-disabled{--ink:#B9BFC7;--ink2:#BEC4CB;--ink3:#CDD2D8}
+.nx.st-disabled.dk{--ink:#4B525B;--ink2:#454C55;--ink3:#3A4048}
+.nx.st-disabled .body{--acc:var(--ink2);--acc-t:none}
 </style>
-<g class="body m-hum"><rect class="sh" x="14" y="14" width="40" height="100" rx="4"/><rect class="fo" x="10" y="10" width="40" height="100" rx="4"/><line class="d2 mani" x1="20" y1="20" x2="20" y2="100"/><line class="d2" x1="21" y1="28" x2="27" y2="28"/><path class="d3 ac-s puff p1" d="M31 24Q35 28 31 32"/><path class="d3 ac-s puff p1" d="M37 22Q43 28 37 34"/><line class="d2" x1="21" y1="44" x2="27" y2="44"/><path class="d3 ac-s puff p2" d="M31 40Q35 44 31 48"/><path class="d3 ac-s puff p2" d="M37 38Q43 44 37 50"/><line class="d2" x1="21" y1="60" x2="27" y2="60"/><path class="d3 ac-s puff p3" d="M31 56Q35 60 31 64"/><path class="d3 ac-s puff p3" d="M37 54Q43 60 37 66"/><line class="d2" x1="21" y1="76" x2="27" y2="76"/><path class="d3 ac-s puff p1" d="M31 72Q35 76 31 80"/><path class="d3 ac-s puff p1" d="M37 70Q43 76 37 82"/><line class="d2" x1="21" y1="92" x2="27" y2="92"/><path class="d3 ac-s puff p2" d="M31 88Q35 92 31 96"/><path class="d3 ac-s puff p2" d="M37 86Q43 92 37 98"/></g>
+<g class="body m-hum"><g class="plate" transform="translate(4 4)"><rect class="sh" x="10" y="10" width="40" height="100" rx="4" /></g><rect class="fo" x="10" y="10" width="40" height="100" rx="4" /><line class="d2 mani" x1="20" y1="20" x2="20" y2="100" /><line class="d2" x1="21" y1="28" x2="27" y2="28" /><path class="d3 ac-s puff p1" d="M31 24Q35 28 31 32" /><path class="d3 ac-s puff p1" d="M37 22Q43 28 37 34" /><line class="d2" x1="21" y1="44" x2="27" y2="44" /><path class="d3 ac-s puff p2" d="M31 40Q35 44 31 48" /><path class="d3 ac-s puff p2" d="M37 38Q43 44 37 50" /><line class="d2" x1="21" y1="60" x2="27" y2="60" /><path class="d3 ac-s puff p3" d="M31 56Q35 60 31 64" /><path class="d3 ac-s puff p3" d="M37 54Q43 60 37 66" /><line class="d2" x1="21" y1="76" x2="27" y2="76" /><path class="d3 ac-s puff p1" d="M31 72Q35 76 31 80" /><path class="d3 ac-s puff p1" d="M37 70Q43 76 37 82" /><line class="d2" x1="21" y1="92" x2="27" y2="92" /><path class="d3 ac-s puff p2" d="M31 88Q35 92 31 96" /><path class="d3 ac-s puff p2" d="M37 86Q43 92 37 98" /></g>
 </svg>

@@ -41,3 +41,13 @@ export const ShapeStateContext = createContext<ShapeStateValues | null>(null)
 export function useShapeStateOverrides(): ShapeStateValues | null {
   return useContext(ShapeStateContext)
 }
+
+/**
+ * The Niagara status string of the point driving the shape being rendered (its first
+ * bound behavior's point), or null. Symbols show it on their status plate.
+ */
+export const ShapeStatusContext = createContext<string | null>(null)
+
+export function useShapeStatus(): string | null {
+  return useContext(ShapeStatusContext)
+}

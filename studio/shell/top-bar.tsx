@@ -42,25 +42,33 @@ import { usePluginRuntime } from "../plugins/runtime"
 import { studioState } from "../state"
 import { AppMenubar } from "./app-menubar"
 import { CategoryBar } from "./category-bar"
-import { BrandMark, PRODUCT_NAME, PRODUCT_TAGLINE } from "./brand"
+import { BrandMark, PRODUCT_TAGLINE } from "./brand"
 import { Icon } from "./icon"
 import { Tip } from "./tip"
 import { useWorkspace } from "./workspace"
 
 export function TopBar() {
   const { contributions } = usePluginRuntime()
+  const editor = useEditor()
+  // View → Reduce motion (it starts from the system setting) keeps the logo still.
+  const still = useValue(
+    "reduce motion",
+    () => editor.user.getAnimationSpeed() === 0,
+    [editor]
+  )
 
   return (
     <header className="flex h-11 items-center gap-2 border-b bg-background px-2.5">
       {/* The menubar keeps its width; the categories and right side give way instead. */}
       <div className="flex shrink-0 items-center gap-1.5">
         <Tip label={PRODUCT_TAGLINE} side="bottom">
+          {/* Same column as the panel rail below (48px with its 1px border), so the
+              mark centres over the rail's icons. */}
           <div
             tabIndex={-1}
-            className="flex shrink-0 cursor-default items-center gap-2 pr-1.5 pl-0.5 text-[13px] font-semibold whitespace-nowrap outline-none"
+            className="-ml-2.5 flex h-8 w-12 shrink-0 cursor-default items-center justify-center border-r border-transparent outline-none"
           >
-            <BrandMark />
-            {PRODUCT_NAME}
+            <BrandMark still={still} className="size-full" />
           </div>
         </Tip>
         <AppMenubar />

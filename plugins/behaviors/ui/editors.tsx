@@ -6,7 +6,7 @@ import {
   Link01Icon,
   Unlink01Icon,
 } from "@hugeicons/core-free-icons"
-import { useEditor, useValue } from "tldraw"
+import { useValue } from "tldraw"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -35,6 +35,7 @@ import type {
 import { setTestValue, testValues } from "../runtime/state"
 import type { FieldDef } from "./effect-ui"
 import { PointField } from "@/studio/data/point-field"
+import { TargetField } from "@/studio/navigation/target-field"
 
 export function Row({
   label,
@@ -398,6 +399,7 @@ export function ParamField({
           <TargetField
             value={typeof value === "string" ? value : ""}
             onChange={(v) => onChange(field.key, v)}
+            pickLabel="this shape's click"
           />
         </Row>
       )
@@ -514,48 +516,6 @@ function PivotGrid({
         })
       )}
     </div>
-  )
-}
-
-/** Pages and frames, as navigation targets. */
-function TargetField({
-  value,
-  onChange,
-}: {
-  value: string
-  onChange(v: string): void
-}) {
-  const editor = useEditor()
-  const options = useValue(
-    "navigation targets",
-    () => {
-      const pages = editor.getPages().map((page) => ({
-        value: page.id as string,
-        label: page.name,
-        group: "Pages",
-      }))
-      const frames = editor.getPages().flatMap((page) =>
-        [...editor.getPageShapeIds(page.id)]
-          .map((id) => editor.getShape(id))
-          .filter((shape) => shape?.type === "frame")
-          .map((shape) => ({
-            value: shape!.id as string,
-            label: `${(shape!.props as { name?: string }).name || "Frame"} · ${page.name}`,
-            group: "Frames",
-          }))
-      )
-      return [...pages, ...frames]
-    },
-    [editor]
-  )
-  return (
-    <SelectField
-      label="Go to"
-      value={value || null}
-      options={options}
-      onChange={onChange}
-      placeholder="Choose a page or frame"
-    />
   )
 }
 

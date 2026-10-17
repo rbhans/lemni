@@ -12,6 +12,7 @@ const SYMBOLS: Record<string, string> = isMac
       backspace: "⌫",
       enter: "↵",
       esc: "Esc",
+      comma: ",",
     }
   : {
       cmd: "Ctrl",
@@ -22,6 +23,7 @@ const SYMBOLS: Record<string, string> = isMac
       backspace: "⌫",
       enter: "Enter",
       esc: "Esc",
+      comma: ",",
     }
 
 /**

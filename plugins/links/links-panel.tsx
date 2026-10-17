@@ -36,11 +36,12 @@ import {
 import { endKey, linksOf, sameEnd, type LinkEnd } from "@/studio/links/model"
 import { usePageGroups } from "@/studio/pages/page-categories"
 import { PanelHeader } from "@/studio/shell/fields"
+import { getDataSource } from "@/studio/data/live-points"
 import { Icon } from "@/studio/shell/icon"
 import { shapeDisplayName } from "@/studio/lib/shape-names"
 
 /** Drag format for a linkable thing (Links panel → wire sheet). */
-export const LINK_END_DRAG_TYPE = "application/x-lemni-link-end"
+export const LINK_END_DRAG_TYPE = "application/x-lemscape-link-end"
 
 interface Row {
   end: LinkEnd
@@ -142,13 +143,17 @@ export function LinksPanel() {
           {data.points.filter(matches).length ? (
             <section aria-label="Station" className="pb-1">
               <p className="px-3.5 pt-1.5 pb-0.5 text-[10.5px] font-medium tracking-wide text-muted-foreground uppercase">
-                Station
+                Points
               </p>
               {data.points.filter(matches).map((row) => (
                 <LinkRow
                   key={endKey(row.end)}
                   row={row}
-                  icon={ServerStack01Icon}
+                  icon={
+                    (row.end.kind === "point"
+                      ? getDataSource(row.end.source)?.icon
+                      : undefined) ?? ServerStack01Icon
+                  }
                   depth={0}
                 />
               ))}

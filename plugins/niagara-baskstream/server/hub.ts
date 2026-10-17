@@ -205,7 +205,7 @@ class StationConnection extends EventEmitter {
         if (!this.watch) {
           if (!points.length) return
           this.watch = await this.client.watch(points, {
-            group: `lemni-${this.id.slice(0, 8)}`,
+            group: `lemscape-${this.id.slice(0, 8)}`,
             leaseSec: 120,
           })
           this.watch.on("change", (snapshot: PointSnapshot) =>
@@ -494,12 +494,12 @@ class StationHub {
 }
 
 const globalHub = globalThis as typeof globalThis & {
-  __lemniStationHub?: StationHub
+  __lemscapeStationHub?: StationHub
 }
 
 export function getStationHub(): StationHub {
-  globalHub.__lemniStationHub ??= new StationHub()
-  return globalHub.__lemniStationHub
+  globalHub.__lemscapeStationHub ??= new StationHub()
+  return globalHub.__lemscapeStationHub
 }
 
 export type { StationConnection }

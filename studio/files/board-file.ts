@@ -1,18 +1,18 @@
 // Board file naming and the recent-boards list. Pure module (no DOM, no tldraw).
 
-export const BOARD_EXTENSION = ".lemni"
-/** Boards saved before the product was renamed (BAS Board). */
-export const LEGACY_EXTENSION = ".basboard"
+export const BOARD_EXTENSION = ".lemscape"
+/** Boards saved under the product's earlier names (Lemni, then BAS Board before it). */
+export const LEGACY_EXTENSIONS = [".lemni", ".basboard"] as const
 /** What Open accepts: our boards (old and new), plus plain tldraw files. */
 export const OPENABLE_EXTENSIONS = [
   BOARD_EXTENSION,
-  LEGACY_EXTENSION,
+  ...LEGACY_EXTENSIONS,
   ".tldr",
   ".json",
 ] as const
 export const UNTITLED_BOARD = "Untitled board"
 
-/** "AHU-1 graphics.lemni" → "AHU-1 graphics". */
+/** "AHU-1 graphics.lemscape" → "AHU-1 graphics". */
 export function boardNameFromFileName(fileName: string): string {
   let name = fileName.trim()
   for (const ext of OPENABLE_EXTENSIONS) {

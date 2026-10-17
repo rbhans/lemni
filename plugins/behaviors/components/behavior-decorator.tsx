@@ -19,7 +19,10 @@ import {
 } from "tldraw"
 
 import { getDataSource, useDataSources } from "@/studio/data/live-points"
-import { ShapeStateContext } from "@/studio/editor/shape-states"
+import {
+  ShapeStateContext,
+  ShapeStatusContext,
+} from "@/studio/editor/shape-states"
 import { cn } from "@/lib/utils"
 
 import type { Presentation } from "../core/effects"
@@ -135,7 +138,9 @@ function RuntimeLayer({
               <ShapeStateContext.Provider
                 value={p && Object.keys(p.state).length ? p.state : null}
               >
-                {children}
+                <ShapeStatusContext.Provider value={p?.status ?? null}>
+                  {children}
+                </ShapeStatusContext.Provider>
               </ShapeStateContext.Provider>
             </div>
             {!isBackground && p?.color && shape.type === "image" ? (

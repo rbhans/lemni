@@ -30,7 +30,7 @@ function headersOf(url: URL): Promise<Headers> {
         method: "GET",
         timeout: TIMEOUT_MS,
         rejectUnauthorized: false,
-        headers: { "user-agent": "Lemni web view check" },
+        headers: { "user-agent": "Lemscape web view check" },
       },
       (response) => {
         const one = (name: string) => {

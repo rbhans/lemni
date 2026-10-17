@@ -1,35 +1,95 @@
+"use client"
+
+import { useRef } from "react"
+
 import { cn } from "@/lib/utils"
 
-export const PRODUCT_NAME = "Lemni"
+import {
+  MARK_LOOP,
+  MARK_ORBIT,
+  MARK_POINT,
+  MARK_POINT_RADIUS,
+  MARK_POINT_RING,
+  MARK_VIEWBOX,
+} from "./brand-mark"
+
+export const PRODUCT_NAME = "Lemscape"
 export const PRODUCT_TAGLINE = "The endless canvas for buildings"
 
-/** The lemniscate (∞) the name comes from: two rounded boards joined by one endless line. */
-export const LOOP_PATH =
-  "M4 12C4 8.5 4.5 8 8 8C11.5 8 12.5 16 16 16C19.5 16 20 15.5 20 12C20 8.5 19.5 8 16 8C12.5 8 11.5 16 8 16C4.5 16 4 15.5 4 12Z"
+/** One trip round the loop. A brand moment, not routine UI, so it can take its time. */
+const ORBIT_MS = 900
 
-/** Endless-loop mark with its live point, on a dark tile in both themes. */
-export function BrandMark({ className }: { className?: string }) {
+/**
+ * The Lemscape mark: an endless loop laid on the ground with a live point travelling
+ * it. The loop takes the text color; the point is lime (darker in light mode), ringed in
+ * the background color so it sits on top of the line. Hovering sends the point once
+ * round the loop (mouse only, and never under Reduce motion).
+ */
+export function BrandMark({
+  className,
+  still = false,
+}: {
+  className?: string
+  /** Reduce motion: the point stays put. */
+  still?: boolean
+}) {
+  const orbit = useRef<SVGElement>(null)
+  const running = useRef(false)
+
+  const travel = () => {
+    // Touch fires a hover on tap; a trip already under way finishes rather than restarting.
+    if (still || running.current) return
+    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return
+    running.current = true
+    ;(orbit.current as SVGAnimationElement | null)?.beginElement()
+    window.setTimeout(() => (running.current = false), ORBIT_MS)
+  }
+
   return (
     <span
-      className={cn(
-        "flex size-6 items-center justify-center rounded-md bg-stone-950 dark:ring-1 dark:ring-white/10",
-        className
-      )}
+      className={cn("flex items-center justify-center", className)}
+      onPointerEnter={travel}
     >
-      <svg viewBox="0 0 24 24" fill="none" className="size-[20px]" aria-hidden>
-        <path
-          d={LOOP_PATH}
-          className="stroke-primary"
-          strokeWidth={2.1}
-          strokeLinejoin="round"
-        />
-        <circle
-          cx={19.31}
-          cy={8.69}
-          r={1.7}
-          className="fill-white stroke-stone-950"
-          strokeWidth={0.9}
-        />
+      <svg
+        viewBox={MARK_VIEWBOX}
+        role="img"
+        aria-label={PRODUCT_NAME}
+        className="h-auto w-[26px] overflow-visible"
+      >
+        {MARK_LOOP.map(({ width, d }) => (
+          <path
+            key={width}
+            d={d}
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={width}
+            strokeLinecap="round"
+          />
+        ))}
+        <g>
+          <circle
+            {...MARK_POINT}
+            r={MARK_POINT_RING}
+            className="fill-background"
+          />
+          <circle
+            {...MARK_POINT}
+            r={MARK_POINT_RADIUS}
+            className="fill-sidebar-primary"
+          />
+          {/* Strong ease-in-out: on-screen movement that starts and ends at rest. */}
+          <animateMotion
+            ref={orbit}
+            path={MARK_ORBIT}
+            dur={`${ORBIT_MS}ms`}
+            begin="indefinite"
+            fill="remove"
+            calcMode="spline"
+            keyPoints="0;1"
+            keyTimes="0;1"
+            keySplines="0.77 0 0.175 1"
+          />
+        </g>
       </svg>
     </span>
   )

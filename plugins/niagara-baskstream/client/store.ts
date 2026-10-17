@@ -1,6 +1,6 @@
 "use client"
 
-import { atom, react, type Atom } from "tldraw"
+import { atom, computed, react, type Atom } from "tldraw"
 
 import {
   registerDataSource,
@@ -9,7 +9,13 @@ import {
   type HistoryQuery,
   type LiveValue,
   type PointOption,
+  type PointWriteRequest,
+  type WriteAction,
+  type WriteCapability,
+  type WriteOutcome,
+  type WriteRequester,
 } from "@/studio/data/live-points"
+import { sourceIcon } from "@/studio/shell/source-icon"
 
 import {
   statusKind,
@@ -21,9 +27,12 @@ import {
 } from "../shared"
 import { stationApi, StationApiError } from "./api"
 
+/** A live Niagara station. */
+export const NIAGARA_ICON = sourceIcon("N", "live")
+
 const SESSION_ID = crypto.randomUUID()
-const ACTIVE_KEY = "lemni.station.active"
-const PROFILES_KEY = "lemni.station-profiles.v1"
+const ACTIVE_KEY = "lemscape.station.active"
+const PROFILES_KEY = "lemscape.station-profiles.v1"
 
 function toLiveValue(value: PointValue): LiveValue {
   return {
@@ -125,6 +134,7 @@ export function onReveal(reveal: (ord: string) => void) {
 /** Live values and interest tracking for the connected station. */
 class NiagaraLiveSource implements DataSource {
   readonly label: string
+  readonly icon = NIAGARA_ICON
   private readonly values = new Map<string, Atom<LiveValue | undefined>>()
   private readonly interest = new Map<string, number>()
   private syncTimer: ReturnType<typeof setTimeout> | null = null
@@ -191,6 +201,38 @@ class NiagaraLiveSource implements DataSource {
 
   reveal(point: string) {
     revealInTree?.(point)
+  }
+
+  async describeWrite(points: string[]): Promise<WriteCapability[]> {
+    const { points: infos } = await stationApi.describeWrite(
+      this.connectionId,
+      points
+    )
+    return infos.map((info) => ({
+      point: info.point,
+      writable: info.writable,
+      actions: info.actions.filter(
+        (a): a is WriteAction => a === "set" || a === "override" || a === "auto"
+      ),
+      enumOptions: info.enumOptions,
+      supportsDuration: info.supportsDuration,
+    }))
+  }
+
+  async write(
+    writes: PointWriteRequest[],
+    who: WriteRequester
+  ): Promise<WriteOutcome[]> {
+    const { results } = await stationApi.write(this.connectionId, writes, who)
+    return results.map((result) => {
+      if (result.after) this.value(result.point).set(toLiveValue(result.after))
+      return {
+        point: result.point,
+        ok: result.ok,
+        error: result.error,
+        after: result.after ? toLiveValue(result.after) : undefined,
+      }
+    })
   }
 
   /** Walks the folder breadth-first, a few levels deep, collecting points. */
@@ -266,6 +308,11 @@ export const connectionError = atom<string | null>(
   null
 )
 let source: NiagaraLiveSource | null = null
+
+/** The rail icon: dashed until the station is connected. */
+export const niagaraRailIcon = computed("niagara rail icon", () =>
+  sourceIcon("N", "live", connection.get()?.status === "connected")
+)
 
 /** Stable source id for drawings: the station, not this browser session. */
 export function sourceIdFor(info: Pick<ConnectionInfo, "station">) {

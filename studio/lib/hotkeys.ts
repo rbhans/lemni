@@ -21,7 +21,7 @@ export const IS_MAC =
   typeof navigator !== "undefined" &&
   /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)
 
-/** "cmd+shift+s" → one chord per comma-separated alternative. Legacy `$`/`!` work too. */
+/** "cmd+shift+s" → one chord per comma-separated alternative ("comma" names the key). Legacy `$`/`!` work too. */
 export function parseKbd(kbd: string): Chord[] {
   return kbd
     .split(",")
@@ -43,7 +43,9 @@ export function parseKbd(kbd: string): Chord[] {
       expanded = prefix + expanded
       const parts = expanded.split("+").map((p) => p.trim().toLowerCase())
       // "shift++" style keys: the key itself may be "+".
-      const key = expanded.endsWith("++") ? "+" : (parts.pop() ?? "")
+      const last = expanded.endsWith("++") ? "+" : (parts.pop() ?? "")
+      // "," separates alternatives, so a comma key is spelled "comma".
+      const key = last === "comma" ? "," : last
       return {
         key,
         mod: parts.some((p) => p === "cmd" || p === "ctrl" || p === "mod"),

@@ -59,6 +59,11 @@ export function composePresentation(
 
   for (const owner of owners) {
     const ownerTransforms: Presentation["transforms"] = []
+    // The first bound point's status, whatever its effect (a symbol's status plate).
+    if (owner.frame.isSelf) {
+      const first = owner.behaviors.find((b) => b.enabled && b.source)
+      if (first?.source) p.status = read(first.source, first)?.status ?? null
+    }
     for (const behavior of owner.behaviors) {
       if (!behavior.enabled) continue
       const def = getEffect(behavior.effect)

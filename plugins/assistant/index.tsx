@@ -87,6 +87,7 @@ export const assistant: BoardPlugin = {
     {
       id: "ai",
       title: "AI",
+      group: "ai",
       icon: AiMagicIcon,
       side: "left",
       order: 90,

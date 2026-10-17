@@ -4,7 +4,6 @@ import { useState, type FormEvent } from "react"
 import {
   Alert02Icon,
   Cancel01Icon,
-  ServerStack01Icon,
 } from "@hugeicons/core-free-icons"
 import { useValue } from "tldraw"
 
@@ -25,6 +24,7 @@ import {
   connect,
   connectionError,
   forgetProfile,
+  NIAGARA_ICON,
   stationProfiles,
 } from "../client/store"
 
@@ -88,7 +88,7 @@ export function ConnectForm() {
                   onClick={() => setProfile(saved)}
                 >
                   <Icon
-                    icon={ServerStack01Icon}
+                    icon={NIAGARA_ICON}
                     className="size-3.5 text-muted-foreground"
                   />
                   <span className="flex min-w-0 flex-col">

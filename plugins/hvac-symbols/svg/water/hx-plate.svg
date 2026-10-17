@@ -9,6 +9,17 @@
 .nx .f3{fill:var(--ink3)}
 .nx .d2{fill:none;stroke:var(--ink2);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
 .nx .pl{fill:none;stroke:var(--ink2);stroke-width:2}
+.nx .plate{transition:transform .2s}
+.nx.st-alarm{--shadow:#CF1624}
+.nx.st-fault{--shadow:#FC7734}
+.nx.st-down{--shadow:#FAC600}
+.nx.st-overridden{--shadow:#BFADDD}
+.nx.st-stale{--shadow:#D9C09D}
+.nx.st-disabled{--shadow:#D6D6D6}
+.nx.st-alarm .plate,.nx.st-fault .plate,.nx.st-down .plate,.nx.st-overridden .plate,.nx.st-stale .plate,.nx.st-disabled .plate{transform:translate(6px,6px)}
+.nx.st-disabled{--ink:#B9BFC7;--ink2:#BEC4CB;--ink3:#CDD2D8}
+.nx.st-disabled.dk{--ink:#4B525B;--ink2:#454C55;--ink3:#3A4048}
+.nx.st-disabled .body{--acc:var(--ink2);--acc-t:none}
 </style>
-<g class="body"><rect class="so" x="100" y="10" width="10" height="80" rx="2"/><line class="d2" x1="20" y1="14" x2="104" y2="14"/><line class="d2" x1="20" y1="86" x2="104" y2="86"/><line class="pl" x1="26" y1="18" x2="26" y2="82"/><line class="pl" x1="30" y1="18" x2="30" y2="82"/><line class="pl" x1="34" y1="18" x2="34" y2="82"/><line class="pl" x1="38" y1="18" x2="38" y2="82"/><line class="pl" x1="42" y1="18" x2="42" y2="82"/><line class="pl" x1="46" y1="18" x2="46" y2="82"/><line class="pl" x1="50" y1="18" x2="50" y2="82"/><line class="pl" x1="54" y1="18" x2="54" y2="82"/><line class="pl" x1="58" y1="18" x2="58" y2="82"/><line class="pl" x1="62" y1="18" x2="62" y2="82"/><line class="pl" x1="66" y1="18" x2="66" y2="82"/><rect class="so" x="68" y="14" width="8" height="72" rx="2"/><rect class="sh" x="14" y="14" width="12" height="80" rx="2"/><rect class="fo" x="10" y="10" width="12" height="80" rx="2"/><circle class="f3" cx="16" cy="24" r="3"/><circle class="f3" cx="16" cy="76" r="3"/></g>
+<g class="body"><g class="plate" transform="translate(4 4)"><rect class="sh" x="100" y="10" width="10" height="80" rx="2" /><rect class="sh" x="68" y="14" width="8" height="72" rx="2" /><rect class="sh" x="10" y="10" width="12" height="80" rx="2" /></g><rect class="so" x="100" y="10" width="10" height="80" rx="2" /><line class="d2" x1="20" y1="14" x2="104" y2="14" /><line class="d2" x1="20" y1="86" x2="104" y2="86" /><line class="pl" x1="26" y1="18" x2="26" y2="82" /><line class="pl" x1="30" y1="18" x2="30" y2="82" /><line class="pl" x1="34" y1="18" x2="34" y2="82" /><line class="pl" x1="38" y1="18" x2="38" y2="82" /><line class="pl" x1="42" y1="18" x2="42" y2="82" /><line class="pl" x1="46" y1="18" x2="46" y2="82" /><line class="pl" x1="50" y1="18" x2="50" y2="82" /><line class="pl" x1="54" y1="18" x2="54" y2="82" /><line class="pl" x1="58" y1="18" x2="58" y2="82" /><line class="pl" x1="62" y1="18" x2="62" y2="82" /><line class="pl" x1="66" y1="18" x2="66" y2="82" /><rect class="so" x="68" y="14" width="8" height="72" rx="2" /><rect class="fo" x="10" y="10" width="12" height="80" rx="2" /><circle class="f3" cx="16" cy="24" r="3" /><circle class="f3" cx="16" cy="76" r="3" /></g>
 </svg>

@@ -15,14 +15,14 @@ import { persistentAtom } from "@/studio/state"
 
 /** How much AI apps may do. Kept per browser, not in the board. */
 export const aiAccess = persistentAtom<AiAccessLevel>(
-  "lemni.ai-access.v1",
+  "lemscape.ai-access.v1",
   "edit",
   isAccessLevel
 )
 
 /** Bring the AI's changes into view as they happen. */
 export const aiFollow = persistentAtom(
-  "lemni.ai-follow.v1",
+  "lemscape.ai-follow.v1",
   true,
   (value): value is boolean => typeof value === "boolean"
 )

@@ -1,11 +1,10 @@
 "use client"
 
-import { ServerStack01Icon } from "@hugeicons/core-free-icons"
-
 import type { BoardPlugin } from "@/studio/plugins/types"
 
 import { niagaraAi } from "./client/ai-tools"
 import { disconnectLocal, restore } from "./client/lifecycle"
+import { NIAGARA_ICON, niagaraRailIcon } from "./client/store"
 import { ConnectionPill, LivePointsStatus } from "./components/connection-pill"
 import { StationPanel } from "./components/station-panel"
 
@@ -16,7 +15,7 @@ export const niagaraBaskstream: BoardPlugin = {
   description:
     "Station tree, search, live values, history and alarms through the baskStream SDK. AI apps can propose point writes and alarm acknowledgements, each approved by you.",
   category: "connections",
-  icon: ServerStack01Icon,
+  icon: NIAGARA_ICON,
   stage: "preview",
   optionalDependencies: ["behaviors"],
   ai: niagaraAi,
@@ -24,7 +23,10 @@ export const niagaraBaskstream: BoardPlugin = {
     {
       id: "station",
       title: "Station",
-      icon: ServerStack01Icon,
+      railLabel: "Niagara",
+      group: "connections",
+      icon: NIAGARA_ICON,
+      currentIcon: niagaraRailIcon,
       side: "left",
       order: 30,
       workspaces: ["canvas"],

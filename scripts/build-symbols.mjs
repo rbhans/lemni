@@ -2,11 +2,13 @@
 // Builds the HVAC symbol library module from the SVG pieces in plugins/hvac-symbols/svg.
 //
 //   node scripts/build-symbols.mjs                 regenerate from the in-repo copies
-//   node scripts/build-symbols.mjs --from <dir>    copy <dir> (e.g. ../symbol-library/svg) in first
+//   node scripts/build-symbols.mjs --from <dir>    copy <dir> (e.g. ../../symbol-library/svg) in first
 //
 // Each piece is a standalone SVG with its own <style> (see svg/README.md). Inline SVG
 // styles are global, so every piece's CSS is scoped to its own root class and its
-// keyframes are renamed. Features (on, ccw, flow, --level, …) are detected from the CSS.
+// keyframes are renamed. Features (on, ccw, flow, --level, status, …) are detected from the CSS.
+// What each piece is for (use, keywords, ports, roles) and the status model come from the
+// library's shared svg/library.json, which must cover every piece.
 // Anything unexpected (scripts, links, ids, odd viewBoxes) fails the build.
 
 import {
@@ -24,6 +26,7 @@ import { fileURLToPath } from "node:url"
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..")
 const svgDir = join(root, "plugins/hvac-symbols/svg")
 const outFile = join(root, "plugins/hvac-symbols/library.generated.ts")
+const manifestOut = join(root, "plugins/hvac-symbols/manifest.generated.ts")
 
 // Pieces that stretch along their run: their geometry is written with a {L} length.
 const STRETCH = new Set(["air/duct", "water/pipe"])
@@ -49,9 +52,11 @@ function syncFrom(source) {
     mkdirSync(dirname(target), { recursive: true })
     copyFileSync(file, target)
   }
-  const readme = join(from, "README.md")
-  if (statSync(readme, { throwIfNoEntry: false }))
-    copyFileSync(readme, join(svgDir, "README.md"))
+  for (const name of ["README.md", "library.json"]) {
+    const file = join(from, name)
+    if (statSync(file, { throwIfNoEntry: false }))
+      copyFileSync(file, join(svgDir, name))
+  }
   console.log(`Copied ${listSvgs(svgDir).length} pieces from ${from}`)
 }
 
@@ -90,11 +95,11 @@ function scopeRules(css, scope, where) {
         )
       const selectors = prelude.split(",").map((s) => {
         const sel = s.trim()
-        // Already scoped: ".scope", ".scope.on …", ".scope .part", ".scope:hover".
+        // Already scoped: ".scope", ".scope.on …", ".scope .part", ".scope:hover", ".scope[…]".
         const scoped =
           sel === `.${scope}` ||
           (sel.startsWith(`.${scope}`) &&
-            /^[.:\s]/.test(sel.slice(scope.length + 1)))
+            /^[.:\s[]/.test(sel.slice(scope.length + 1)))
         return scoped ? sel : `.${scope} ${sel}`
       })
       out += `${selectors.join(",")}{${inner.trim()}}`
@@ -181,6 +186,11 @@ function buildPiece(file) {
   if (has(/var\(--blade\b/)) features.push("position")
   if (has(/var\(--level\b/)) features.push("level")
   if (has(/var\(--sash\b/)) features.push("sash")
+  if (has(/\.nx\.st-[a-z]+\b/)) {
+    if (!/<g class="plate"/.test(source))
+      throw new Error(`${id}: status CSS needs a <g class="plate">`)
+    features.push("status")
+  }
 
   for (const name of new Set(
     [...css.matchAll(/@keyframes\s+([\w-]+)/g)].map((m) => m[1])
@@ -227,6 +237,13 @@ function buildPiece(file) {
     stretch = "x"
   }
 
+  const entry = library.pieces[id]
+  if (!entry) throw new Error(`${id}: missing from svg/library.json`)
+  if (entry.size?.[0] !== width || entry.size?.[1] !== height)
+    throw new Error(
+      `${id}: library.json says ${entry.size}, the SVG is ${width}×${height}`
+    )
+
   return {
     id,
     category,
@@ -237,13 +254,35 @@ function buildPiece(file) {
     css,
     body,
     features,
+    keywords: entry.keywords ?? [],
     ...(text !== undefined && { text }),
     ...(stretch && { stretch }),
   }
 }
 
+/** library.json's entry with shared roles ("run", "fault", …) written out. */
+function manifestEntry(id) {
+  const entry = library.pieces[id]
+  if (typeof entry.use !== "string" || !entry.use)
+    throw new Error(`${id}: library.json needs a "use"`)
+  const roles = (entry.roles ?? []).map((role) => {
+    if (typeof role !== "string") return role
+    if (!library.roles[role])
+      throw new Error(`${id}: unknown shared role "${role}"`)
+    return library.roles[role]
+  })
+  return { use: entry.use, ports: entry.ports ?? [], roles }
+}
+
 const fromIndex = process.argv.indexOf("--from")
 if (fromIndex !== -1) syncFrom(process.argv[fromIndex + 1] ?? "")
+
+const libraryFile = join(svgDir, "library.json")
+if (!statSync(libraryFile, { throwIfNoEntry: false }))
+  throw new Error(
+    `Missing ${relative(root, libraryFile)} (sync from the symbol library)`
+  )
+const library = JSON.parse(readFileSync(libraryFile, "utf8"))
 
 const pieces = listSvgs(svgDir).map(buildPiece)
 const ids = new Set()
@@ -251,14 +290,38 @@ for (const piece of pieces) {
   if (ids.has(piece.id)) throw new Error(`Duplicate symbol ${piece.id}`)
   ids.add(piece.id)
 }
+for (const id of Object.keys(library.pieces))
+  if (!ids.has(id)) throw new Error(`${id}: in library.json but there's no SVG`)
+
+const { priority, colors, plate } = library.status
+const status = { priority, colors, plate }
 
 const header = `// Generated by scripts/build-symbols.mjs from plugins/hvac-symbols/svg. Do not edit.
-// Run \`npm run symbols:build\` (or \`npm run symbols:sync\` to pull from ../symbol-library).
+// Run \`npm run symbols:build\` (or \`npm run symbols:sync\` to pull from ../../symbol-library).
+`
+writeFileSync(
+  outFile,
+  `${header}
+import type { StatusModel, SymbolPiece } from "./library-types.ts"
 
-import type { SymbolPiece } from "./library-types.ts"
+export const STATUS: StatusModel = ${JSON.stringify(status, null, 2)}
 
-export const PIECES: readonly SymbolPiece[] = `
-writeFileSync(outFile, `${header}${JSON.stringify(pieces, null, 2)}\n`)
+export const PIECES: readonly SymbolPiece[] = ${JSON.stringify(pieces, null, 2)}\n`
+)
+writeFileSync(
+  manifestOut,
+  `${header}// Source: svg/library.json (use, ports, roles). See manifest.ts for the types.
+
+import type { ManifestEntry } from "./manifest.ts"
+
+export const MANIFEST: Readonly<Record<string, ManifestEntry>> = ${JSON.stringify(
+    Object.fromEntries(
+      pieces.map((piece) => [piece.id, manifestEntry(piece.id)])
+    ),
+    null,
+    2
+  )}\n`
+)
 console.log(
   `Wrote ${pieces.length} symbols to ${relative(root, outFile)} (${basename(svgDir)}/: ${CATEGORIES.map((c) => `${c} ${pieces.filter((p) => p.category === c).length}`).join(", ")})`
 )

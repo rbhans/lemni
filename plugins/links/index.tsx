@@ -121,6 +121,7 @@ export const links: BoardPlugin = {
     {
       id: "links",
       title: "Links",
+      group: "board",
       icon: Link01Icon,
       side: "left",
       order: 25,

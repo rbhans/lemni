@@ -15,6 +15,7 @@ import {
 import type { BoardPlugin } from "@/studio/plugins/types"
 
 import { canvasAi } from "./ai-tools"
+import { RailSettings } from "./interface-settings"
 import { LayersPanel } from "./layers-panel"
 import { LibraryPanel } from "./library-panel"
 import { coreMenuItems } from "./menus"
@@ -99,6 +100,7 @@ export const canvasCore: BoardPlugin = {
     {
       id: "layers",
       title: "Layers",
+      group: "board",
       icon: Layers01Icon,
       side: "left",
       order: 10,
@@ -108,11 +110,23 @@ export const canvasCore: BoardPlugin = {
     {
       id: "library",
       title: "Library",
+      group: "board",
       icon: LibraryIcon,
       side: "left",
       order: 20,
       workspaces: ["canvas"],
       component: LibraryPanel,
+    },
+  ],
+
+  settingsSections: [
+    {
+      id: "panel-rail",
+      page: "Interface",
+      title: "Panel rail",
+      description: "The column of panel icons on the left.",
+      order: 10,
+      component: RailSettings,
     },
   ],
 

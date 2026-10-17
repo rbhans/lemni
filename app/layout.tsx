@@ -18,7 +18,7 @@ const fontMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: "Lemni",
+  title: "Lemscape",
   description:
     "The endless canvas for buildings: project documents, live graphics, and the systems they connect to.",
 }

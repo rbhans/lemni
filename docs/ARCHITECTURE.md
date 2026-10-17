@@ -1,12 +1,13 @@
-# Lemni architecture
+# Lemscape architecture
 
-Lemni is the endless canvas for buildings: a hub for a project's documents (control
+Lemscape is the endless canvas for buildings: a hub for a project's documents (control
 drawings, floor plans, specs), operator graphics with live data, trends and tables, and
 the building systems it connects to (Niagara today), with AI apps working alongside.
 It isn't a building automation system itself; it connects to them. The name comes from
-the lemniscate, the ∞ curve in the logo. It was called BAS Board while in development;
-saved boards, settings and the local data folder from then carry over (see
-Persistence). It is v2 of `bas-whiteboard` (basdraw),
+the lemniscate, the ∞ curve, and a landscape: an endless space to lay a building out
+on. It was called BAS Board while in development, then Lemni (renamed because another
+Lemni brand exists in AI software); saved boards, settings and the local data folder
+from both carry over (see Persistence). It is v2 of `bas-whiteboard` (basdraw),
 rebuilt from scratch. The v1 concepts it carries forward are summarized in
 [`reference/v1-behaviors.md`](reference/v1-behaviors.md) and
 [`reference/v1-platform.md`](reference/v1-platform.md).
@@ -148,7 +149,7 @@ Rules (carried from v1, where they worked):
 - **Dependencies.** `dependencies` are required and resolved transitively: turning a
   plugin on turns on what it needs; turning it off turns off what needs it.
   `optionalDependencies` must degrade gracefully.
-- **Only explicit choices are stored** (`lemni.plugins.v1`), so new defaults apply
+- **Only explicit choices are stored** (`lemscape.plugins.v1`), so new defaults apply
   without migrations.
 - **Stages.** `preview` plugins are usable but incomplete; `planned` ones are listed so
   the manager shows the roadmap but cannot be enabled.
@@ -186,7 +187,8 @@ Layout:
 - **Effects** (`effects.ts`) register id, family, channel, output kind, defaults per
   source kind, validation and a pure `apply`. Built in: value label, color, level fill,
   visibility, opacity, blink, rotate (follow or spin, with pivot), move (follow or
-  travel, per axis), scale, pipe flow, and On click: go to (page or frame). Number
+  travel, per axis), scale, pipe flow, and On click: go to (any navigation target, see
+  Navigation). Number
   parameters can be bound to a point (spin speed from a VFD, for example).
 - **Any point, any effect.** Mappings fit the point you give them: a number drives an
   on/off effect through a visible threshold ("is above 0", editable), and number effects
@@ -222,13 +224,18 @@ open-view and write-point interactions (those wait for write approvals in the AI
 ## Symbols
 
 `plugins/hvac-symbols` holds the base control-drawing library (the Plate-style pieces from
-`../symbol-library`) as a native `bas-symbol` shape.
+`../../symbol-library`, the single source shared with the QAGSchematic Niagara module) as a
+native `bas-symbol` shape.
 
 - **Source and build.** The SVGs are copied into `plugins/hvac-symbols/svg/` (their README
   documents the classes and variables) and compiled by `scripts/build-symbols.mjs` into
   `library.generated.ts`. `npm run symbols:sync` pulls a new copy of the library and
   rebuilds; `npm run symbols:build` rebuilds from the in-repo copy. The build fails on
   anything unexpected (scripts, links, ids, a viewBox not at 0 0, unscoped CSS).
+- **Manifest.** What each piece is for, its search keywords, ports and point roles live in
+  the library's `svg/library.json` (edited there, checked by its `tools/check.mjs`). The
+  build writes them to `manifest.generated.ts` (shared roles expanded) and fails if a
+  piece and its entry don't match; `manifest.ts` keeps the types.
 - **Scoping.** Inline SVG styles are global, so each piece's CSS is rewritten under its
   own root class (`nx-air-damper`) and its keyframes are renamed. Each piece's sheet is
   injected into `<head>` once, however many copies are on the board.
@@ -239,6 +246,11 @@ open-view and write-point interactions (those wait for write approvals in the AI
   (a damper's position is % open and becomes the blade angle).
 - **Runs** (duct, pipe) stretch along x: their geometry is a template with the run
   length, so thickness and flow dashes keep their size.
+- **Status plate.** Every piece but the runs and junctions has a plate (its shadow). A
+  symbol's first bound behavior's point status reaches it through `ShapeStatusContext`
+  and becomes one `st-*` class by Niagara's priority (disabled, fault, down, alarm,
+  stale, overridden), which colors the plate and steps it out; disabled also grays the
+  piece out. It is runtime only, like other behavior output.
 - **Theme and flips.** `dk` follows the editor's color mode. Flips mirror the drawing and
   counter-flip `.label` groups so text stays readable. SVG export embeds the styles.
 
@@ -256,8 +268,13 @@ Implemented in `plugins/niagara-baskstream` (see
   kept 30 s after its stream drops so reloads don't thrash subscriptions.
 - **API.** `app/api/stations/[[...path]]` delegates to the plugin's handler. Everything
   is guarded by `server/request-guard.ts`: loopback hosts only (override with
-  `LEMNI_ALLOWED_HOSTS`), same-origin, JSON bodies. Live values stream over
+  `LEMSCAPE_ALLOWED_HOSTS`), same-origin, JSON bodies. Live values stream over
   server-sent events, batched every 100 ms.
+- **Connection icons.** `studio/shell/source-icon.ts` builds them from the vendor's letter
+  (N Niagara, M Metasys, B BACnet) and a badge notched into the corner for how it
+  connects: a dot for live, a cylinder for a SQL database, a page for a backup file.
+  Plugins use it for their rail and panel icons and set `DataSource.icon`, which the
+  Links panel and navigation targets show next to a point.
 - **Provider-neutral values.** `studio/data/live-points.ts` defines `DataSource`,
   `PointRef` (`{ source, point }`), `useLivePoint` and `useLiveValues`. Sources are
   keyed by a stable id (`niagara:<station origin>`) so drawings can store point
@@ -267,16 +284,58 @@ Implemented in `plugins/niagara-baskstream` (see
   the window end snaps to the refresh period, so every chart showing the same point
   and range reuses one request. Niagara clamps a window to 31 days and 10–600 buckets
   of at least a minute.
-- **Point drops.** The Station tree drags `application/x-lemni-point` for a point
-  and `application/x-lemni-folder` for a folder; a folder is expanded on drop with
+- **Point drops.** The Station tree drags `application/x-lemscape-point` for a point
+  and `application/x-lemscape-folder` for a folder; a folder is expanded on drop with
   `DataSource.pointsUnder` (breadth-first, a few levels, at most 300 points).
   `studio/editor/point-drop.tsx` routes the points to the first `pointDrops`
   contribution that claims the shape under the pointer (outlining it while dragging);
   contributions without `multiple` are skipped for folders. On empty canvas it runs the
-  only `create` option or shows a menu of them.
-- **Writes** (next): capabilities check, `describe_write` preview, a one-time approval
-  bound to the exact arguments, an audit row before dispatch, no automatic retries
-  (v1 pipeline). Model edits use baskStream's preview/apply plans.
+  only option or shows a menu: each contribution's `create`/`creates` go under its
+  `group` flyout (Data, HVAC, UI), options that `accepts` the points only, `suggested`
+  ones first, then by `section`. A plugin can be left out of this menu with its switch in
+  the Plugins dialog (`lemscape.point-menu-hidden.v1`). Flyouts are columns inside the
+  one menu (a group's options, and inside it a flyout per section when there are
+  several, e.g. HVAC ▸ Air side), opened by hovering with a short intent delay, a
+  click, or the right arrow. Base UI submenus aren't used: under a menu opened at a
+  point they close as soon as the pointer moves into them.
+- **Placing a symbol for a point.** The HVAC flyout lists pieces whose manifest roles
+  fit the point's kind, suggesting ones whose name matches both the role (SF-S: status)
+  and the equipment (SF → fan). The piece is placed and its role's behavior bound
+  through `studio/editor/behavior-binding.ts`, which the Behaviors plugin registers
+  (`runtime/bind.ts`, the effect's defaults for the named state); with Behaviors off
+  the piece is placed unbound.
+- **Writes.** `DataSource.describeWrite` (writable, accepted actions, enum options) and
+  `DataSource.write` (set, override with an optional duration, or auto), with who asked
+  and why. Callers get the person's approval first: AI apps through the AI connection's
+  Allow once + "Are you sure?", people through the UI elements' confirm dialog. The
+  Niagara server writes an audit row before sending, sends once (no retries), reads
+  back, and refuses when the station has writes turned off. Model edits will use
+  baskStream's preview/apply plans.
+
+## Metasys SCT archive
+
+Implemented in `plugins/metasys-sct`: an offline Metasys archive (an SCT backup restored
+to SQL Server) as a read-only data source.
+
+- **Server.** `server/hub.ts` keeps one `mssql` pool per open archive on `globalThis`;
+  the password is only in the pool's config. Every query is a fixed, parameterized
+  `SELECT` (nothing writes). TLS is on; "Trust the server certificate" accepts a
+  self-signed one, and an IP address gets `serverName: localhost` so TLS accepts it.
+  `/api/sct` (same guard as stations) lists archives (online databases with
+  `dbo.Item` and `dbo.ItemDefinition`, read from `master`), opens one, and serves
+  `children`, `search`, `describe`, `under` and `values`.
+- **Model.** `dbo.Item` rows (parent by `parentItemID`, engine by `DeviceItemID`) typed
+  by `dbo.ItemDefinition` (`type`, `bacnetClassid`); deleted rows (`itemState = 0`)
+  are skipped. A point's id is its FQR, the engine's reference plus its own
+  (`SITE:NAE-1/FC-2.VMA-1.ZN-T`), stable across restores; item ids are used only for
+  browsing and folder drags. Point kind comes from the BACnet class (AI/AO/AV number,
+  BI/BO/BV boolean, MI/MO/MV multistate text). Pure helpers in `model.ts` are tested.
+- **Network tree.** Site, engines, trunks, controllers and points; folders kept for
+  other views (equipment, definitions, graphics, trend studies, `$`-prefixed) are left
+  out. Equipment and Spaces views come later as their own tabs.
+- **Values.** An archive is a snapshot: a point's value is its stored Present Value
+  (attribute 85) when SCT kept one, otherwise "—". Values load once, no history or
+  writes. Source id `sct:<database>`.
 
 ## Data widgets
 
@@ -313,6 +372,43 @@ then tldraw inlines its computed styles; `useDelaySvgExport` waits for history).
   values sort last. Rows that don't fit are counted, never scrolled (scrolling would
   fight canvas panning). CSV export prefixes formula characters, since point names come
   from the station.
+
+## UI elements
+
+`plugins/ui-elements`: operator controls drawn with the app's own shadcn components, on
+UI pages. Two shapes: `bas-ui` (one element) and `bas-ui-panel` (a card with a title
+and rows; it grows as rows are added). An element is a plain record
+(`model.ts`, tested) read through `normalizeElement`, so panels and single elements
+share one renderer (`controls.tsx`).
+
+- **Kinds.** Button (go to a target, or write a fixed value), switch, slider, setpoint
+  (step up or down, then Set: one confirmation, not one per click), select (the
+  station's own states via `describeWrite`, or a typed list), badge, progress and value.
+  Writes are a plain set or an override (timed, or until released); "Auto" can be
+  offered to release an override.
+- **Board vs Present.** On the board an element is a shape (no pointer events, normal
+  look). In Present mode it takes the pointer and stops it reaching tldraw.
+- **Every write is confirmed.** `writes.tsx` shows the point, its value now, what it
+  becomes and how (set / override for 1 h / release to auto), checks the point with
+  `describeWrite` first, and only then calls `DataSource.write`, attributed to the
+  control in the audit log.
+- **Drops.** A point dropped on an element binds it; on empty canvas it becomes a
+  suitable control (switch for on/off, setpoint for numbers). Points or a whole
+  equipment folder dropped on a panel become rows; on empty canvas, a panel titled after
+  the equipment.
+- **AI tools** lay out elements and panels (`create_ui_elements`, `create_ui_panel`,
+  `update_ui_element`) but can't press them.
+
+## Navigation
+
+`studio/navigation`, shared by behaviors ("On click: go to") and UI buttons. A target is
+one string: a page id, any shape id, `doc:<shapeId>#<page>` (one page of a document
+card), `point:<source>\n<point>\n<label>` (shown in the Station panel) or
+`url:https://…` (http(s) only, new tab). Plain page and shape ids are targets as they
+are, so older behaviors still work (`targets.ts`, tested). `TargetField` lists pages,
+frames, documents and named shapes, takes a station point or web address, or picks on
+the board: the next click (on any page) picks the shape there, a document card's
+showing page, or the page itself, then returns to where picking started.
 
 ## Project model
 
@@ -416,7 +512,7 @@ helpers, and `safeBatch`.
   symbol build should import it.
 - **Tools run in the board tab** that was used last, through the same code as the UI,
   so plugins, undo and live data behave the same. The server only relays; a closed or
-  reloading board answers "Lemni isn't open". `board_status` is served by the server
+  reloading board answers "Lemscape isn't open". `board_status` is served by the server
   itself.
 - **Access level** (AI panel, kept per browser): Off, Read only, Edit the board
   (default), Edit + station writes. Tools the level doesn't allow aren't listed, and are
@@ -428,12 +524,12 @@ helpers, and `safeBatch`.
   sent unless the person chooses **Allow once** and then confirms an "Are you sure?"
   step (its button arms after a moment, so a double click can't pass both); Deny,
   closing the dialog, the AI app cancelling, or 4 minutes passing all decline. Approved station writes are logged to
-  `.lemni/audit.log` before they're sent (no log, no write), sent once, never
+  `.lemscape/audit.log` before they're sent (no log, no write), sent once, never
   retried, read back after 250 ms and logged with their outcome. The station API only
   accepts writes marked confirmed and validates every item again.
 - **Security.** `/api/mcp` answers local addresses only, rejects browser origins other
-  than its own, and requires the token in `.lemni/mcp-token` (made on first use,
-  mode 600; `LEMNI_MCP_TOKEN` overrides). The AI panel shows the connect command with
+  than its own, and requires the token in `.lemscape/mcp-token` (made on first use,
+  mode 600; `LEMSCAPE_MCP_TOKEN` overrides). The AI panel shows the connect command with
   the token hidden and can make a new one. Station data, document text and link
   comments are labeled as source material, not instructions. Known limit: an AI app
   that can also click in the browser could click Allow once itself, so don't give it
@@ -449,12 +545,13 @@ The board you're editing is a working copy in tldraw's local IndexedDB persisten
 (`basboard-dev-board`), so a reload never loses work. Board files move it to and from
 disk (`studio/files/*`):
 
-- **Format.** `.lemni` is a tldraw JSON file (`serializeTldrawJson`) with images
-  inlined, so a board travels as one file. Open also accepts `.basboard` (boards from
-  before the rename), `.tldr` and `.json`.
-- **Names from before the rename.** Settings move from `basboard.*` to `lemni.*` keys
-  once, before the studio loads (`studio/lib/storage-migration.ts`); `.basboard/` moves
-  to `.lemni/` on first use; `BASBOARD_*` environment variables still work. The two
+- **Format.** `.lemscape` is a tldraw JSON file (`serializeTldrawJson`) with images
+  inlined, so a board travels as one file. Open also accepts `.lemni` and `.basboard`
+  (boards saved under earlier names), `.tldr` and `.json`.
+- **Names from before the renames.** Settings move from `lemni.*` and `basboard.*` to
+  `lemscape.*` keys once, before the studio loads (`studio/lib/storage-migration.ts`);
+  `.lemni/` (or `.basboard/`) moves to `.lemscape/` on first use; `LEMNI_*` and
+  `BASBOARD_*` environment variables still work. The two
   IndexedDB databases (`basboard-dev-board`, `basboard-files`) and the `bas-*` shape
   types keep their names: renaming them would orphan saved work.
   Shape names, hidden flags and behaviors ride along in shape `meta`.

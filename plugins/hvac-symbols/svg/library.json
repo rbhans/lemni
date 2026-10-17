@@ -1,0 +1,1933 @@
+{
+  "$comment": "Shared manifest for the Plate symbol library. Hand-edited; check with `node tools/check.mjs` (add --write to refresh title, size and features from the SVGs). Read by Lemni (scripts/build-symbols.mjs) and documented for the QAGSchematic Niagara module.",
+  "version": 1,
+  "units": "Ports and sizes are in each piece's viewBox units, before flips. Lines run through the vertical center unless a port says otherwise.",
+  "status": {
+    "priority": [
+      "disabled",
+      "fault",
+      "down",
+      "alarm",
+      "stale",
+      "overridden"
+    ],
+    "colors": {
+      "alarm": {
+        "bg": "#CF1624",
+        "fg": "#FFFFFF"
+      },
+      "fault": {
+        "bg": "#FC7734",
+        "fg": "#333333"
+      },
+      "down": {
+        "bg": "#FAC600",
+        "fg": "#333333"
+      },
+      "overridden": {
+        "bg": "#BFADDD",
+        "fg": "#333333"
+      },
+      "stale": {
+        "bg": "#D9C09D",
+        "fg": "#333333"
+      },
+      "disabled": {
+        "bg": "#D6D6D6",
+        "fg": "#333333"
+      }
+    },
+    "plate": {
+      "offset": 4,
+      "statusOffset": 6
+    },
+    "disabled": {
+      "light": {
+        "ink": "#B9BFC7",
+        "ink2": "#BEC4CB",
+        "ink3": "#CDD2D8"
+      },
+      "dark": {
+        "ink": "#4B525B",
+        "ink2": "#454C55",
+        "ink3": "#3A4048"
+      },
+      "note": "Opaque gray-out: lines and the active color drop to these; faces stay solid. Never use opacity."
+    },
+    "classes": "Add st-<key> to the root <svg>, e.g. class=\"nx st-alarm\". ok has no class."
+  },
+  "tokens": {
+    "light": {
+      "ink": "#2A2F36",
+      "ink2": "#7B838E",
+      "ink3": "#A9B0B9",
+      "face": "#FFFFFF",
+      "side": "#DCE0E5",
+      "shadow": "#D3D8DE",
+      "glass": "#E4EBF2",
+      "dirt": "#8F98A3",
+      "duct": "#C3C9D0",
+      "duct-lo": "#A9B0B9",
+      "air": "#FFFFFF",
+      "pipe": "#8D949D",
+      "water": "#3D8FE0",
+      "run": "#15924E",
+      "cool": "#1F78DC",
+      "cool-t": "rgba(31,120,220,.12)",
+      "heat": "#DA4136",
+      "heat-t": "rgba(218,65,54,.11)",
+      "hum": "#1896A8",
+      "uv": "#7C4DFF",
+      "uv-t": "rgba(124,77,255,.12)",
+      "cw": "#1F9E66",
+      "cw-t": "rgba(31,158,102,.13)"
+    },
+    "dark": {
+      "ink": "#D3D8DE",
+      "ink2": "#8B949F",
+      "ink3": "#59616B",
+      "face": "#242930",
+      "side": "#1A1D22",
+      "shadow": "#0B0D10",
+      "glass": "#2B3540",
+      "dirt": "#6B737D",
+      "duct": "#363D46",
+      "duct-lo": "#2A3038",
+      "air": "#7D8794",
+      "pipe": "#6B737D",
+      "water": "#4FA3F7",
+      "run": "#3CD38A",
+      "cool": "#4CA4FF",
+      "cool-t": "rgba(76,164,255,.17)",
+      "heat": "#FF6A5C",
+      "heat-t": "rgba(255,106,92,.16)",
+      "hum": "#45C8D8",
+      "uv": "#A78BFA",
+      "uv-t": "rgba(167,139,250,.16)",
+      "cw": "#4FD39A",
+      "cw-t": "rgba(79,211,154,.16)"
+    }
+  },
+  "roles": {
+    "run": {
+      "role": "run",
+      "kind": "boolean",
+      "words": [
+        "status",
+        "sts",
+        "run",
+        "proof",
+        "prf",
+        "-s",
+        "_s",
+        "on"
+      ],
+      "behaviors": [
+        {
+          "effect": "state",
+          "params": {
+            "state": "on"
+          }
+        }
+      ]
+    },
+    "speed": {
+      "role": "speed",
+      "kind": "number",
+      "unit": "%",
+      "words": [
+        "speed",
+        "spd",
+        "vfd",
+        "hz",
+        "output",
+        "-o"
+      ],
+      "behaviors": [
+        {
+          "effect": "label"
+        }
+      ]
+    },
+    "fault": {
+      "role": "fault",
+      "kind": "boolean",
+      "words": [
+        "fault",
+        "flt",
+        "fail",
+        "trip",
+        "alarm",
+        "alm"
+      ],
+      "behaviors": [
+        {
+          "effect": "blink"
+        }
+      ]
+    },
+    "command": {
+      "role": "command",
+      "kind": "any",
+      "words": [
+        "cmd",
+        "command",
+        "start",
+        "ss",
+        "-c",
+        "_c"
+      ],
+      "behaviors": [
+        {
+          "effect": "label"
+        }
+      ]
+    },
+    "reading": {
+      "role": "reading",
+      "kind": "any",
+      "words": [
+        "temp",
+        "-t",
+        "rh",
+        "humidity",
+        "pressure",
+        "-p",
+        "co2",
+        "flow"
+      ],
+      "behaviors": [
+        {
+          "effect": "label"
+        }
+      ]
+    }
+  },
+  "pieces": {
+    "air/coil-cool": {
+      "title": "Cool coil",
+      "size": [
+        60,
+        120
+      ],
+      "features": [
+        "on",
+        "status"
+      ],
+      "use": "Cooling coil (chilled water or DX).",
+      "keywords": [
+        "chw",
+        "chilled water",
+        "cooling",
+        "cc",
+        "dx"
+      ],
+      "ports": [
+        {
+          "id": "in",
+          "at": [
+            9,
+            60
+          ],
+          "dir": "left",
+          "line": "duct"
+        },
+        {
+          "id": "out",
+          "at": [
+            51,
+            60
+          ],
+          "dir": "right",
+          "line": "duct"
+        },
+        {
+          "id": "water",
+          "at": [
+            30,
+            114
+          ],
+          "dir": "down",
+          "line": "pipe"
+        }
+      ],
+      "roles": [
+        {
+          "role": "valve",
+          "kind": "number",
+          "unit": "%",
+          "words": [
+            "valve",
+            "vlv",
+            "chw",
+            "clg",
+            "cool",
+            "-v",
+            "output"
+          ],
+          "behaviors": [
+            {
+              "effect": "state",
+              "params": {
+                "state": "on"
+              }
+            },
+            {
+              "effect": "label"
+            }
+          ]
+        }
+      ]
+    },
+    "air/coil-heat": {
+      "title": "Heat coil",
+      "size": [
+        60,
+        120
+      ],
+      "features": [
+        "on",
+        "status"
+      ],
+      "use": "Heating, preheat or reheat coil (hot water, steam or electric).",
+      "keywords": [
+        "hw",
+        "hot water",
+        "heating",
+        "hc",
+        "reheat",
+        "preheat"
+      ],
+      "ports": [
+        {
+          "id": "in",
+          "at": [
+            9,
+            60
+          ],
+          "dir": "left",
+          "line": "duct"
+        },
+        {
+          "id": "out",
+          "at": [
+            51,
+            60
+          ],
+          "dir": "right",
+          "line": "duct"
+        },
+        {
+          "id": "water",
+          "at": [
+            30,
+            114
+          ],
+          "dir": "down",
+          "line": "pipe"
+        }
+      ],
+      "roles": [
+        {
+          "role": "valve",
+          "kind": "number",
+          "unit": "%",
+          "words": [
+            "valve",
+            "vlv",
+            "hw",
+            "htg",
+            "heat",
+            "-v",
+            "output"
+          ],
+          "behaviors": [
+            {
+              "effect": "state",
+              "params": {
+                "state": "on"
+              }
+            },
+            {
+              "effect": "label"
+            }
+          ]
+        }
+      ]
+    },
+    "air/damper-round": {
+      "title": "Round damper",
+      "size": [
+        70,
+        90
+      ],
+      "features": [
+        "on",
+        "position",
+        "status"
+      ],
+      "use": "Round damper or VAV box damper in a round duct.",
+      "keywords": [
+        "oa",
+        "ra",
+        "ea",
+        "outside air",
+        "return air",
+        "mixed air",
+        "actuator"
+      ],
+      "ports": [
+        {
+          "id": "in",
+          "at": [
+            9,
+            45
+          ],
+          "dir": "left",
+          "line": "duct"
+        },
+        {
+          "id": "out",
+          "at": [
+            61,
+            45
+          ],
+          "dir": "right",
+          "line": "duct"
+        }
+      ],
+      "roles": [
+        {
+          "role": "position",
+          "kind": "number",
+          "unit": "%",
+          "words": [
+            "position",
+            "pos",
+            "damper",
+            "dpr",
+            "dmp",
+            "-d"
+          ],
+          "behaviors": [
+            {
+              "effect": "state",
+              "params": {
+                "state": "position"
+              }
+            },
+            {
+              "effect": "label"
+            }
+          ]
+        }
+      ]
+    },
+    "air/damper": {
+      "title": "Damper",
+      "size": [
+        50,
+        140
+      ],
+      "features": [
+        "on",
+        "parallel",
+        "position",
+        "status"
+      ],
+      "use": "Rectangular control damper in a duct (outside, return, exhaust, mixed air).",
+      "keywords": [
+        "oa",
+        "ra",
+        "ea",
+        "outside air",
+        "return air",
+        "mixed air",
+        "actuator"
+      ],
+      "ports": [
+        {
+          "id": "in",
+          "at": [
+            9,
+            70
+          ],
+          "dir": "left",
+          "line": "duct"
+        },
+        {
+          "id": "out",
+          "at": [
+            41,
+            70
+          ],
+          "dir": "right",
+          "line": "duct"
+        }
+      ],
+      "roles": [
+        {
+          "role": "position",
+          "kind": "number",
+          "unit": "%",
+          "words": [
+            "position",
+            "pos",
+            "damper",
+            "dpr",
+            "dmp",
+            "-d",
+            "output"
+          ],
+          "behaviors": [
+            {
+              "effect": "state",
+              "params": {
+                "state": "position"
+              }
+            },
+            {
+              "effect": "label"
+            }
+          ]
+        },
+        "command"
+      ]
+    },
+    "air/duct-junction": {
+      "title": "Duct junction",
+      "size": [
+        30,
+        30
+      ],
+      "features": [],
+      "use": "A tee, elbow or cross where duct runs meet.",
+      "keywords": [
+        "line",
+        "run"
+      ],
+      "ports": [
+        {
+          "id": "left",
+          "at": [
+            0,
+            15
+          ],
+          "dir": "left",
+          "line": "duct"
+        },
+        {
+          "id": "right",
+          "at": [
+            30,
+            15
+          ],
+          "dir": "right",
+          "line": "duct"
+        },
+        {
+          "id": "top",
+          "at": [
+            15,
+            0
+          ],
+          "dir": "up",
+          "line": "duct"
+        },
+        {
+          "id": "bottom",
+          "at": [
+            15,
+            30
+          ],
+          "dir": "down",
+          "line": "duct"
+        }
+      ],
+      "roles": []
+    },
+    "air/duct": {
+      "title": "Duct",
+      "size": [
+        100,
+        20
+      ],
+      "stretch": "x",
+      "features": [
+        "flow"
+      ],
+      "use": "A straight duct run; stretches along its length. Draw supply, return, outside and exhaust air paths with it.",
+      "keywords": [
+        "line",
+        "run"
+      ],
+      "ports": [
+        {
+          "id": "in",
+          "at": [
+            0,
+            10
+          ],
+          "dir": "left",
+          "line": "duct"
+        },
+        {
+          "id": "out",
+          "at": [
+            0,
+            10
+          ],
+          "dir": "right",
+          "line": "duct",
+          "end": true
+        }
+      ],
+      "roles": [
+        {
+          "role": "flow",
+          "kind": "boolean",
+          "words": [
+            "status",
+            "flow",
+            "run",
+            "fan"
+          ],
+          "behaviors": [
+            {
+              "effect": "state",
+              "params": {
+                "state": "flow"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "air/fan-centrifugal": {
+      "title": "Centrifugal fan",
+      "size": [
+        120,
+        120
+      ],
+      "features": [
+        "on",
+        "ccw",
+        "status"
+      ],
+      "use": "Supply, return or exhaust fan (centrifugal, housed). Air enters at the wheel, leaves through the discharge on the right.",
+      "keywords": [
+        "supply",
+        "return",
+        "exhaust",
+        "relief",
+        "blower",
+        "sf",
+        "rf",
+        "ef"
+      ],
+      "ports": [
+        {
+          "id": "in",
+          "at": [
+            21,
+            60
+          ],
+          "dir": "left",
+          "line": "duct"
+        },
+        {
+          "id": "out",
+          "at": [
+            113,
+            60
+          ],
+          "dir": "right",
+          "line": "duct"
+        }
+      ],
+      "roles": [
+        "run",
+        "speed",
+        "fault",
+        "command"
+      ]
+    },
+    "air/fan-plug": {
+      "title": "Plug fan",
+      "size": [
+        120,
+        100
+      ],
+      "features": [
+        "on",
+        "status"
+      ],
+      "use": "Plug (plenum) fan in an air handler.",
+      "keywords": [
+        "supply",
+        "return",
+        "exhaust",
+        "relief",
+        "blower",
+        "sf",
+        "rf",
+        "ef"
+      ],
+      "ports": [
+        {
+          "id": "in",
+          "at": [
+            9,
+            50
+          ],
+          "dir": "left",
+          "line": "duct"
+        },
+        {
+          "id": "out",
+          "at": [
+            111,
+            50
+          ],
+          "dir": "right",
+          "line": "duct"
+        }
+      ],
+      "roles": [
+        "run",
+        "speed",
+        "fault",
+        "command"
+      ]
+    },
+    "air/fan-roof-downblast": {
+      "title": "Roof fan · downblast",
+      "size": [
+        120,
+        120
+      ],
+      "features": [
+        "on",
+        "status"
+      ],
+      "use": "Roof exhaust fan, downblast. The duct comes up from below.",
+      "keywords": [
+        "supply",
+        "return",
+        "exhaust",
+        "relief",
+        "blower",
+        "sf",
+        "rf",
+        "ef",
+        "rooftop"
+      ],
+      "ports": [
+        {
+          "id": "in",
+          "at": [
+            60,
+            111
+          ],
+          "dir": "down",
+          "line": "duct"
+        }
+      ],
+      "roles": [
+        "run",
+        "speed",
+        "fault",
+        "command"
+      ]
+    },
+    "air/fan-roof-upblast": {
+      "title": "Roof fan · upblast",
+      "size": [
+        120,
+        120
+      ],
+      "features": [
+        "on",
+        "status"
+      ],
+      "use": "Roof exhaust fan, upblast. The duct comes up from below.",
+      "keywords": [
+        "supply",
+        "return",
+        "exhaust",
+        "relief",
+        "blower",
+        "sf",
+        "rf",
+        "ef",
+        "rooftop"
+      ],
+      "ports": [
+        {
+          "id": "in",
+          "at": [
+            60,
+            111
+          ],
+          "dir": "down",
+          "line": "duct"
+        }
+      ],
+      "roles": [
+        "run",
+        "speed",
+        "fault",
+        "command"
+      ]
+    },
+    "air/filter-uv": {
+      "title": "UV filter",
+      "size": [
+        50,
+        120
+      ],
+      "features": [
+        "on",
+        "status"
+      ],
+      "use": "UV lamp bank in the air stream (UVGI).",
+      "keywords": [
+        "prefilter",
+        "final filter",
+        "pf",
+        "dp",
+        "uvgi",
+        "lamp"
+      ],
+      "ports": [
+        {
+          "id": "in",
+          "at": [
+            9,
+            60
+          ],
+          "dir": "left",
+          "line": "duct"
+        },
+        {
+          "id": "out",
+          "at": [
+            41,
+            60
+          ],
+          "dir": "right",
+          "line": "duct"
+        }
+      ],
+      "roles": [
+        "run"
+      ]
+    },
+    "air/filter": {
+      "title": "Filter",
+      "size": [
+        50,
+        120
+      ],
+      "features": [
+        "loaded",
+        "status"
+      ],
+      "use": "Air filter bank (pre-filter or final filter).",
+      "keywords": [
+        "prefilter",
+        "final filter",
+        "pf",
+        "dp"
+      ],
+      "ports": [
+        {
+          "id": "in",
+          "at": [
+            9,
+            60
+          ],
+          "dir": "left",
+          "line": "duct"
+        },
+        {
+          "id": "out",
+          "at": [
+            41,
+            60
+          ],
+          "dir": "right",
+          "line": "duct"
+        }
+      ],
+      "roles": [
+        {
+          "role": "dirty",
+          "kind": "boolean",
+          "words": [
+            "dirty",
+            "filter",
+            "dp",
+            "alarm",
+            "-dp"
+          ],
+          "behaviors": [
+            {
+              "effect": "state",
+              "params": {
+                "state": "loaded"
+              }
+            }
+          ]
+        },
+        {
+          "role": "pressure-drop",
+          "kind": "number",
+          "unit": "in",
+          "words": [
+            "dp",
+            "differential",
+            "pressure"
+          ],
+          "behaviors": [
+            {
+              "effect": "label"
+            }
+          ]
+        }
+      ]
+    },
+    "air/fume-hood": {
+      "title": "Fume hood",
+      "size": [
+        100,
+        120
+      ],
+      "features": [
+        "sash",
+        "status"
+      ],
+      "use": "Laboratory fume hood; exhaust leaves through the collar on top.",
+      "keywords": [
+        "lab",
+        "sash"
+      ],
+      "ports": [
+        {
+          "id": "exhaust",
+          "at": [
+            50,
+            9
+          ],
+          "dir": "up",
+          "line": "duct"
+        }
+      ],
+      "roles": [
+        {
+          "role": "sash",
+          "kind": "number",
+          "unit": "%",
+          "words": [
+            "sash",
+            "position",
+            "opening"
+          ],
+          "behaviors": [
+            {
+              "effect": "state",
+              "params": {
+                "state": "sash"
+              }
+            }
+          ]
+        },
+        "reading"
+      ]
+    },
+    "air/heat-wheel": {
+      "title": "Heat wheel",
+      "size": [
+        120,
+        120
+      ],
+      "features": [
+        "on",
+        "status"
+      ],
+      "use": "Energy recovery wheel: one air stream through the top half, the other through the bottom.",
+      "keywords": [
+        "erv",
+        "energy recovery",
+        "enthalpy wheel"
+      ],
+      "ports": [
+        {
+          "id": "a-in",
+          "at": [
+            9,
+            35
+          ],
+          "dir": "left",
+          "line": "duct"
+        },
+        {
+          "id": "a-out",
+          "at": [
+            111,
+            35
+          ],
+          "dir": "right",
+          "line": "duct"
+        },
+        {
+          "id": "b-in",
+          "at": [
+            9,
+            85
+          ],
+          "dir": "left",
+          "line": "duct"
+        },
+        {
+          "id": "b-out",
+          "at": [
+            111,
+            85
+          ],
+          "dir": "right",
+          "line": "duct"
+        }
+      ],
+      "roles": [
+        "run",
+        "speed"
+      ]
+    },
+    "air/humidifier": {
+      "title": "Humidifier",
+      "size": [
+        60,
+        120
+      ],
+      "features": [
+        "on",
+        "status"
+      ],
+      "use": "Humidifier dispersion in the air stream.",
+      "keywords": [
+        "steam",
+        "humidity"
+      ],
+      "ports": [
+        {
+          "id": "in",
+          "at": [
+            9,
+            60
+          ],
+          "dir": "left",
+          "line": "duct"
+        },
+        {
+          "id": "out",
+          "at": [
+            51,
+            60
+          ],
+          "dir": "right",
+          "line": "duct"
+        }
+      ],
+      "roles": [
+        "run",
+        {
+          "role": "output",
+          "kind": "number",
+          "unit": "%",
+          "words": [
+            "humidifier",
+            "hum",
+            "output",
+            "valve"
+          ],
+          "behaviors": [
+            {
+              "effect": "label"
+            }
+          ]
+        }
+      ]
+    },
+    "air/hx-air-to-air": {
+      "title": "Air-to-air HX",
+      "size": [
+        120,
+        120
+      ],
+      "features": [
+        "status"
+      ],
+      "use": "Fixed-plate air-to-air heat exchanger: one stream left to right, the other top to bottom.",
+      "keywords": [
+        "plate",
+        "energy recovery",
+        "hrv"
+      ],
+      "ports": [
+        {
+          "id": "a-in",
+          "at": [
+            9,
+            60
+          ],
+          "dir": "left",
+          "line": "duct"
+        },
+        {
+          "id": "a-out",
+          "at": [
+            111,
+            60
+          ],
+          "dir": "right",
+          "line": "duct"
+        },
+        {
+          "id": "b-in",
+          "at": [
+            60,
+            9
+          ],
+          "dir": "up",
+          "line": "duct"
+        },
+        {
+          "id": "b-out",
+          "at": [
+            60,
+            111
+          ],
+          "dir": "down",
+          "line": "duct"
+        }
+      ],
+      "roles": [
+        "reading"
+      ]
+    },
+    "air/phoenix-valve": {
+      "title": "Phoenix valve",
+      "size": [
+        100,
+        80
+      ],
+      "features": [
+        "on",
+        "status"
+      ],
+      "use": "Venturi air valve (lab supply or exhaust, constant volume or VAV).",
+      "keywords": [
+        "venturi",
+        "lab",
+        "airflow",
+        "cav"
+      ],
+      "ports": [
+        {
+          "id": "in",
+          "at": [
+            9,
+            40
+          ],
+          "dir": "left",
+          "line": "duct"
+        },
+        {
+          "id": "out",
+          "at": [
+            91,
+            40
+          ],
+          "dir": "right",
+          "line": "duct"
+        }
+      ],
+      "roles": [
+        "run",
+        {
+          "role": "airflow",
+          "kind": "number",
+          "unit": "cfm",
+          "words": [
+            "flow",
+            "cfm",
+            "airflow"
+          ],
+          "behaviors": [
+            {
+              "effect": "label"
+            }
+          ]
+        }
+      ]
+    },
+    "shared/sensor": {
+      "title": "Sensor",
+      "size": [
+        60,
+        80
+      ],
+      "features": [
+        "text",
+        "status"
+      ],
+      "text": "T",
+      "use": "A sensor or transmitter with a short tag (T, P, RH, CO2, DP, F). Its probe tip goes on the duct or pipe it measures.",
+      "keywords": [
+        "temperature",
+        "pressure",
+        "humidity",
+        "co2",
+        "transmitter",
+        "probe"
+      ],
+      "ports": [
+        {
+          "id": "probe",
+          "at": [
+            30,
+            49
+          ],
+          "dir": "down",
+          "line": "probe"
+        }
+      ],
+      "roles": [
+        "reading"
+      ]
+    },
+    "water/boiler-drum": {
+      "title": "Drum boiler",
+      "size": [
+        160,
+        110
+      ],
+      "features": [
+        "on",
+        "status"
+      ],
+      "use": "Fire-tube (drum) boiler: supply leaves the nozzle on top, return enters at the right end.",
+      "keywords": [
+        "hw",
+        "hot water",
+        "steam",
+        "b"
+      ],
+      "ports": [
+        {
+          "id": "out",
+          "at": [
+            125,
+            9
+          ],
+          "dir": "up",
+          "line": "pipe"
+        },
+        {
+          "id": "in",
+          "at": [
+            151,
+            60
+          ],
+          "dir": "right",
+          "line": "pipe"
+        }
+      ],
+      "roles": [
+        "run",
+        "fault",
+        "reading"
+      ]
+    },
+    "water/boiler-vertical": {
+      "title": "Vertical boiler",
+      "size": [
+        80,
+        120
+      ],
+      "features": [
+        "on",
+        "status"
+      ],
+      "use": "Vertical (condensing) boiler: supply on top, return on the right.",
+      "keywords": [
+        "hw",
+        "hot water",
+        "steam",
+        "b"
+      ],
+      "ports": [
+        {
+          "id": "out",
+          "at": [
+            40,
+            9
+          ],
+          "dir": "up",
+          "line": "pipe"
+        },
+        {
+          "id": "in",
+          "at": [
+            71,
+            95
+          ],
+          "dir": "right",
+          "line": "pipe"
+        }
+      ],
+      "roles": [
+        "run",
+        "fault",
+        "reading"
+      ]
+    },
+    "water/chiller-air-cooled": {
+      "title": "Air-cooled chiller",
+      "size": [
+        180,
+        100
+      ],
+      "features": [
+        "on",
+        "status"
+      ],
+      "use": "Air-cooled chiller; chilled water connects at the left end.",
+      "keywords": [
+        "chw",
+        "chilled water",
+        "ch"
+      ],
+      "ports": [
+        {
+          "id": "in",
+          "at": [
+            9,
+            70
+          ],
+          "dir": "left",
+          "line": "pipe"
+        },
+        {
+          "id": "out",
+          "at": [
+            9,
+            40
+          ],
+          "dir": "left",
+          "line": "pipe"
+        }
+      ],
+      "roles": [
+        "run",
+        "fault",
+        "reading"
+      ]
+    },
+    "water/chiller-centrifugal": {
+      "title": "Centrifugal chiller",
+      "size": [
+        180,
+        120
+      ],
+      "features": [
+        "on",
+        "ccw",
+        "status"
+      ],
+      "use": "Water-cooled centrifugal chiller: condenser barrel on top, evaporator below, water boxes at both ends.",
+      "keywords": [
+        "chw",
+        "chilled water",
+        "ch"
+      ],
+      "ports": [
+        {
+          "id": "cond-in",
+          "at": [
+            11,
+            59
+          ],
+          "dir": "left",
+          "line": "pipe"
+        },
+        {
+          "id": "cond-out",
+          "at": [
+            169,
+            59
+          ],
+          "dir": "right",
+          "line": "pipe"
+        },
+        {
+          "id": "evap-in",
+          "at": [
+            11,
+            86
+          ],
+          "dir": "left",
+          "line": "pipe"
+        },
+        {
+          "id": "evap-out",
+          "at": [
+            169,
+            86
+          ],
+          "dir": "right",
+          "line": "pipe"
+        }
+      ],
+      "roles": [
+        "run",
+        "fault",
+        "reading"
+      ]
+    },
+    "water/cooling-tower": {
+      "title": "Cooling tower",
+      "size": [
+        120,
+        130
+      ],
+      "features": [
+        "on",
+        "status"
+      ],
+      "use": "Cooling tower: warm water in near the top on the right, cooled water out of the basin on the left.",
+      "keywords": [
+        "ct",
+        "condenser"
+      ],
+      "ports": [
+        {
+          "id": "in",
+          "at": [
+            111,
+            40
+          ],
+          "dir": "right",
+          "line": "pipe"
+        },
+        {
+          "id": "out",
+          "at": [
+            9,
+            112
+          ],
+          "dir": "left",
+          "line": "pipe"
+        }
+      ],
+      "roles": [
+        "run",
+        "speed",
+        "fault",
+        "reading"
+      ]
+    },
+    "water/hx-plate": {
+      "title": "Plate HX",
+      "size": [
+        120,
+        100
+      ],
+      "features": [
+        "status"
+      ],
+      "use": "Plate heat exchanger: one loop on the left frame, the other on the right.",
+      "keywords": [
+        "heat exchanger",
+        "shell and tube"
+      ],
+      "ports": [
+        {
+          "id": "a-in",
+          "at": [
+            9,
+            22
+          ],
+          "dir": "left",
+          "line": "pipe"
+        },
+        {
+          "id": "a-out",
+          "at": [
+            9,
+            78
+          ],
+          "dir": "left",
+          "line": "pipe"
+        },
+        {
+          "id": "b-in",
+          "at": [
+            111,
+            22
+          ],
+          "dir": "right",
+          "line": "pipe"
+        },
+        {
+          "id": "b-out",
+          "at": [
+            111,
+            78
+          ],
+          "dir": "right",
+          "line": "pipe"
+        }
+      ],
+      "roles": [
+        "reading"
+      ]
+    },
+    "water/hx-shell-tube": {
+      "title": "Shell &amp; tube HX",
+      "size": [
+        140,
+        70
+      ],
+      "features": [
+        "status"
+      ],
+      "use": "Shell-and-tube heat exchanger: tube side through the heads, shell side top and bottom.",
+      "keywords": [
+        "heat exchanger",
+        "plate",
+        "shell and tube"
+      ],
+      "ports": [
+        {
+          "id": "tube-in",
+          "at": [
+            9,
+            35
+          ],
+          "dir": "left",
+          "line": "pipe"
+        },
+        {
+          "id": "tube-out",
+          "at": [
+            131,
+            35
+          ],
+          "dir": "right",
+          "line": "pipe"
+        },
+        {
+          "id": "shell-in",
+          "at": [
+            40,
+            9
+          ],
+          "dir": "up",
+          "line": "pipe"
+        },
+        {
+          "id": "shell-out",
+          "at": [
+            100,
+            61
+          ],
+          "dir": "down",
+          "line": "pipe"
+        }
+      ],
+      "roles": [
+        "reading"
+      ]
+    },
+    "water/pipe-junction": {
+      "title": "Pipe junction",
+      "size": [
+        20,
+        20
+      ],
+      "features": [],
+      "use": "A tee, elbow or cross where pipe runs meet.",
+      "keywords": [
+        "line",
+        "run"
+      ],
+      "ports": [
+        {
+          "id": "left",
+          "at": [
+            0,
+            10
+          ],
+          "dir": "left",
+          "line": "pipe"
+        },
+        {
+          "id": "right",
+          "at": [
+            20,
+            10
+          ],
+          "dir": "right",
+          "line": "pipe"
+        },
+        {
+          "id": "top",
+          "at": [
+            10,
+            0
+          ],
+          "dir": "up",
+          "line": "pipe"
+        },
+        {
+          "id": "bottom",
+          "at": [
+            10,
+            20
+          ],
+          "dir": "down",
+          "line": "pipe"
+        }
+      ],
+      "roles": []
+    },
+    "water/pipe": {
+      "title": "Pipe",
+      "size": [
+        100,
+        10
+      ],
+      "stretch": "x",
+      "features": [
+        "flow"
+      ],
+      "use": "A straight pipe run; stretches along its length. Chilled water, hot water, condenser water, steam.",
+      "keywords": [
+        "line",
+        "run"
+      ],
+      "ports": [
+        {
+          "id": "in",
+          "at": [
+            0,
+            5
+          ],
+          "dir": "left",
+          "line": "pipe"
+        },
+        {
+          "id": "out",
+          "at": [
+            0,
+            5
+          ],
+          "dir": "right",
+          "line": "pipe",
+          "end": true
+        }
+      ],
+      "roles": [
+        {
+          "role": "flow",
+          "kind": "boolean",
+          "words": [
+            "status",
+            "flow",
+            "pump",
+            "run"
+          ],
+          "behaviors": [
+            {
+              "effect": "state",
+              "params": {
+                "state": "flow"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "water/pump-end-suction": {
+      "title": "End-suction pump",
+      "size": [
+        140,
+        100
+      ],
+      "features": [
+        "on",
+        "ccw",
+        "status"
+      ],
+      "use": "End-suction pump: suction on the left end, discharge out the top.",
+      "keywords": [
+        "chw",
+        "hw",
+        "cw",
+        "condenser",
+        "circulator",
+        "chwp",
+        "hwp"
+      ],
+      "ports": [
+        {
+          "id": "in",
+          "at": [
+            9,
+            50
+          ],
+          "dir": "left",
+          "line": "pipe"
+        },
+        {
+          "id": "out",
+          "at": [
+            49,
+            11
+          ],
+          "dir": "up",
+          "line": "pipe"
+        }
+      ],
+      "roles": [
+        "run",
+        "speed",
+        "fault",
+        "command"
+      ]
+    },
+    "water/pump-inline": {
+      "title": "Inline pump",
+      "size": [
+        100,
+        140
+      ],
+      "features": [
+        "on",
+        "ccw",
+        "status"
+      ],
+      "use": "Inline circulator pump.",
+      "keywords": [
+        "chw",
+        "hw",
+        "cw",
+        "condenser",
+        "circulator",
+        "chwp",
+        "hwp"
+      ],
+      "ports": [
+        {
+          "id": "in",
+          "at": [
+            9,
+            70
+          ],
+          "dir": "left",
+          "line": "pipe"
+        },
+        {
+          "id": "out",
+          "at": [
+            91,
+            70
+          ],
+          "dir": "right",
+          "line": "pipe"
+        }
+      ],
+      "roles": [
+        "run",
+        "speed",
+        "fault",
+        "command"
+      ]
+    },
+    "water/tank": {
+      "title": "Tank",
+      "size": [
+        80,
+        120
+      ],
+      "features": [
+        "level",
+        "status"
+      ],
+      "use": "Expansion, buffer or storage tank; connects at the bottom.",
+      "keywords": [
+        "expansion",
+        "storage",
+        "buffer",
+        "level"
+      ],
+      "ports": [
+        {
+          "id": "bottom",
+          "at": [
+            40,
+            104
+          ],
+          "dir": "down",
+          "line": "pipe"
+        }
+      ],
+      "roles": [
+        {
+          "role": "level",
+          "kind": "number",
+          "unit": "%",
+          "words": [
+            "level",
+            "lvl",
+            "volume"
+          ],
+          "behaviors": [
+            {
+              "effect": "state",
+              "params": {
+                "state": "level"
+              }
+            }
+          ]
+        },
+        "reading"
+      ]
+    },
+    "water/valve-2way": {
+      "title": "2-way valve",
+      "size": [
+        80,
+        100
+      ],
+      "features": [
+        "status"
+      ],
+      "use": "Two-way control valve.",
+      "keywords": [
+        "control valve",
+        "chw",
+        "hw",
+        "cv",
+        "actuator"
+      ],
+      "ports": [
+        {
+          "id": "in",
+          "at": [
+            9,
+            50
+          ],
+          "dir": "left",
+          "line": "pipe"
+        },
+        {
+          "id": "out",
+          "at": [
+            71,
+            50
+          ],
+          "dir": "right",
+          "line": "pipe"
+        }
+      ],
+      "roles": [
+        {
+          "role": "position",
+          "kind": "number",
+          "unit": "%",
+          "words": [
+            "valve",
+            "vlv",
+            "position",
+            "-v",
+            "output"
+          ],
+          "behaviors": [
+            {
+              "effect": "label"
+            }
+          ]
+        }
+      ]
+    },
+    "water/valve-3way": {
+      "title": "3-way valve",
+      "size": [
+        80,
+        100
+      ],
+      "features": [
+        "status"
+      ],
+      "use": "Three-way mixing or diverting valve; the bypass port points down.",
+      "keywords": [
+        "control valve",
+        "chw",
+        "hw",
+        "cv",
+        "actuator"
+      ],
+      "ports": [
+        {
+          "id": "in",
+          "at": [
+            9,
+            50
+          ],
+          "dir": "left",
+          "line": "pipe"
+        },
+        {
+          "id": "out",
+          "at": [
+            71,
+            50
+          ],
+          "dir": "right",
+          "line": "pipe"
+        },
+        {
+          "id": "bypass",
+          "at": [
+            40,
+            78
+          ],
+          "dir": "down",
+          "line": "pipe"
+        }
+      ],
+      "roles": [
+        {
+          "role": "position",
+          "kind": "number",
+          "unit": "%",
+          "words": [
+            "valve",
+            "vlv",
+            "position",
+            "-v",
+            "output"
+          ],
+          "behaviors": [
+            {
+              "effect": "label"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

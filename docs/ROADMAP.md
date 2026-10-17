@@ -18,7 +18,7 @@ Done:
 - Native `bas-symbol` shape for the base library (32 Plate-style pieces from
   `symbol-library`: theme-aware, states, stretchable ducts and pipes, flip-safe labels).
 - Board files: new, open, save, save as, recent boards, unsaved-changes prompt;
-  `.lemni` files (formerly `.basboard`) with images inlined; download/upload fallback without file access.
+  `.lemscape` files (formerly `.lemscape`, `.basboard`) with images inlined; download/upload fallback without file access.
 - Shape names: rename in Layers (double-click) and the Inspector header.
 - Hide/show in Layers, Object → Hide (⇧⌘H) and Show all hidden.
 - Pages section in Layers: add, rename, duplicate, reorder, delete.
@@ -51,6 +51,17 @@ Next:
   inspector for people.
 - Multiple simultaneous stations.
 
+## 2b · Metasys SCT archive (offline) — started
+
+Done:
+- Read-only SQL Server connection to restored SCT archives: find archives, open one,
+  network tree (site → engines → trunks → controllers → points) with point type and
+  stored value, search, point details, drags and link marks like the Station tree.
+
+Next:
+- Equipment and Spaces tabs (SCT's other views), equipment definitions and their points.
+- Several archives open at once; enum state names from the translation dictionary.
+
 ## 3 · Behaviors — in progress
 
 Done:
@@ -68,7 +79,8 @@ Next:
 - Symbol state: done for the library's built-in states (on, flow, dirty filter, reverse,
   damper position, level, sash). Next: variants and per-symbol state presets.
 - Multi-selection editing; presets and equipment templates with point-role remapping.
-- Interactions: open a view, write a point (with the AI phase's approvals).
+- Interactions: writing a point from a shape's own behavior (controls exist as UI
+  elements; see Data widgets).
 
 ## 4 · Data widgets — in progress
 
@@ -85,6 +97,12 @@ Done:
 - Gauge (dial or bar) with a scale and low/high warning and alarm limits.
 - Drag a whole folder (equipment, device, network) from the Station tree: charts take
   up to eight of its points; tables split it into one table per kind of equipment.
+- UI elements plugin (shadcn): button (go to / write a value), switch, slider,
+  setpoint, select, badge, progress, value, and panels of rows. Live in Present mode;
+  every write is confirmed and audited; set or override (timed or until released) with
+  an optional "Auto" release. Folder drop builds a panel.
+- Shared navigation targets: any page, shape, document page, station point or web
+  address, chosen from a list or picked on the board; used by "On click: go to" too.
 
 Next:
 - Bar and comparison charts.
@@ -122,7 +140,7 @@ Next:
 ## 6 · AI — usable
 
 Done (October 2026): AI through the person's own AI app over MCP, no chat in the board.
-- MCP endpoint (`/api/mcp`, token in `.lemni/`), board-tab bridge, AI panel (who's
+- MCP endpoint (`/api/mcp`, token in `.lemscape/`), board-tab bridge, AI panel (who's
   connected, access level, connect commands for Claude Code, Claude Desktop and Codex,
   activity), top-bar status, working chip, change outlines and follow.
 - Plugin `ai` contribution: tools, guides, shape descriptions. Tools for the canvas,
@@ -132,12 +150,15 @@ Done (October 2026): AI through the person's own AI app over MCP, no chat in the
 - Agent-ready HVAC library: piece descriptions (ports, point roles), place_symbols,
   connect_ports, place_run (whole air/water paths), check_layout; read_document zooms
   into regions of big drawings.
+- Shared manifest: piece descriptions, keywords, ports and roles moved to the symbol
+  library's `svg/library.json`, shared with the Niagara module. Status plates show the
+  first bound point's Niagara status.
 
 Next:
 - Pinned AI comments on the canvas; an "undo everything this AI did" control.
 - Knowledge: project notes and point-role conventions the AI reads first.
-- Library: ports drawn into the art (coil water stubs), a shared manifest with the
-  symbol library (and the Niagara module), snapshot tests per piece and state.
+- Library: ports drawn into the art (coil water stubs), snapshot tests per piece and
+  state.
 - Schedules and station model edits (preview → apply) as write tools.
 - An optional built-in chat with an API key for people without an AI app.
 - Remote boards: OAuth for the MCP endpoint once boards are hosted.

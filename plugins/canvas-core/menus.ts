@@ -466,6 +466,15 @@ const items: Item[] = [
     kbd: "shift+/",
     onSelect: () => studioState.shortcutSheetOpen.set(true),
   },
+  // Last, so it sits at the bottom of File.
+  {
+    id: "file-settings",
+    menu: "file",
+    group: "settings",
+    label: "Settings…",
+    kbd: "cmd+comma",
+    onSelect: () => studioState.settingsPage.set(""),
+  },
 ]
 
 export const coreMenuItems: MenuItemContribution[] = items.map(

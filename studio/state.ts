@@ -47,27 +47,43 @@ const isPluginPreferences = (value: unknown): value is PluginPreferences =>
   isStringArray((value as PluginPreferences).disabled)
 
 export const studioState = {
-  workspace: persistentAtom("lemni.workspace.v1", "canvas", isString),
+  workspace: persistentAtom("lemscape.workspace.v1", "canvas", isString),
   /** Open left panel per workspace. `null` means collapsed. */
   leftPanels: persistentAtom<Record<string, string | null>>(
-    "lemni.left-panels.v1",
+    "lemscape.left-panels.v1",
     {},
     isPanelMap
   ),
-  rightPanelOpen: persistentAtom("lemni.right-panel.v1", true, isBoolean),
+  rightPanelOpen: persistentAtom("lemscape.right-panel.v1", true, isBoolean),
+  /** Settings → Interface: a short name under each panel icon in the rail. */
+  railLabels: persistentAtom("lemscape.rail-labels.v1", false, isBoolean),
   pluginPreferences: persistentAtom(
-    "lemni.plugins.v1",
+    "lemscape.plugins.v1",
     EMPTY_PREFERENCES,
     isPluginPreferences
   ),
   pluginManagerOpen: atom("plugin-manager-open", false),
+  /** Settings dialog: the page to show, "" for the first, `null` when closed. */
+  settingsPage: atom<string | null>("settings page", null),
+  /** Plugins whose options are left out of the menu for points dropped on the board. */
+  pointMenuHidden: persistentAtom<string[]>(
+    "lemscape.point-menu-hidden.v1",
+    [],
+    isStringArray
+  ),
+  /** Canvas background id from a `canvasBackgrounds` contribution; "none" is the plain fill. */
+  canvasBackground: persistentAtom(
+    "lemscape.canvas-background.v1",
+    "none",
+    isString
+  ),
   inspectorTab: atom<string | null>("inspector tab", null),
   /** Present mode: chrome hidden, board read-only, click interactions active. */
   presenting: atom("presenting", false),
   /** The open board's name (its file name without the extension). */
-  boardName: persistentAtom("lemni.board-name.v1", UNTITLED_BOARD, isString),
+  boardName: persistentAtom("lemscape.board-name.v1", UNTITLED_BOARD, isString),
   /** Changed since it was last saved to a file. The working copy itself is always kept. */
-  boardDirty: persistentAtom("lemni.board-dirty.v1", false, isBoolean),
+  boardDirty: persistentAtom("lemscape.board-dirty.v1", false, isBoolean),
   /** Command palette; "recent" opens it filtered to recent boards. */
   commandPalette: atom<"closed" | "open" | "recent">(
     "command palette",

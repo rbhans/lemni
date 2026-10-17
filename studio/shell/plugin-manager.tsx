@@ -158,6 +158,10 @@ function CategoryButton({
   )
 }
 
+/** Whether the plugin offers things to make from points dropped on empty canvas. */
+const offersPointOptions = (plugin: BoardPlugin) =>
+  (plugin.pointDrops ?? []).some((drop) => drop.create || drop.creates?.length)
+
 function PluginRow({ plugin }: { plugin: BoardPlugin }) {
   const { plugins, enabled, setEnabled } = usePluginRuntime()
   const isOn = enabled.has(plugin.id)
@@ -168,6 +172,7 @@ function PluginRow({ plugin }: { plugin: BoardPlugin }) {
     .filter((id) => enabled.has(id))
     .map(nameOf)
   const contributes = describeContributions(plugin)
+  const pointMenuHidden = useValue(studioState.pointMenuHidden)
 
   return (
     <li className="flex gap-3 border-b py-3 last:border-b-0">
@@ -221,6 +226,23 @@ function PluginRow({ plugin }: { plugin: BoardPlugin }) {
           <p className="text-[11px] text-muted-foreground">
             Works better with {optional.join(", ")}
           </p>
+        ) : null}
+        {isOn && offersPointOptions(plugin) ? (
+          <label className="mt-0.5 flex w-fit items-center gap-2 text-[11px] text-muted-foreground">
+            <Switch
+              size="sm"
+              aria-label={`Offer ${plugin.name} when points are dropped on the board`}
+              checked={!pointMenuHidden.includes(plugin.id)}
+              onCheckedChange={(show) =>
+                studioState.pointMenuHidden.update((hidden) =>
+                  show
+                    ? hidden.filter((id) => id !== plugin.id)
+                    : [...hidden.filter((id) => id !== plugin.id), plugin.id]
+                )
+              }
+            />
+            Offer it when points are dropped on the board
+          </label>
         ) : null}
         {isOn && dependents.length ? (
           <p className="text-[11px] text-muted-foreground">

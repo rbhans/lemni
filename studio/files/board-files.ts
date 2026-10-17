@@ -1,7 +1,7 @@
 "use client"
 
 // Board files: the board you're editing always lives in browser storage (the working
-// copy); these operations move it to and from `.lemni` files on disk. Where the
+// copy); these operations move it to and from `.lemscape` files on disk. Where the
 // browser supports the File System Access API, Save writes back to the same file and
 // recent boards reopen by handle; elsewhere Save downloads a copy and Open uploads one.
 
@@ -49,13 +49,13 @@ export const supportsFileAccess = () =>
 
 const OPEN_TYPES: FilePickerAcceptType[] = [
   {
-    description: "Lemni board",
+    description: "Lemscape board",
     accept: { "application/json": [...OPENABLE_EXTENSIONS] },
   },
 ]
 const SAVE_TYPES: FilePickerAcceptType[] = [
   {
-    description: "Lemni board",
+    description: "Lemscape board",
     accept: { "application/json": [BOARD_EXTENSION] },
   },
 ]

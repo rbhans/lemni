@@ -1,15 +1,23 @@
 // The HVAC symbol library: lookup, search terms, and how a symbol's state turns into
 // root classes, CSS variables and markup. Pure module (no React, no DOM).
 
-import { PIECES } from "./library.generated.ts"
+import { PIECES, STATUS } from "./library.generated.ts"
 import type {
+  StatusModel,
   SymbolCategory,
   SymbolFeature,
   SymbolPiece,
+  SymbolStatus,
 } from "./library-types.ts"
 
-export type { SymbolCategory, SymbolFeature, SymbolPiece }
-export { PIECES }
+export type {
+  StatusModel,
+  SymbolCategory,
+  SymbolFeature,
+  SymbolPiece,
+  SymbolStatus,
+}
+export { PIECES, STATUS }
 
 const BY_ID = new Map(PIECES.map((piece) => [piece.id, piece]))
 
@@ -23,45 +31,8 @@ export const CATEGORIES: { id: SymbolCategory; title: string }[] = [
   { id: "shared", title: "Sensors" },
 ]
 
-/** Extra search terms, keyed by the start of a symbol id. */
-const SEARCH_TERMS: [prefix: string, terms: string[]][] = [
-  [
-    "air/fan",
-    ["supply", "return", "exhaust", "relief", "blower", "sf", "rf", "ef"],
-  ],
-  ["air/fan-roof", ["rooftop", "exhaust"]],
-  ["air/coil-cool", ["chw", "chilled water", "cooling", "cc", "dx"]],
-  ["air/coil-heat", ["hw", "hot water", "heating", "hc", "reheat", "preheat"]],
-  [
-    "air/damper",
-    ["oa", "ra", "ea", "outside air", "return air", "mixed air", "actuator"],
-  ],
-  ["air/filter", ["prefilter", "final filter", "pf", "dp"]],
-  ["air/filter-uv", ["uv", "uvgi", "lamp"]],
-  ["air/heat-wheel", ["erv", "energy recovery", "enthalpy wheel"]],
-  ["air/hx-air-to-air", ["plate", "energy recovery", "hrv"]],
-  ["air/humidifier", ["steam", "humidity"]],
-  ["air/phoenix-valve", ["venturi", "lab", "airflow", "cav"]],
-  ["air/fume-hood", ["lab", "sash", "hood"]],
-  ["air/duct", ["air", "line", "run"]],
-  ["water/pump", ["chw", "hw", "cw", "condenser", "circulator", "chwp", "hwp"]],
-  ["water/chiller", ["chw", "chilled water", "ch"]],
-  ["water/cooling-tower", ["ct", "condenser", "tower"]],
-  ["water/boiler", ["hw", "hot water", "steam", "b"]],
-  ["water/hx", ["heat exchanger", "hx", "plate", "shell and tube"]],
-  ["water/valve", ["control valve", "chw", "hw", "cv", "actuator"]],
-  ["water/tank", ["expansion", "storage", "buffer", "level"]],
-  ["water/pipe", ["water", "line", "run"]],
-  [
-    "shared/sensor",
-    ["temperature", "pressure", "humidity", "co2", "transmitter", "probe"],
-  ],
-]
-
 export function searchTermsFor(piece: SymbolPiece): string[] {
-  const words = piece.id.split(/[/-]/)
-  const extra = SEARCH_TERMS.filter(([prefix]) => piece.id.startsWith(prefix))
-  return [...new Set([...words, ...extra.flatMap(([, terms]) => terms)])]
+  return [...new Set([...piece.id.split(/[/-]/), ...piece.keywords])]
 }
 
 /** Inserted size: native for equipment, a longer run for ducts and pipes. */
@@ -124,17 +95,46 @@ export function resolveState(
   return next
 }
 
+/** Words in a Niagara status string ("{alarm,unackedAlarm}", "overridden @ 8") per status. */
+const STATUS_WORDS: Record<SymbolStatus, RegExp> = {
+  disabled: /disabled/,
+  fault: /fault/,
+  down: /down/,
+  alarm: /alarm/,
+  stale: /stale/,
+  overridden: /overridden|@\s*\d+/,
+}
+
+/** The status a plate shows for a point's status string, by the library's priority; null for ok. */
+export function symbolStatus(
+  status: string | null | undefined
+): SymbolStatus | null {
+  if (!status) return null
+  const s = status.toLowerCase()
+  return STATUS.priority.find((key) => STATUS_WORDS[key].test(s)) ?? null
+}
+
 /** Root classes for the symbol's <svg>. Only classes the piece understands are added. */
 export function symbolClasses(
   piece: SymbolPiece,
   state: SymbolState,
-  opts: { dark: boolean; flipX?: boolean; flipY?: boolean }
+  opts: {
+    dark: boolean
+    flipX?: boolean
+    flipY?: boolean
+    /** A Niagara status string (or a SymbolStatus); colors the plate. */
+    status?: string | null
+  }
 ): string {
   const classes = ["bas-symbol", piece.scope]
   if (opts.dark) classes.push("dk")
   for (const key of BOOLEAN_STATES) {
     if (state[key] && piece.features.includes(key)) classes.push(key)
   }
+  const status = piece.features.includes("status")
+    ? symbolStatus(opts.status)
+    : null
+  if (status) classes.push(`st-${status}`)
   if (opts.flipX) classes.push("fx")
   if (opts.flipY) classes.push("fy")
   return classes.join(" ")

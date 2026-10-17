@@ -32,6 +32,7 @@ import {
   EngineBridge,
 } from "./engine-bridge"
 import { PasteSpecialDialog, rememberCopy } from "./paste"
+import { TargetPickLayer } from "../navigation/target-field"
 import { PointDrop } from "./point-drop"
 
 const editorOptions: Partial<TldrawOptions> = {
@@ -69,7 +70,7 @@ export function BoardEditor({ slots }: { slots: ShellSlots | null }) {
         themes={boardThemes}
         components={canvasComponents}
         getShapeVisibility={shapeVisibility}
-        // Named before the rename to Lemni; changing it would orphan the working copy.
+        // Named when the product was BAS Board; changing it would orphan the working copy.
         persistenceKey="basboard-dev-board"
         licenseKey={process.env.NEXT_PUBLIC_TLDRAW_LICENSE_KEY}
         onMount={(editor) => {
@@ -152,6 +153,7 @@ function EditorScope({ slots }: { slots: ShellSlots | null }) {
         )}
         <ToolDock />
         <PointDrop />
+        <TargetPickLayer />
         <PasteSpecialDialog />
         {slots ? <ShellChrome slots={slots} /> : null}
       </PluginProviders>

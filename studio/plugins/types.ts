@@ -6,6 +6,7 @@ import type {
   TLAnyShapeUtilConstructor,
   TLShape,
   TLShapeId,
+  Signal,
   TLStateNodeConstructor,
   VecLike,
 } from "tldraw"
@@ -63,10 +64,25 @@ export interface ToolbarContribution extends ToolItem {
   pageKinds?: PageKind[]
 }
 
+/** Where a left panel sits in the rail. Groups are split by a divider, in this order. */
+export type PanelGroup = "board" | "connections" | "ai"
+
+export const PANEL_GROUPS: readonly { id: PanelGroup; label: string }[] = [
+  { id: "board", label: "Board" },
+  { id: "connections", label: "Connections" },
+  { id: "ai", label: "AI" },
+]
+
 export interface PanelContribution {
   id: string
   title: string
+  /** Short name under the rail icon when labels are on (default: the title). */
+  railLabel?: string
+  /** Rail group (default "board"). */
+  group?: PanelGroup
   icon: IconSvgElement
+  /** An icon that follows state, shown in the rail instead of `icon` (a connection's, dashed while it's not connected). */
+  currentIcon?: Signal<IconSvgElement>
   side: "left" | "right"
   order: number
   /** Workspaces that show this panel. */
@@ -140,6 +156,26 @@ export interface SlotContribution {
 
 export interface StatusContribution extends SlotContribution {
   align: "start" | "end"
+}
+
+/** A block of controls in the Settings dialog, listed under its page. */
+export interface SettingsSectionContribution {
+  id: string
+  /** Page it's listed under in the dialog's sidebar, e.g. "Canvas". */
+  page: string
+  title: string
+  /** One line under the title saying what the settings do. */
+  description?: string
+  order: number
+  component: ComponentType
+}
+
+/** A full-viewport layer painted behind the grid; one is shown at a time, picked in View. */
+export interface CanvasBackgroundContribution {
+  id: string
+  order: number
+  label: string
+  component: ComponentType
 }
 
 /** Wraps how every shape renders, e.g. to animate it. Must render `children`. */
@@ -239,6 +275,31 @@ export interface PasteOptionContribution {
  * point in a dropped folder. Contributions are tried in order: the first one that
  * claims the shape under the pointer gets the drop.
  */
+/** A flyout in the menu for points dropped on empty canvas ("Data", "HVAC", "UI"). */
+export interface PointMenuGroup {
+  id: string
+  label: string
+  order: number
+}
+
+/** One thing a dropped point can become, e.g. "Trend chart" or "Fan". */
+export interface PointCreateOption {
+  id: string
+  label: string
+  icon: IconSvgElement
+  /** Takes several points at once (a dropped folder). */
+  multiple?: boolean
+  /** Whether it suits these points (default: yes). */
+  accepts?(points: PointDragData[]): boolean
+  /** Listed first in its flyout, e.g. a fan for a fan status point. */
+  suggested?(points: PointDragData[]): boolean
+  /** A heading the option sits under within its flyout ("Air side"). */
+  section?: string
+  /** Shown instead of the icon (a symbol's own drawing). */
+  preview?: ReactNode
+  run(ctx: StudioContext, points: PointDragData[], at: VecLike): void
+}
+
 export interface PointDropContribution {
   id: string
   order: number
@@ -254,6 +315,10 @@ export interface PointDropContribution {
     icon: IconSvgElement
     run(ctx: StudioContext, points: PointDragData[], at: VecLike): void
   }
+  /** More things to offer on empty canvas (each its own row). */
+  creates?: PointCreateOption[]
+  /** The flyout `create` and `creates` go under; none: the menu's top level. */
+  group?: PointMenuGroup
 }
 
 /** What an AI tool call can reach. */
@@ -365,6 +430,10 @@ export interface BoardPlugin extends PluginNode {
   canvasOverlays?: SlotContribution[]
   /** Content drawn on the canvas in page space (moves and zooms with the board). */
   canvasLayers?: SlotContribution[]
+  /** Sections of the Settings dialog (File → Settings…). */
+  settingsSections?: SettingsSectionContribution[]
+  /** Backgrounds behind the grid, picked in Settings → Canvas. */
+  canvasBackgrounds?: CanvasBackgroundContribution[]
   shapeDecorators?: ShapeDecoratorContribution[]
   pointDrops?: PointDropContribution[]
   pageCategories?: PageCategoryContribution[]
@@ -387,6 +456,8 @@ export function describeContributions(plugin: BoardPlugin): string[] {
   if (plugin.inspectorTabs?.length) out.push("Property tab")
   if (plugin.inspectorSections?.length) out.push("Properties")
   if (plugin.workspaces?.length) out.push("Workspace")
+  if (plugin.canvasBackgrounds?.length) out.push("Backgrounds")
+  if (plugin.settingsSections?.length) out.push("Settings")
   if (plugin.ai?.tools?.length) out.push("AI tools")
   if (plugin.topbarItems?.length || plugin.statusItems?.length)
     out.push("Status")

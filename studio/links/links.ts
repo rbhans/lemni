@@ -57,6 +57,15 @@ export function registerLinkable(type: string, options: LinkableType = {}) {
   linkable.set(type, options)
 }
 
+/** Shows one page of a shape that has pages (document cards); no-op for others. */
+export function showShapePage(editor: Editor, shape: TLShape, page: number) {
+  linkable.get(shape.type)?.showPage?.(editor, shape, page)
+}
+
+/** What to call one page of a shape ("p. 3", or a Word section's heading). */
+export const shapePageLabel = (shape: TLShape, page: number) =>
+  linkable.get(shape.type)?.pageLabel?.(shape, page) ?? `p. ${page}`
+
 export const isLinkable = (shape: TLShape | undefined | null) =>
   Boolean(shape && linkable.has(shape.type))
 

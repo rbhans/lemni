@@ -5,10 +5,12 @@ import {
   DefaultShapeWrapper,
   type TLEditorComponents,
   type TLShapeWrapperProps,
+  useValue,
 } from "tldraw"
 
 import { PluginBoundary } from "../plugins/plugin-boundary"
 import { usePluginRuntime } from "../plugins/runtime"
+import { studioState } from "../state"
 
 /**
  * tldraw's shape wrapper, with plugin decorators around each shape's content. The
@@ -63,7 +65,33 @@ function StudioOnTheCanvas() {
   )
 }
 
+/**
+ * tldraw's plain fill, with the chosen plugin background over it (screen space,
+ * under the grid). An unknown or disabled choice falls back to the plain fill.
+ */
+function StudioBackground() {
+  const { contributions } = usePluginRuntime()
+  const chosen = useValue(
+    "canvas background",
+    () => studioState.canvasBackground.get(),
+    []
+  )
+  const background = contributions.canvasBackgrounds.find(
+    (entry) => entry.id === chosen
+  )
+  return (
+    <div className="tl-background">
+      {background ? (
+        <PluginBoundary pluginId={background.pluginId} mode="silent">
+          <background.component />
+        </PluginBoundary>
+      ) : null}
+    </div>
+  )
+}
+
 export const canvasComponents: TLEditorComponents = {
+  Background: StudioBackground,
   ShapeWrapper: StudioShapeWrapper,
   OnTheCanvas: StudioOnTheCanvas,
 }

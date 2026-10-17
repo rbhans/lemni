@@ -257,7 +257,7 @@ interface WriteInput {
   reason: string
 }
 
-const requestedBy = (client: string) => `AI app: ${client} (approved in Lemni)`
+const requestedBy = (client: string) => `AI app: ${client} (approved in Lemscape)`
 
 const showValue = (v: PointWrite["value"]) =>
   typeof v === "boolean" ? (v ? "true (on)" : "false (off)") : String(v)

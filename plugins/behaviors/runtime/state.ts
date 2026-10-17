@@ -27,7 +27,7 @@ function persistedFlag(key: string, initial: boolean) {
 }
 
 /** Live effects on the canvas. Off shows the saved drawing, e.g. for arranging. */
-export const liveEffects = persistedFlag("lemni.live-effects.v1", true)
+export const liveEffects = persistedFlag("lemscape.live-effects.v1", true)
 
 /** Session-only test values per behavior, so effects can be checked without a station. */
 export const testValues = atom<Record<string, InputValue | undefined>>(

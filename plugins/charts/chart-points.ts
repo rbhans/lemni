@@ -11,7 +11,10 @@ import {
   type PointKind,
   type PointRef,
 } from "@/studio/data/live-points"
-import type { PointDropContribution } from "@/studio/plugins/types"
+import type {
+  PointDropContribution,
+  PointMenuGroup,
+} from "@/studio/plugins/types"
 
 import { CHART_TYPE, isChartShape, type ChartShape } from "./chart-shape"
 import { MAX_SERIES, nextSlot, sameSeries, type ChartSeries } from "./model"
@@ -132,8 +135,12 @@ function chartAt(editor: Editor, hit: TLShape): ChartShape | null {
   return isChartShape(ancestor) ? ancestor : null
 }
 
+/** The drop menu's Data flyout (shared by the data widgets). */
+const DATA_GROUP: PointMenuGroup = { id: "data", label: "Data", order: 10 }
+
 export const chartPointDrop: PointDropContribution = {
   id: "chart",
+  group: DATA_GROUP,
   order: 10,
   multiple: true,
   target: chartAt,

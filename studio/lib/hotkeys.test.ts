@@ -79,6 +79,13 @@ test("shifted punctuation matches by physical key", () => {
   )
 })
 
+test("the comma key is spelled out, since a comma separates alternatives", () => {
+  assert.deepEqual(parseKbd("cmd+comma"), [
+    { key: ",", mod: true, shift: false, alt: false },
+  ])
+  assert.ok(matchesKbd(key(",", "Comma", { meta: true }), "cmd+comma", true))
+})
+
 test("typing targets and modifier shortcuts", () => {
   assert.equal(isTypingTarget(null), false)
   assert.equal(hasModifier("cmd+s"), true)
@@ -86,14 +93,19 @@ test("typing targets and modifier shortcuts", () => {
 })
 
 test("board file names", () => {
+  assert.equal(
+    boardNameFromFileName("AHU-1 graphics.lemscape"),
+    "AHU-1 graphics"
+  )
   assert.equal(boardNameFromFileName("AHU-1 graphics.lemni"), "AHU-1 graphics")
   assert.equal(boardNameFromFileName("plant.TLDR"), "plant")
-  assert.equal(boardNameFromFileName(".lemni"), UNTITLED_BOARD)
+  assert.equal(boardNameFromFileName(".lemscape"), UNTITLED_BOARD)
   assert.equal(boardNameFromFileName("Old plant.basboard"), "Old plant")
-  assert.equal(fileNameForBoard("AHU/1: graphics?"), "AHU-1- graphics.lemni")
-  assert.equal(fileNameForBoard("   "), `${UNTITLED_BOARD}.lemni`)
-  assert.equal(fileNameForBoard("Plant.lemni"), "Plant.lemni")
-  assert.equal(fileNameForBoard("Plant.basboard"), "Plant.lemni")
+  assert.equal(fileNameForBoard("AHU/1: graphics?"), "AHU-1- graphics.lemscape")
+  assert.equal(fileNameForBoard("   "), `${UNTITLED_BOARD}.lemscape`)
+  assert.equal(fileNameForBoard("Plant.lemscape"), "Plant.lemscape")
+  assert.equal(fileNameForBoard("Plant.lemni"), "Plant.lemscape")
+  assert.equal(fileNameForBoard("Plant.basboard"), "Plant.lemscape")
 })
 
 test("recent boards move to the front and stay short", () => {

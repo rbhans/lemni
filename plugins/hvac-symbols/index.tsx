@@ -23,6 +23,7 @@ import {
   type SymbolPiece,
 } from "./library"
 import { hvacAi } from "./ai-tools"
+import { symbolPointDrop } from "./point-drop"
 import { hasSymbolSelected, SymbolSection } from "./symbol-section"
 import { SYMBOL_TYPE, SymbolShapeUtil } from "./symbol-shape"
 import { useSymbolStyles } from "./symbol-styles"
@@ -93,6 +94,8 @@ export const hvacSymbols: BoardPlugin = {
   stage: "preview",
   shapeUtils: [SymbolShapeUtil],
   libraryCollections: collections,
+  pointDrops: [symbolPointDrop((piece) => <SymbolPreview piece={piece} />)],
+  optionalDependencies: ["behaviors"],
   ai: hvacAi,
   inspectorSections: [
     {

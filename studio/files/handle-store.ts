@@ -3,7 +3,7 @@
 // A tiny key-value store in IndexedDB. File handles can only be kept across reloads
 // here (they're structured-cloneable, not JSON).
 
-// Named before the rename to Lemni; changing it would forget recent files.
+// Named when the product was BAS Board; changing it would forget recent files.
 const DB_NAME = "basboard-files"
 const STORE = "kv"
 

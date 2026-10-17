@@ -15,7 +15,10 @@ import {
   type PointKind,
   type PointRef,
 } from "@/studio/data/live-points"
-import type { PointDropContribution } from "@/studio/plugins/types"
+import type {
+  PointDropContribution,
+  PointMenuGroup,
+} from "@/studio/plugins/types"
 
 import {
   GAUGE_SIZE,
@@ -139,8 +142,12 @@ function ownerOf<S extends TLShape>(
   return ancestor && is(ancestor) ? ancestor : null
 }
 
+/** The drop menu's Data flyout (shared by the data widgets). */
+const DATA_GROUP: PointMenuGroup = { id: "data", label: "Data", order: 10 }
+
 export const statPointDrop: PointDropContribution = {
   id: "stat",
+  group: DATA_GROUP,
   order: 12,
   target: (editor, hit) => ownerOf(editor, hit, isStatShape),
   drop({ editor }, shape, [point]) {
@@ -157,6 +164,7 @@ export const statPointDrop: PointDropContribution = {
 
 export const gaugePointDrop: PointDropContribution = {
   id: "gauge",
+  group: DATA_GROUP,
   order: 14,
   target: (editor, hit) => ownerOf(editor, hit, isGaugeShape),
   drop({ editor }, shape, [point]) {

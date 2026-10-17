@@ -21,14 +21,27 @@ test("old settings move to the new prefix once; newer ones win", () => {
   const storage = fakeStorage({
     "basboard.plugins.v1": '{"enabled":[]}',
     "basboard.ai-access.v1": '"full"',
-    "lemni.ai-access.v1": '"edit"',
+    "lemscape.ai-access.v1": '"edit"',
     "other.key": "kept",
   })
   assert.equal(migrateKeys(storage), 2)
   assert.deepEqual(Object.fromEntries(storage.map), {
-    "lemni.plugins.v1": '{"enabled":[]}',
-    "lemni.ai-access.v1": '"edit"',
+    "lemscape.plugins.v1": '{"enabled":[]}',
+    "lemscape.ai-access.v1": '"edit"',
     "other.key": "kept",
   })
   assert.equal(migrateKeys(storage), 0)
+})
+
+test("Lemni-era settings move too, and beat older BAS Board ones", () => {
+  const storage = fakeStorage({
+    "basboard.workspace.v1": '"documents"',
+    "lemni.workspace.v1": '"canvas"',
+    "lemni.board-name.v1": '"AHU-1"',
+  })
+  assert.equal(migrateKeys(storage), 3)
+  assert.deepEqual(Object.fromEntries(storage.map), {
+    "lemscape.workspace.v1": '"canvas"',
+    "lemscape.board-name.v1": '"AHU-1"',
+  })
 })

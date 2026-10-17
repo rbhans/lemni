@@ -6,6 +6,7 @@ import { CommandPalette } from "./command-palette"
 import { LeftDock, RightDock } from "./docks"
 import { PanelRail } from "./panel-rail"
 import { PluginManagerDialog } from "./plugin-manager"
+import { SettingsDialog } from "./settings-dialog"
 import { ShortcutSheet } from "./shortcut-sheet"
 import type { ShellSlots } from "./shell-layout"
 import { StatusBar } from "./status-bar"
@@ -21,6 +22,7 @@ export function ShellChrome({ slots }: { slots: ShellSlots }) {
       {createPortal(<RightDock />, slots.right)}
       {createPortal(<StatusBar />, slots.status)}
       <PluginManagerDialog />
+      <SettingsDialog />
       <CommandPalette />
       <ShortcutSheet />
       <UnsavedChangesDialog />

@@ -53,6 +53,8 @@ export interface Presentation {
   flow: { seconds: number; reverse: boolean } | null
   /** Values for the shape's own states (a symbol's "on", "level", …), by key. */
   state: Record<string, boolean | number>
+  /** Status string of the shape's first bound point (its own behaviors only). */
+  status: string | null
   transitionMs: number
 }
 
@@ -68,6 +70,7 @@ export function emptyPresentation(): Presentation {
     level: null,
     flow: null,
     state: {},
+    status: null,
     transitionMs: 400,
   }
 }

@@ -6,7 +6,7 @@ import type { AiToolInfo } from "../protocol"
 import { getAiBridge } from "./bridge"
 import { hasValidToken } from "./token"
 
-// Lemni as an MCP server (Streamable HTTP), so people can use the AI app they
+// Lemscape as an MCP server (Streamable HTTP), so people can use the AI app they
 // already pay for (Claude Code, Claude Desktop, Codex) on the board. Requests carry the
 // board's token; tools run in the open board tab, which enforces access levels and asks
 // before any write. JSON-RPC replies are plain JSON; a GET stream carries
@@ -15,9 +15,9 @@ import { hasValidToken } from "./token"
 const SUPPORTED_VERSIONS = ["2025-11-25", "2025-06-18", "2025-03-26"]
 const MAX_BODY = 1_000_000
 
-const SERVER_INFO = { name: "lemni", title: "Lemni", version: "0.1.0" }
+const SERVER_INFO = { name: "lemscape", title: "Lemscape", version: "0.1.0" }
 
-const INSTRUCTIONS = `Lemni is the endless canvas for buildings: project documents (control drawings, floor plans, specs), operator graphics with live data from the building systems it connects to, trend charts and tables, and links between them. The person has it open in a browser and watches what you do.
+const INSTRUCTIONS = `Lemscape is the endless canvas for buildings: project documents (control drawings, floor plans, specs), operator graphics with live data from the building systems it connects to, trend charts and tables, and links between them. The person has it open in a browser and watches what you do.
 
 - Start with board_overview: pages by category, what plugins add, and how much you may do.
 - Look before you change things: read_page for structure, screenshot to see the layout.
@@ -137,10 +137,10 @@ async function guard(request: Request): Promise<Response | null> {
     return reply(
       {
         error:
-          "Missing or wrong token. Copy the connect command from Lemni's AI panel.",
+          "Missing or wrong token. Copy the connect command from Lemscape's AI panel.",
       },
       401,
-      { "WWW-Authenticate": 'Bearer realm="lemni"' }
+      { "WWW-Authenticate": 'Bearer realm="lemscape"' }
     )
   return null
 }

@@ -84,7 +84,7 @@ export interface StationAlarm {
   message: string
 }
 
-/** Point writes Lemni sends: fallback (set), priority 8 (override), or release (auto). */
+/** Point writes Lemscape sends: fallback (set), priority 8 (override), or release (auto). */
 export type WriteAction = "set" | "override" | "auto"
 
 export interface PointWrite {

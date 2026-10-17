@@ -46,7 +46,7 @@ const BOARD_STATUS: AiToolInfo = {
   name: "board_status",
   title: "Is the board open?",
   description:
-    "Says whether Lemni is open in a browser, which board, and how much the person lets AI apps do. Call it when other tools say the board isn't open.",
+    "Says whether Lemscape is open in a browser, which board, and how much the person lets AI apps do. Call it when other tools say the board isn't open.",
   inputSchema: { type: "object", properties: {}, additionalProperties: false },
   access: "read",
   timeoutMs: 5_000,
@@ -54,7 +54,7 @@ const BOARD_STATUS: AiToolInfo = {
 }
 
 export const NOT_OPEN =
-  "Lemni isn't open. Ask the person to open the board in a browser (for example the browser pane next to this chat), then try again."
+  "Lemscape isn't open. Ask the person to open the board in a browser (for example the browser pane next to this chat), then try again."
 
 /** Friendly names for common MCP clients (they report a code name). */
 const CLIENT_NAMES: Record<string, string> = {
@@ -155,8 +155,8 @@ class AiBridge {
     const text = !tab
       ? NOT_OPEN
       : catalog?.access === "off"
-        ? `Lemni is open ("${catalog.board}"), but the person has turned AI access off in its AI panel.`
-        : `Lemni is open: "${catalog?.board}". Access: ${catalog?.access}. Call board_overview to start.`
+        ? `Lemscape is open ("${catalog.board}"), but the person has turned AI access off in its AI panel.`
+        : `Lemscape is open: "${catalog?.board}". Access: ${catalog?.access}. Call board_overview to start.`
     return { content: [{ type: "text", text }] }
   }
 
@@ -175,7 +175,7 @@ class AiBridge {
     const { catalog } = tab
     if (catalog.access === "off")
       return errorOutput(
-        "The person has turned AI access off in Lemni's AI panel."
+        "The person has turned AI access off in Lemscape's AI panel."
       )
     const tool = catalog.tools.find((t) => t.name === name)
     if (!tool)
@@ -185,7 +185,7 @@ class AiBridge {
     if (!allows(catalog.access, tool.access))
       return errorOutput(
         tool.access === "write"
-          ? "Station writes are off for AI apps. The person can allow them in Lemni's AI panel (Edit + station writes)."
+          ? "Station writes are off for AI apps. The person can allow them in Lemscape's AI panel (Edit + station writes)."
           : "The person has set AI access to read only, so the board can't be changed."
       )
 
@@ -320,11 +320,11 @@ class AiBridge {
 }
 
 const globalBridge = globalThis as typeof globalThis & {
-  __lemniAiBridge?: AiBridge
+  __lemscapeAiBridge?: AiBridge
 }
 
 /** Process-wide; survives hot reloads in development. */
 export function getAiBridge(): AiBridge {
-  globalBridge.__lemniAiBridge ??= new AiBridge()
-  return globalBridge.__lemniAiBridge
+  globalBridge.__lemscapeAiBridge ??= new AiBridge()
+  return globalBridge.__lemscapeAiBridge
 }

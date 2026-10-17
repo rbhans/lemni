@@ -17,6 +17,7 @@ import {
 import { registerShapeLabel } from "@/studio/lib/shape-labels"
 import {
   useShapeStateOverrides,
+  useShapeStatus,
   type ShapeStateDef,
   type ShapeStateSource,
 } from "@/studio/editor/shape-states"
@@ -74,7 +75,8 @@ function drawing(
   piece: SymbolPiece,
   props: SymbolShapeProps,
   state: SymbolState,
-  dark: boolean
+  dark: boolean,
+  status: string | null = null
 ) {
   const length = stretchLength(piece, props.w, props.h)
   return {
@@ -83,6 +85,7 @@ function drawing(
       dark,
       flipX: props.flipX,
       flipY: props.flipY,
+      status,
     }),
     vars: symbolVars(piece, state) as CSSProperties,
     markup: symbolMarkup(piece, { length, text: state.text }),
@@ -203,11 +206,12 @@ function SymbolShapeView({ shape }: { shape: SymbolShape }) {
     editor,
   ])
   const overrides = useShapeStateOverrides()
+  const status = useShapeStatus()
   const piece = getSymbol(shape.props.symbol)
   useSymbolStyles(piece)
 
   const state = resolveState(stateOf(shape.props), overrides)
-  const d = piece ? drawing(piece, shape.props, state, dark) : null
+  const d = piece ? drawing(piece, shape.props, state, dark, status) : null
   // Markup only changes with length or text, so state changes (classes, variables)
   // keep the same elements and the piece's own transitions and animations run.
   const html = useMemo(() => ({ __html: d?.markup ?? "" }), [d?.markup])

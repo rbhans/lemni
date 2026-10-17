@@ -12,6 +12,17 @@
 .nx .blade{transform-box:fill-box;transform-origin:center}
 .nx .blade{transform:rotate(var(--blade,45deg));transition:transform .6s}
 .nx.on .ac-f{fill:var(--acc)}
+.nx .plate{transition:transform .2s}
+.nx.st-alarm{--shadow:#CF1624}
+.nx.st-fault{--shadow:#FC7734}
+.nx.st-down{--shadow:#FAC600}
+.nx.st-overridden{--shadow:#BFADDD}
+.nx.st-stale{--shadow:#D9C09D}
+.nx.st-disabled{--shadow:#D6D6D6}
+.nx.st-alarm .plate,.nx.st-fault .plate,.nx.st-down .plate,.nx.st-overridden .plate,.nx.st-stale .plate,.nx.st-disabled .plate{transform:translate(6px,6px)}
+.nx.st-disabled{--ink:#B9BFC7;--ink2:#BEC4CB;--ink3:#CDD2D8}
+.nx.st-disabled.dk{--ink:#4B525B;--ink2:#454C55;--ink3:#3A4048}
+.nx.st-disabled .body{--acc:var(--ink2);--acc-t:none}
 </style>
-<g class="body m-run"><rect class="sh" x="29" y="14" width="20" height="10" rx="2"/><rect class="fo" x="25" y="10" width="20" height="10" rx="2"/><circle class="sh" cx="39" cy="49" r="25"/><circle class="fo" cx="35" cy="45" r="25"/><circle class="hl" cx="35" cy="45" r="21"/><g class="blade"><rect class="f2 ac-f" x="13" y="42.5" width="44" height="5" rx="2.5"/></g><circle class="fi" cx="35" cy="45" r="2.5"/></g>
+<g class="body m-run"><g class="plate" transform="translate(4 4)"><rect class="sh" x="25" y="10" width="20" height="10" rx="2" /><circle class="sh" cx="35" cy="45" r="25" /></g><rect class="fo" x="25" y="10" width="20" height="10" rx="2" /><circle class="fo" cx="35" cy="45" r="25" /><circle class="hl" cx="35" cy="45" r="21" /><g class="blade"><rect class="f2 ac-f" x="13" y="42.5" width="44" height="5" rx="2.5" /></g><circle class="fi" cx="35" cy="45" r="2.5" /></g>
 </svg>

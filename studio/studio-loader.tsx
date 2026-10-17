@@ -13,7 +13,7 @@ const Studio = dynamic(
     ssr: false,
     loading: () => (
       <div className="grid h-svh place-items-center text-xs text-muted-foreground">
-        Loading Lemni…
+        Loading Lemscape…
       </div>
     ),
   }

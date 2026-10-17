@@ -14,6 +14,17 @@
 .nx.on .flame{fill:var(--heat);animation:nx-flick 1.3s ease-in-out infinite}
 @keyframes nx-flick{ 0%,100%{opacity:1} 45%{opacity:.55} 70%{opacity:.85} }
 @media (prefers-reduced-motion:reduce){ .nx *{animation:none !important} }
+.nx .plate{transition:transform .2s}
+.nx.st-alarm{--shadow:#CF1624}
+.nx.st-fault{--shadow:#FC7734}
+.nx.st-down{--shadow:#FAC600}
+.nx.st-overridden{--shadow:#BFADDD}
+.nx.st-stale{--shadow:#D9C09D}
+.nx.st-disabled{--shadow:#D6D6D6}
+.nx.st-alarm .plate,.nx.st-fault .plate,.nx.st-down .plate,.nx.st-overridden .plate,.nx.st-stale .plate,.nx.st-disabled .plate{transform:translate(6px,6px)}
+.nx.st-disabled{--ink:#B9BFC7;--ink2:#BEC4CB;--ink3:#CDD2D8}
+.nx.st-disabled.dk{--ink:#4B525B;--ink2:#454C55;--ink3:#3A4048}
+.nx.st-disabled .body{--acc:var(--ink2);--acc-t:none}
 </style>
-<g class="body m-heat"><rect class="so" x="118" y="10" width="14" height="20" rx="1.5"/><path class="so" d="M56 80H74L78 100H52Z"/><path class="so" d="M110 80H128L132 100H106Z"/><rect class="sh" x="38" y="30" width="116" height="60" rx="14" ry="30"/><rect class="fo" x="34" y="26" width="116" height="60" rx="14" ry="30"/><rect class="tint" x="34" y="26" width="116" height="60" rx="14" ry="30"/><line class="hl" x1="72" y1="27" x2="72" y2="85"/><line class="hl" x1="118" y1="27" x2="118" y2="85"/><rect class="sh" x="14" y="42" width="28" height="36" rx="3"/><rect class="fo" x="10" y="38" width="28" height="36" rx="3"/><circle class="win" cx="24" cy="52" r="7"/><circle class="flame" cx="24" cy="52" r="5"/><line class="hl" x1="16" y1="63" x2="32" y2="63"/><line class="hl" x1="16" y1="67" x2="32" y2="67"/><line class="hl" x1="16" y1="71" x2="32" y2="71"/></g>
+<g class="body m-heat"><g class="plate" transform="translate(4 4)"><rect class="sh" x="118" y="10" width="14" height="20" rx="1.5" /><path class="sh" d="M56 80H74L78 100H52Z" /><path class="sh" d="M110 80H128L132 100H106Z" /><rect class="sh" x="34" y="26" width="116" height="60" rx="14" ry="30" /><rect class="sh" x="10" y="38" width="28" height="36" rx="3" /></g><rect class="so" x="118" y="10" width="14" height="20" rx="1.5" /><path class="so" d="M56 80H74L78 100H52Z" /><path class="so" d="M110 80H128L132 100H106Z" /><rect class="fo" x="34" y="26" width="116" height="60" rx="14" ry="30" /><rect class="tint" x="34" y="26" width="116" height="60" rx="14" ry="30" /><line class="hl" x1="72" y1="27" x2="72" y2="85" /><line class="hl" x1="118" y1="27" x2="118" y2="85" /><rect class="fo" x="10" y="38" width="28" height="36" rx="3" /><circle class="win" cx="24" cy="52" r="7" /><circle class="flame" cx="24" cy="52" r="5" /><line class="hl" x1="16" y1="63" x2="32" y2="63" /><line class="hl" x1="16" y1="67" x2="32" y2="67" /><line class="hl" x1="16" y1="71" x2="32" y2="71" /></g>
 </svg>

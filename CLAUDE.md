@@ -1,9 +1,10 @@
 @AGENTS.md
 
-# Lemni
+# Lemscape
 
-The endless canvas for buildings (formerly BAS Board; the repo folder is still
-`basboard`).
+The endless canvas for buildings (formerly Lemni, and BAS Board before that; the repo
+folder is still `lemni`). Storage keys, files and env vars from the old names are
+migrated or still read; keep it that way when touching them.
 
 Read `docs/ARCHITECTURE.md` before structural changes. v1 lives in
 `../bas-whiteboard`; use it for concepts only, not code.

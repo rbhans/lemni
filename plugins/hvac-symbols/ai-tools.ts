@@ -272,7 +272,7 @@ const listSymbols: AiBoardTool<{ query?: string; ids?: string[] }> = {
       return words.every((word) => text.includes(word))
     })
     return {
-      text: `${pieces.length} piece(s). Equipment carries its duct or pipe through its vertical center, flowing left to right; flipX reverses it. Lay out a whole air or water path with place_run.`,
+      text: `${pieces.length} piece(s). Equipment carries its duct or pipe through its vertical center, flowing left to right; flipX reverses it. Lay out a whole air or water path with place_run. Pieces with statusPlate show their first bound point's Niagara status (alarm, fault, down, overridden, stale, disabled) on their plate by themselves, with no behavior needed.`,
       data: pieces.map((piece) => {
         const entry = manifestFor(piece.id)!
         const size = defaultSize(piece)
@@ -294,6 +294,7 @@ const listSymbols: AiBoardTool<{ query?: string; ids?: string[] }> = {
             ...(s.unit ? { unit: s.unit } : {}),
           })),
           roles: entry.roles,
+          ...(piece.features.includes("status") ? { statusPlate: true } : {}),
           ...(piece.features.includes("text")
             ? { text: piece.text ?? "" }
             : {}),

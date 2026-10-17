@@ -11,7 +11,10 @@ import {
 } from "tldraw"
 
 import type { LiveValue, PointRef } from "@/studio/data/live-points"
-import type { PointDropContribution } from "@/studio/plugins/types"
+import type {
+  PointDropContribution,
+  PointMenuGroup,
+} from "@/studio/plugins/types"
 
 import {
   equipmentOf,
@@ -162,8 +165,12 @@ function tableAt(editor: Editor, hit: TLShape): TableShape | null {
   return isTableShape(ancestor) ? ancestor : null
 }
 
+/** The drop menu's Data flyout (shared by the data widgets). */
+const DATA_GROUP: PointMenuGroup = { id: "data", label: "Data", order: 10 }
+
 export const tablePointDrop: PointDropContribution = {
   id: "table",
+  group: DATA_GROUP,
   order: 20,
   multiple: true,
   target: tableAt,

@@ -35,6 +35,8 @@ pnpm-debug.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# Lemni local data (MCP token, audit log); .basboard/ is the folder before the rename
+# Lemscape local data (MCP token, audit log); .lemni/ and .basboard/ are the folders
+# from earlier names (moved on first use)
+/.lemscape/
 /.lemni/
 /.basboard/

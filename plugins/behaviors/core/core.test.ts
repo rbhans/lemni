@@ -187,6 +187,31 @@ test("presentation: spin while on, color with alarm override, hidden when off", 
   assert.equal(alarm.color?.stroke, "#e7000b")
 })
 
+test("presentation: status comes from the shape's first bound point", () => {
+  const read = (values: Record<string, InputValue>) => (r: { point: string }) =>
+    values[r.point]
+  const spin = behavior("rotate", "boolean", { source: ref("fan") })
+  const label = behavior("label", "number", { source: ref("vfd") })
+  const values = read({
+    fan: v(true, "On", "{fault}"),
+    vfd: v(40, "40 %", "{ok}"),
+  })
+  const self = [{ behaviors: [label, spin], frame: selfFrame }]
+  assert.equal(composePresentation(self, values).presentation.status, "{ok}")
+  assert.equal(
+    composePresentation(
+      [{ behaviors: [{ ...label, enabled: false }, spin], frame: selfFrame }],
+      values
+    ).presentation.status,
+    "{fault}"
+  )
+  assert.equal(
+    composePresentation([{ behaviors: [], frame: selfFrame }], values)
+      .presentation.status,
+    null
+  )
+})
+
 test("presentation: missing values are reported and leave the saved drawing alone", () => {
   const spin = behavior("rotate", "boolean")
   const result = composePresentation(
