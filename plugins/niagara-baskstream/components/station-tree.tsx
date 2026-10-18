@@ -13,20 +13,18 @@ import {
 import { cn } from "@/lib/utils"
 import {
   endLabel,
+  FOLDER_DRAG_TYPE,
+  Icon,
   linkMark,
   linkToMark,
   markForLink,
-} from "@/studio/links/links"
-import { sameEnd, type LinkEnd } from "@/studio/links/model"
-import { usePluginRuntime } from "@/studio/plugins/runtime"
-import { Icon } from "@/studio/shell/icon"
-
-import {
-  FOLDER_DRAG_TYPE,
   POINT_DRAG_TYPE,
+  sameEnd,
+  usePluginRuntime,
   type FolderDragData,
+  type LinkEnd,
   type PointDragData,
-} from "@/studio/data/live-points"
+} from "@/sdk"
 
 import type { StationNode } from "../shared"
 import { currentSourceId } from "../client/store"

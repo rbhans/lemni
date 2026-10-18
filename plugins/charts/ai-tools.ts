@@ -2,12 +2,18 @@
 
 import type { Editor, TLShapeId, VecLike } from "tldraw"
 
-import { safeBatch } from "@/studio/ai/batch"
-import { pageForInsert, pageIdSchema } from "@/studio/ai/pages"
-import { pointIdSchema, resolvePoints, sourceSchema } from "@/studio/ai/points"
-import type { JsonSchema } from "@/studio/ai/schema"
-import type { PointDragData } from "@/studio/data/live-points"
-import type { AiBoardTool, AiContribution } from "@/studio/plugins/types"
+import {
+  pageForInsert,
+  pageIdSchema,
+  pointIdSchema,
+  resolvePoints,
+  safeBatch,
+  sourceSchema,
+  type AiBoardTool,
+  type AiContribution,
+  type JsonSchema,
+  type PointDragData,
+} from "@/sdk"
 
 import { addSeries, createChart, seriesFor } from "./chart-points"
 import { CHART_TYPE, isChartShape, type ChartShape } from "./chart-shape"
@@ -280,12 +286,7 @@ const createGaugeTool: AiBoardTool<{
 export const chartsAi: AiContribution = {
   guide:
     "Live widgets for UI pages: create_trend_chart (history and live tail, panes per unit), create_stat_tile (value, change, sparkline) and create_gauge (numeric, dial or bar). Find point ords with find_points first.",
-  tools: [
-    createTrendChart,
-    addChartPoints,
-    createStatTile,
-    createGaugeTool,
-  ] as AiContribution["tools"],
+  tools: [createTrendChart, addChartPoints, createStatTile, createGaugeTool],
   shapes: {
     [CHART_TYPE]: (_editor, shape) =>
       isChartShape(shape)

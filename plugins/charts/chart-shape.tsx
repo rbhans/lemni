@@ -10,7 +10,7 @@ import {
   type TLShape,
 } from "tldraw"
 
-import { registerShapeLabel } from "@/studio/lib/shape-labels"
+import { registerShapeLabel } from "@/sdk"
 
 import type { ChartRange, ChartSeries } from "./model"
 import { TrendChart } from "./trend-chart"

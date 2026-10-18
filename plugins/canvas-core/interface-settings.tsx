@@ -3,11 +3,11 @@
 import { useValue } from "tldraw"
 
 import { Switch } from "@/components/ui/switch"
-import { studioState } from "@/studio/state"
+import { shell } from "@/sdk"
 
 /** Settings → Interface → Panel rail. */
 export function RailSettings() {
-  const labels = useValue(studioState.railLabels)
+  const labels = useValue(shell.railLabels)
   return (
     <label className="flex max-w-96 items-center justify-between gap-3 text-xs">
       <span>
@@ -18,7 +18,7 @@ export function RailSettings() {
       </span>
       <Switch
         checked={labels}
-        onCheckedChange={(checked) => studioState.railLabels.set(checked)}
+        onCheckedChange={(checked) => shell.railLabels.set(checked)}
       />
     </label>
   )

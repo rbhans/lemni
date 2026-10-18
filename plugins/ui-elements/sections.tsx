@@ -14,15 +14,15 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
 import { cn } from "@/lib/utils"
-import { PointField } from "@/studio/data/point-field"
-import { TargetField } from "@/studio/navigation/target-field"
 import {
+  Icon,
   NumberField,
+  PointField,
   PropertyRow,
   Segmented,
   SelectField,
-} from "@/studio/shell/fields"
-import { Icon } from "@/studio/shell/icon"
+  TargetField,
+} from "@/sdk"
 
 import { ColorPicker, IconPicker, LinksEditor } from "./editors"
 import {

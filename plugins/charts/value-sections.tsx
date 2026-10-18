@@ -4,8 +4,7 @@ import { useEditor, useValue, type Editor } from "tldraw"
 import { toast } from "sonner"
 
 import { Input } from "@/components/ui/input"
-import { PointField } from "@/studio/data/point-field"
-import { PropertyRow, Segmented } from "@/studio/shell/fields"
+import { PointField, PropertyRow, Segmented } from "@/sdk"
 
 import {
   GAUGE_SIZE,

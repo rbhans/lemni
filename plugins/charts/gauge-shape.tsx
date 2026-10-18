@@ -15,9 +15,7 @@ import {
   type TLShape,
 } from "tldraw"
 
-import { numericValue, useLivePoint } from "@/studio/data/live-points"
-import { registerShapeLabel } from "@/studio/lib/shape-labels"
-import { Icon } from "@/studio/shell/icon"
+import { Icon, numericValue, registerShapeLabel, useLivePoint } from "@/sdk"
 
 import { formatNumber } from "./model"
 import { StatusChip } from "./stat-shape"

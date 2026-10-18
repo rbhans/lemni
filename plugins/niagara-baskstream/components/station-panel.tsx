@@ -25,12 +25,11 @@ import {
 } from "@/components/ui/input-group"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { cn } from "@/lib/utils"
-import { PanelHeader } from "@/studio/shell/fields"
-import { Icon } from "@/studio/shell/icon"
+import { Icon, PanelHeader } from "@/sdk"
 
 import type { StationNode } from "../shared"
 import { stationApi } from "../client/api"
-import { connection, disconnect } from "../client/store"
+import { connectDraft, connection, disconnect } from "../client/store"
 import { loadBranch, selectedOrd } from "../client/tree-state"
 import { AlarmsList, useAlarms } from "./alarms-list"
 import { LiveValueText, NodeIcon } from "./bits"
@@ -41,12 +40,14 @@ import { StationTree } from "./station-tree"
 
 export function StationPanel() {
   const info = useValue(connection)
-  if (!info) {
+  const draft = useValue(connectDraft)
+  if (!info || draft) {
     return (
       <div className="flex min-h-0 flex-1 flex-col">
         <PanelHeader title="Station" />
         <ScrollArea className="min-h-0 flex-1 border-t">
-          <ConnectForm />
+          {/* A new draft (Connect…) starts the form over with its address. */}
+          <ConnectForm key={draft ? `draft:${draft.station}` : "saved"} />
         </ScrollArea>
       </div>
     )
@@ -87,6 +88,13 @@ function ConnectedPanel() {
             <DropdownMenuGroup>
               <DropdownMenuLabel>{info.station}</DropdownMenuLabel>
               <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onClick={() =>
+                  connectDraft.set({ station: "", certificateProblem: null })
+                }
+              >
+                Connect to another station…
+              </DropdownMenuItem>
               <DropdownMenuItem
                 variant="destructive"
                 onClick={() => void disconnect()}

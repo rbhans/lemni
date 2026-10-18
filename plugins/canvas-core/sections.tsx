@@ -26,9 +26,7 @@ import { useActions, useEditor, useValue, Vec, type Editor } from "tldraw"
 
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import { NumberField } from "@/studio/shell/fields"
-import { Icon } from "@/studio/shell/icon"
-import { Tip } from "@/studio/shell/tip"
+import { Icon, NumberField, Tip } from "@/sdk"
 
 const DEG = 180 / Math.PI
 

@@ -18,9 +18,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
-import { TargetField } from "@/studio/navigation/target-field"
-import { ColorField } from "@/studio/shell/fields"
-import { Icon } from "@/studio/shell/icon"
+import { ColorField, Icon, TargetField } from "@/sdk"
 
 import {
   CURATED,

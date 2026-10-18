@@ -3,11 +3,11 @@
 import { FanIcon } from "@hugeicons/core-free-icons"
 import { createShapeId, useMaybeEditor, useValue } from "tldraw"
 
-import type {
-  BoardPlugin,
-  LibraryCollectionContribution,
-  LibraryItem,
-} from "@/studio/plugins/types"
+import {
+  definePlugin,
+  type LibraryCollectionContribution,
+  type LibraryItem,
+} from "@/sdk"
 
 import {
   CATEGORIES,
@@ -83,7 +83,7 @@ const collections: LibraryCollectionContribution[] = CATEGORIES.map(
   })
 )
 
-export const hvacSymbols: BoardPlugin = {
+export default definePlugin({
   id: "hvac-symbols",
   name: "HVAC & BAS symbols",
   version: "0.2.0",
@@ -107,4 +107,4 @@ export const hvacSymbols: BoardPlugin = {
       component: SymbolSection,
     },
   ],
-}
+})

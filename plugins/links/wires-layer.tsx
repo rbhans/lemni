@@ -3,10 +3,7 @@
 import { useState } from "react"
 import { useEditor, useValue, type Box } from "tldraw"
 
-import { getLinks, selectedLink } from "@/studio/links/links"
-import { endKey } from "@/studio/links/model"
-import { currentPageKind } from "@/studio/pages/page-categories"
-import { studioState } from "@/studio/state"
+import { currentPageKind, endKey, getLinks, selectedLink, shell } from "@/sdk"
 
 import { isNodeShape, wireDrag } from "./wire-sheet"
 
@@ -83,7 +80,7 @@ export function WiresLayer() {
   )
   const selected = useValue(selectedLink)
   const zoom = useValue("zoom", () => editor.getZoomLevel(), [editor])
-  const presenting = useValue(studioState.presenting)
+  const presenting = useValue(shell.presenting)
   const [hover, setHover] = useState<string | null>(null)
   if (!onSheet || presenting) return null
   const hovered = wires.find((wire) => wire.id === hover)

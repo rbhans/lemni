@@ -1,10 +1,7 @@
 "use client"
 
 import { useState, type FormEvent } from "react"
-import {
-  Alert02Icon,
-  Cancel01Icon,
-} from "@hugeicons/core-free-icons"
+import { Alert02Icon, Cancel01Icon } from "@hugeicons/core-free-icons"
 import { useValue } from "tldraw"
 
 import { Button } from "@/components/ui/button"
@@ -24,7 +21,7 @@ import {
 } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
 import { cn } from "@/lib/utils"
-import { Icon } from "@/studio/shell/icon"
+import { Icon } from "@/sdk"
 
 import { sctApi } from "../client/api"
 import {
@@ -71,7 +68,9 @@ export function ConnectForm() {
         const found = (await sctApi.archives(server, password)).archives
         setArchives(found)
         if (!found.length)
-          setError("No SCT archives on this server (or this login can't see them).")
+          setError(
+            "No SCT archives on this server (or this login can't see them)."
+          )
         else if (!found.includes(database)) update({ database: found[0] })
       } else {
         await connect(server, password, database, remember)

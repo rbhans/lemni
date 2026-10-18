@@ -4,9 +4,7 @@ import { Cancel01Icon } from "@hugeicons/core-free-icons"
 import { useEditor, useValue, type Editor } from "tldraw"
 
 import { Input } from "@/components/ui/input"
-import { LiveValueBadge, PointField } from "@/studio/data/point-field"
-import { PropertyRow, Segmented } from "@/studio/shell/fields"
-import { Icon } from "@/studio/shell/icon"
+import { Icon, LiveValueBadge, PointField, PropertyRow, Segmented } from "@/sdk"
 
 import { addSeries, removeSeries } from "./chart-points"
 import { CHART_TYPE, isChartShape, type ChartShapeProps } from "./chart-shape"

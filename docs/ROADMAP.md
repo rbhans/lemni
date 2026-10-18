@@ -35,8 +35,9 @@ Done:
 - baskStream SDK vendored (`vendor/baskstream-sdk`, refresh with `npm run vendor:baskstream`).
 - Server connection hub in the Next process: one SDK client per station, one shared
   leased watch per connection, per-tab interest sets, 30 s grace on reloads.
-- `/api/stations` (local-only, same-origin, JSON): connect, browse, search, describe,
-  read, 24 h history rollups, open alarms, watch, and an SSE live stream.
+- Station API (now `/api/plugins/niagara-baskstream`; local-only, same-origin, JSON):
+  connect, browse, search, describe, read, 24 h history rollups, open alarms, watch,
+  and an SSE live stream.
 - Provider-neutral live values (`studio/data/live-points.ts`): `DataSource`,
   `useLivePoint`, refcounted interest.
 - Station panel: connect form with remembered profiles (never passwords) and
@@ -124,6 +125,11 @@ Done (see [`PROJECT-MODEL.md`](PROJECT-MODEL.md)):
   keeps them (plugins add options).
 - Documents: PDF and Word cards (page at a time, page-level links), spreadsheets and
   CSV as tables, grid placement, files kept in the board.
+- Bringing things in (see [`INTAKE.md`](INTAKE.md)): Connect… finds what answers at an
+  address and opens that connection's form filled in (connection probes; Niagara
+  today); pasted or dropped links offer a web view or Connect; rows copied from a
+  spreadsheet paste as a table; a points list dropped while connected becomes a live
+  table, panel or trend.
 
 Next:
 - Search inside documents (and text for the AI); thumbnails in the page list.

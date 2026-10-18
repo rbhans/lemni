@@ -6,10 +6,14 @@ import { useEditor, useValue, type Editor } from "tldraw"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
-import { useLiveValues } from "@/studio/data/live-points"
-import { LiveValueBadge, PointField } from "@/studio/data/point-field"
-import { PropertyRow, Segmented } from "@/studio/shell/fields"
-import { Icon } from "@/studio/shell/icon"
+import {
+  Icon,
+  LiveValueBadge,
+  PointField,
+  PropertyRow,
+  Segmented,
+  useLiveValues,
+} from "@/sdk"
 
 import type { TableColumns, TableLayout } from "./model"
 import { addRows, removeRow, tableCsv } from "./table-points"

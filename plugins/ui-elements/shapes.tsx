@@ -13,8 +13,7 @@ import {
 } from "tldraw"
 
 import { cn } from "@/lib/utils"
-import { registerShapeLabel } from "@/studio/lib/shape-labels"
-import { studioState } from "@/studio/state"
+import { registerShapeLabel, shell } from "@/sdk"
 
 import { ElementView } from "./controls"
 import {
@@ -74,7 +73,7 @@ registerShapeLabel(PANEL_TYPE, () => "Panel")
 
 /** Controls answer the pointer in Present mode; on the board they're shapes. */
 function useInteractive() {
-  return useValue(studioState.presenting)
+  return useValue(shell.presenting)
 }
 
 function Live({

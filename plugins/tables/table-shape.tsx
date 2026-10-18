@@ -10,7 +10,7 @@ import {
   type TLShape,
 } from "tldraw"
 
-import { registerShapeLabel } from "@/studio/lib/shape-labels"
+import { registerShapeLabel } from "@/sdk"
 
 import type { TableColumns, TableLayout, TableRowRef } from "./model"
 import { LiveTable } from "./live-table"

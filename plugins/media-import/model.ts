@@ -8,6 +8,8 @@ const BY_EXTENSION: Record<string, DocumentKind> = {
   docx: "word",
   xlsx: "sheet",
   csv: "csv",
+  // Tab-separated files read like CSV (the separator is worked out from the text).
+  tsv: "csv",
 }
 
 /** File-picker types for the documents this plugin opens. */
@@ -16,10 +18,12 @@ export const DOCUMENT_ACCEPT = [
   ".docx",
   ".xlsx",
   ".csv",
+  ".tsv",
   "application/pdf",
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
   "text/csv",
+  "text/tab-separated-values",
 ]
 
 export function documentKind(file: { name: string; type: string }) {
@@ -31,8 +35,27 @@ export function documentKind(file: { name: string; type: string }) {
 /** "Controls set.pdf" → "Controls set". */
 export const baseName = (name: string) => name.replace(/\.[^.]+$/, "") || name
 
-/** RFC 4180 CSV: quoted fields, doubled quotes, CRLF or LF; trailing blank line dropped. */
-export function parseCsv(text: string): string[][] {
+/**
+ * The separator a delimited file uses: whichever of comma, semicolon (Excel in many
+ * European locales) or tab is most common in its first line, outside quotes.
+ */
+export function sniffDelimiter(text: string): "," | ";" | "\t" {
+  const counts = { ",": 0, ";": 0, "\t": 0 }
+  let quoted = false
+  for (const c of text) {
+    if (c === '"') quoted = !quoted
+    else if (!quoted && (c === "\n" || c === "\r")) break
+    else if (!quoted && c in counts) counts[c as keyof typeof counts]++
+  }
+  if (counts["\t"] > counts[","] && counts["\t"] >= counts[";"]) return "\t"
+  return counts[";"] > counts[","] ? ";" : ","
+}
+
+/**
+ * RFC 4180 delimited text: quoted fields, doubled quotes, CRLF or LF; trailing blank
+ * line dropped. The separator is a comma unless given.
+ */
+export function parseDelimited(text: string, delimiter = ","): string[][] {
   const rows: string[][] = []
   let row: string[] = []
   let field = ""
@@ -49,7 +72,7 @@ export function parseCsv(text: string): string[][] {
       continue
     }
     if (c === '"') quoted = true
-    else if (c === ",") {
+    else if (c === delimiter) {
       row.push(field)
       field = ""
     } else if (c === "\n" || c === "\r") {
@@ -65,6 +88,26 @@ export function parseCsv(text: string): string[][] {
     rows.push(row)
   }
   return rows
+}
+
+/** A CSV (or TSV, or semicolon-separated) file's rows. */
+export function parseCsv(text: string): string[][] {
+  return parseDelimited(text, sniffDelimiter(text))
+}
+
+/**
+ * Rows copied from a spreadsheet or a web page's table: tab-separated, at least two
+ * rows and two columns, most rows as wide as the widest. Null for other text, so
+ * prose with a stray tab stays text.
+ */
+export function tableFromTabbed(text: string): string[][] | null {
+  if (!text.includes("\t")) return null
+  const rows = parseDelimited(text.replace(/[\r\n]+$/, ""), "\t")
+  if (rows.length < 2) return null
+  const width = Math.max(...rows.map((row) => row.length))
+  if (width < 2) return null
+  const full = rows.filter((row) => row.length === width).length
+  return full >= Math.max(2, rows.length * 0.6) ? rows : null
 }
 
 /** Most rows and columns a sheet keeps on the board. */

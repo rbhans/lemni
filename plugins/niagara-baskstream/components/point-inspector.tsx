@@ -8,7 +8,7 @@ import { useValue } from "tldraw"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import { Icon } from "@/studio/shell/icon"
+import { Icon } from "@/sdk"
 
 import type { HistoryBucket, PointDetails } from "../shared"
 import { stationApi } from "../client/api"

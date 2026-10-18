@@ -12,20 +12,19 @@ import {
 } from "@/components/ui/context-menu"
 import { cn } from "@/lib/utils"
 import {
-  FOLDER_DRAG_TYPE,
-  POINT_DRAG_TYPE,
-  type FolderDragData,
-  type PointDragData,
-} from "@/studio/data/live-points"
-import {
   endLabel,
+  FOLDER_DRAG_TYPE,
+  Icon,
   linkMark,
   linkToMark,
   markForLink,
-} from "@/studio/links/links"
-import { sameEnd, type LinkEnd } from "@/studio/links/model"
-import { usePluginRuntime } from "@/studio/plugins/runtime"
-import { Icon } from "@/studio/shell/icon"
+  POINT_DRAG_TYPE,
+  sameEnd,
+  usePluginRuntime,
+  type FolderDragData,
+  type LinkEnd,
+  type PointDragData,
+} from "@/sdk"
 
 import type { SctNode } from "../shared"
 import { currentSourceId, folderRef } from "../client/store"

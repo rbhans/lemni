@@ -3,12 +3,15 @@
 import { FileUploadIcon, Image01Icon } from "@hugeicons/core-free-icons"
 import type { Editor } from "tldraw"
 
-import type { BoardPlugin } from "@/studio/plugins/types"
+import { definePlugin } from "@/sdk"
 
 import { mediaImportAi } from "./ai-tools"
 import { DocShapeUtil } from "./doc-shape"
 import { importDocuments } from "./import"
+import { offerPointsList } from "./live-points"
 import { DOCUMENT_ACCEPT, documentKind } from "./model"
+import { tablePaste } from "./paste"
+import { hasPointsListSelected, SheetPointsSection } from "./sheet-points"
 import { SheetShapeUtil } from "./sheet-shape"
 
 const IMAGE_ACCEPT = ["image/*", "video/*"]
@@ -31,7 +34,7 @@ function pickFiles(editor: Editor) {
   input.click()
 }
 
-export const mediaImport: BoardPlugin = {
+export default definePlugin({
   id: "media-import",
   name: "Media import",
   version: "0.2.0",
@@ -48,8 +51,22 @@ export const mediaImport: BoardPlugin = {
       order: 10,
       accept: DOCUMENT_ACCEPT,
       accepts: (file) => documentKind(file) !== null,
-      import: ({ editor }, files, point) =>
-        importDocuments(editor, files, point),
+      import: async (ctx, files, point) => {
+        // A points list dropped while connected can become live values instead.
+        if (await offerPointsList(ctx, files, point)) return
+        await importDocuments(ctx.editor, files, point)
+      },
+    },
+  ],
+  textImporters: [tablePaste],
+  inspectorSections: [
+    {
+      id: "sheet-points",
+      tab: "design",
+      title: "Live points",
+      order: 16,
+      when: hasPointsListSelected,
+      component: SheetPointsSection,
     },
   ],
   toolbar: [
@@ -81,4 +98,4 @@ export const mediaImport: BoardPlugin = {
       onSelect: ({ editor }) => pickFiles(editor),
     },
   ],
-}
+})

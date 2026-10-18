@@ -2,9 +2,7 @@
 
 import { react, type Editor, type TLShape, type TLShapeId } from "tldraw"
 
-import { goTo } from "@/studio/navigation/navigate"
-import { currentPageKind, pageKindOf } from "@/studio/pages/page-categories"
-import { studioState } from "@/studio/state"
+import { currentPageKind, goTo, pageKindOf, shell } from "@/sdk"
 
 import type { Behavior } from "../core/model"
 import { effectiveBehaviors } from "./shapes"
@@ -54,7 +52,7 @@ export function installPresentMode(editor: Editor): () => void {
     down = event.button === 0 ? { x: event.clientX, y: event.clientY } : null
   }
   const onPointerUp = (event: PointerEvent) => {
-    if (!studioState.presenting.get() || event.button !== 0 || !down) return
+    if (!shell.presenting.get() || event.button !== 0 || !down) return
     const moved = Math.hypot(event.clientX - down.x, event.clientY - down.y)
     down = null
     if (moved > 4) return
@@ -76,11 +74,11 @@ export function installPresentMode(editor: Editor): () => void {
       )
   }
   const onKeyDown = (event: KeyboardEvent) => {
-    if (event.key === "Escape" && studioState.presenting.get())
-      studioState.presenting.set(false)
+    if (event.key === "Escape" && shell.presenting.get())
+      shell.presenting.set(false)
   }
   const onPointerMove = (event: PointerEvent) => {
-    if (!studioState.presenting.get() || event.buttons !== 0) return
+    if (!shell.presenting.get() || event.buttons !== 0) return
     const point = editor.screenToPage({ x: event.clientX, y: event.clientY })
     setPointer(
       !!clickBehavior(
@@ -97,7 +95,7 @@ export function installPresentMode(editor: Editor): () => void {
 
   let wasPresenting = false
   const stop = react("present mode", () => {
-    const presenting = studioState.presenting.get()
+    const presenting = shell.presenting.get()
     // Only act on the flip. Reads below touch instance state (cursor, grid), which
     // would otherwise re-run this and overwrite what we saved on entry.
     if (presenting === wasPresenting) return
@@ -132,6 +130,6 @@ export function installPresentMode(editor: Editor): () => void {
     container.removeEventListener("pointerup", onPointerUp, true)
     container.removeEventListener("pointermove", onPointerMove, true)
     window.removeEventListener("keydown", onKeyDown, true)
-    studioState.presenting.set(false)
+    shell.presenting.set(false)
   }
 }

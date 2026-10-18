@@ -3,12 +3,14 @@
 import { atom, computed, react, type Atom } from "tldraw"
 
 import {
+  PluginApiError,
+  pluginStorage,
   registerDataSource,
+  sourceIcon,
   type DataSource,
   type LiveValue,
   type PointOption,
-} from "@/studio/data/live-points"
-import { sourceIcon } from "@/studio/shell/source-icon"
+} from "@/sdk"
 
 import { sourceIdFor } from "../model"
 import type {
@@ -17,13 +19,17 @@ import type {
   SctPointValue,
   SctServerProfile,
 } from "../shared"
-import { sctApi, SctApiError } from "./api"
+import { sctApi } from "./api"
 
 /** A Metasys archive in SQL Server. */
 export const SCT_ICON = sourceIcon("M", "sql")
 
-const ACTIVE_KEY = "lemscape.sct.active"
-const PROFILES_KEY = "lemscape.sct-profiles.v1"
+const storage = pluginStorage("metasys-sct")
+/** The connection this tab shows (per tab, so sessionStorage). */
+const ACTIVE_KEY = storage.key("active", { from: ["lemscape.sct.active"] })
+const PROFILES_KEY = storage.key("profiles", {
+  from: ["lemscape.sct-profiles.v1"],
+})
 
 /** Folder drags carry the item id ("#123"): they're used at once, so it needn't be stable. */
 export const folderRef = (node: Pick<SctNode, "id">) => `#${node.id}`
@@ -183,7 +189,7 @@ class SctArchiveSource implements DataSource {
       const { values } = await sctApi.values(this.connectionId, points)
       for (const v of values) this.value(v.fqr).set(toLiveValue(v, this.label))
     } catch (error) {
-      if (error instanceof SctApiError && error.status === 404)
+      if (error instanceof PluginApiError && error.status === 404)
         void detach("The archive connection closed.")
     }
   }
@@ -214,7 +220,11 @@ function attach(info: SctConnectionInfo) {
   sctConnection.set(info)
   sctConnectionError.set(null)
   sessionStorage.setItem(ACTIVE_KEY, info.id)
-  source = new SctArchiveSource(sourceIdFor(info.database), info.archive, info.id)
+  source = new SctArchiveSource(
+    sourceIdFor(info.database),
+    info.archive,
+    info.id
+  )
   source.start()
 }
 

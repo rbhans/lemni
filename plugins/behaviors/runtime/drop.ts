@@ -3,11 +3,11 @@
 import { toast } from "sonner"
 import type { Editor, TLShape, TLShapeId } from "tldraw"
 
-import type { PointDragData } from "@/studio/data/live-points"
-import type {
-  PointDropContribution,
-  StudioContext,
-} from "@/studio/plugins/types"
+import {
+  type PointDragData,
+  type PointDropContribution,
+  type StudioContext,
+} from "@/sdk"
 
 import { pendingAdd } from "./state"
 

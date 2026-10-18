@@ -25,20 +25,23 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { cn } from "@/lib/utils"
 import {
+  endKey,
   endLabel,
+  getDataSource,
   getLinks,
   goToEnd,
+  Icon,
   isLinkable,
   linkMark,
+  linksOf,
   linkToMark,
   markForLink,
-} from "@/studio/links/links"
-import { endKey, linksOf, sameEnd, type LinkEnd } from "@/studio/links/model"
-import { usePageGroups } from "@/studio/pages/page-categories"
-import { PanelHeader } from "@/studio/shell/fields"
-import { getDataSource } from "@/studio/data/live-points"
-import { Icon } from "@/studio/shell/icon"
-import { shapeDisplayName } from "@/studio/lib/shape-names"
+  PanelHeader,
+  sameEnd,
+  shapeDisplayName,
+  usePageGroups,
+  type LinkEnd,
+} from "@/sdk"
 
 /** Drag format for a linkable thing (Links panel → wire sheet). */
 export const LINK_END_DRAG_TYPE = "application/x-lemscape-link-end"

@@ -50,23 +50,22 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { cn } from "@/lib/utils"
 import {
+  createPageIn,
   customShapeName,
+  Icon,
+  InlineName,
   isHidden,
+  PanelHeader,
   renameShape,
   setHidden,
-  shapeDisplayName,
-} from "@/studio/lib/shape-names"
-import { shapeLabel } from "@/studio/lib/shape-labels"
-import type { CategoryWithPages } from "@/studio/pages/categories"
-import {
-  createPageIn,
   setPageCategory,
+  shapeDisplayName,
+  shapeLabel,
+  Tip,
+  useInlineEditing,
   usePageGroups,
-} from "@/studio/pages/page-categories"
-import { PanelHeader } from "@/studio/shell/fields"
-import { Icon } from "@/studio/shell/icon"
-import { InlineName, useInlineEditing } from "@/studio/shell/inline-name"
-import { Tip } from "@/studio/shell/tip"
+  type CategoryWithPages,
+} from "@/sdk"
 
 const TYPE_ICONS: Record<string, IconSvgElement> = {
   geo: SquareIcon,

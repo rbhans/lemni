@@ -74,14 +74,22 @@ function poolConfig(
 
 /** Plain-language versions of the driver's errors. */
 export function friendlySqlError(error: unknown): string {
-  const e = error as { code?: string; message?: string; originalError?: { message?: string } }
+  const e = error as {
+    code?: string
+    message?: string
+    originalError?: { message?: string }
+  }
   const message = e?.originalError?.message ?? e?.message ?? String(error)
-  if (/Login failed/i.test(message)) return "SQL Server refused the username or password."
-  if (e?.code === "ETIMEOUT") return "SQL Server didn't answer in time. Check the address and port."
-  if (e?.code === "ESOCKET") return "Couldn't reach SQL Server at that address and port."
+  if (/Login failed/i.test(message))
+    return "SQL Server refused the username or password."
+  if (e?.code === "ETIMEOUT")
+    return "SQL Server didn't answer in time. Check the address and port."
+  if (e?.code === "ESOCKET")
+    return "Couldn't reach SQL Server at that address and port."
   if (/self[- ]signed|certificate/i.test(message))
     return "SQL Server's certificate isn't trusted. Turn on “Trust the server certificate” for a self-signed one."
-  if (/Cannot open database/i.test(message)) return "That database doesn't exist, or this login can't open it."
+  if (/Cannot open database/i.test(message))
+    return "That database doesn't exist, or this login can't open it."
   return message.slice(0, 300)
 }
 
@@ -176,7 +184,8 @@ class SctConnection {
     const request = this.request()
     let where: string
     if (parentId === null) {
-      where = "i.parentItemID = (SELECT TOP (1) itemID FROM dbo.Item WHERE parentItemID IS NULL ORDER BY itemID)"
+      where =
+        "i.parentItemID = (SELECT TOP (1) itemID FROM dbo.Item WHERE parentItemID IS NULL ORDER BY itemID)"
     } else {
       request.input("parent", sql.Int, parentId)
       where = "i.parentItemID = @parent"
@@ -194,7 +203,11 @@ class SctConnection {
   /** Points and value objects whose name or reference matches. */
   async search(query: string): Promise<SctNode[]> {
     const request = this.request()
-    request.input("q", sql.NVarChar(400), `%${query.replace(/[[%_]/g, "[$&]")}%`)
+    request.input(
+      "q",
+      sql.NVarChar(400),
+      `%${query.replace(/[[%_]/g, "[$&]")}%`
+    )
     const { recordset } = await request.query<Row>(`
       SELECT TOP (100) ${ROW_COLUMNS}, 0 AS childCount
       FROM dbo.Item i
@@ -262,14 +275,29 @@ class SctConnection {
     return fqrs.map((fqr, i) => {
       const row = rows[i]
       if (!row)
-        return { fqr, ok: false, value: null, display: "Not in archive", units: null, from: null }
+        return {
+          fqr,
+          ok: false,
+          value: null,
+          display: "Not in archive",
+          units: null,
+          from: null,
+        }
       const kind = kindOfClass(row.bacnetClassid)
       const attributes = stored.get(row.itemID)
-      const units = kind === "number" ? unitsOf(attributes?.get(UNITS) ?? null) : null
+      const units =
+        kind === "number" ? unitsOf(attributes?.get(UNITS) ?? null) : null
       for (const [attrib, from] of VALUE_ATTRIBUTES) {
         const value = parseStored(attributes?.get(attrib) ?? null, kind)
         if (value !== null)
-          return { fqr, ok: true, value, display: displayStored(value, units), units, from }
+          return {
+            fqr,
+            ok: true,
+            value,
+            display: displayStored(value, units),
+            units,
+            from,
+          }
       }
       return { fqr, ok: true, value: null, display: "—", units, from: null }
     })
@@ -285,9 +313,13 @@ class SctConnection {
     const description = await request.query<{ Value: string | null }>(`
       SELECT TOP (1) Value FROM dbo.Value
       WHERE ItemID = @id AND AttribID = @attrib AND ValueState <> 0 ORDER BY ValueOrder`)
-    const path = await this.request()
-      .input("id", sql.Int, row.itemID)
-      .query<{ itemID: number; PartialReference: string | null; UserName: string | null; type: string; depth: number }>(`
+    const path = await this.request().input("id", sql.Int, row.itemID).query<{
+      itemID: number
+      PartialReference: string | null
+      UserName: string | null
+      type: string
+      depth: number
+    }>(`
         WITH up AS (
           SELECT itemID, parentItemID, 0 AS depth FROM dbo.Item WHERE itemID = @id
           UNION ALL
@@ -348,12 +380,18 @@ class SctHub {
 
   get(id: string): SctConnection {
     const connection = this.connections.get(id)
-    if (!connection) throw Object.assign(new Error("That archive connection is closed."), { status: 404 })
+    if (!connection)
+      throw Object.assign(new Error("That archive connection is closed."), {
+        status: 404,
+      })
     return connection
   }
 
   /** SCT archives on the server: online databases that have SCT's item tables. */
-  async listArchives(profile: SctServerProfile, password: string): Promise<string[]> {
+  async listArchives(
+    profile: SctServerProfile,
+    password: string
+  ): Promise<string[]> {
     const pool = new sql.ConnectionPool(poolConfig(profile, password, "master"))
     try {
       await pool.connect()
@@ -370,20 +408,28 @@ class SctHub {
   }
 
   async connect(request: SctConnectRequest): Promise<SctConnectionInfo> {
-    if (!isDatabaseName(request.database)) throw new Error("That isn't a valid database name.")
-    const pool = new sql.ConnectionPool(poolConfig(request, request.password, request.database))
+    if (!isDatabaseName(request.database))
+      throw new Error("That isn't a valid database name.")
+    const pool = new sql.ConnectionPool(
+      poolConfig(request, request.password, request.database)
+    )
     await pool.connect()
     try {
       // Is this an SCT archive? Its root item names it.
-      const { recordset } = await pool.request().query<{ PartialReference: string | null }>(
-        "SELECT TOP (1) PartialReference FROM dbo.Item WHERE parentItemID IS NULL ORDER BY itemID"
-      )
-      if (!recordset.length) throw new Error("That database has no SCT archive in it.")
+      const { recordset } = await pool
+        .request()
+        .query<{ PartialReference: string | null }>(
+          "SELECT TOP (1) PartialReference FROM dbo.Item WHERE parentItemID IS NULL ORDER BY itemID"
+        )
+      if (!recordset.length)
+        throw new Error("That database has no SCT archive in it.")
       let release: string | null = null
       try {
-        const history = await pool.request().query<{ Build: string | null }>(
-          "SELECT TOP (1) Build FROM dbo.ArchiveHistory ORDER BY EventTimeStamp DESC"
-        )
+        const history = await pool
+          .request()
+          .query<{ Build: string | null }>(
+            "SELECT TOP (1) Build FROM dbo.ArchiveHistory ORDER BY EventTimeStamp DESC"
+          )
         release = history.recordset[0]?.Build ?? null
       } catch {
         // Older archives have no history table.
@@ -392,7 +438,10 @@ class SctHub {
       void _password
       // One connection per archive: reconnecting replaces it.
       for (const existing of this.connections.values())
-        if (existing.database === database && existing.profile.server === profile.server) {
+        if (
+          existing.database === database &&
+          existing.profile.server === profile.server
+        ) {
           this.connections.delete(existing.id)
           void existing.close()
         }

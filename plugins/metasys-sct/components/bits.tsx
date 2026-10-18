@@ -14,9 +14,8 @@ import {
 import type { IconSvgElement } from "@hugeicons/react"
 import { useValue } from "tldraw"
 
-import { useLivePoint } from "@/studio/data/live-points"
+import { Icon, useLivePoint } from "@/sdk"
 import { cn } from "@/lib/utils"
-import { Icon } from "@/studio/shell/icon"
 
 import { sourceIdFor } from "../model"
 import type { SctNode } from "../shared"

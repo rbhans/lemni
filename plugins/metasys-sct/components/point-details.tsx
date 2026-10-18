@@ -7,7 +7,7 @@ import { useValue } from "tldraw"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Icon } from "@/studio/shell/icon"
+import { Icon } from "@/sdk"
 
 import type { SctPointDetail } from "../shared"
 import { sctApi } from "../client/api"

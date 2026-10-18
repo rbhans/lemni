@@ -2,12 +2,12 @@
 
 import type { Editor, TLAssetId, TLShape, TLShapeId } from "tldraw"
 
-import { goToEnd } from "@/studio/links/links"
-import type {
-  AiBoardTool,
-  AiContribution,
-  AiReply,
-} from "@/studio/plugins/types"
+import {
+  goToEnd,
+  type AiBoardTool,
+  type AiContribution,
+  type AiReply,
+} from "@/sdk"
 
 import { DOC_TYPE, isDocShape, pageName, type DocShape } from "./doc-shape"
 import { pageImage, pageRegionImage, pageText, type PageRegion } from "./pdf"
@@ -300,11 +300,7 @@ const showDocumentPage: AiBoardTool<{ shapeId: string; page: number }> = {
 export const mediaImportAi: AiContribution = {
   guide:
     "Documents pages hold the project's files as cards: a PDF or Word file is one card showing a page at a time; spreadsheets are tables. search_documents finds pages by words; read_document returns a page's text (or an image of it). Card pages can be linked (create_link with shapeId and page).",
-  tools: [
-    readDocument,
-    searchDocuments,
-    showDocumentPage,
-  ] as AiContribution["tools"],
+  tools: [readDocument, searchDocuments, showDocumentPage],
   shapes: {
     [DOC_TYPE]: (_editor, shape) =>
       isDocShape(shape)

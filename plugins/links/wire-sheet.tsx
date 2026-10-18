@@ -17,18 +17,21 @@ import {
 
 import { cn } from "@/lib/utils"
 import {
+  categoryIdOf,
   createLink,
   endExists,
+  endKey,
   endLabel,
   endPageId,
   endPlace,
   getLinks,
   isLinkable,
+  kindOf,
+  linksOf,
   pendingComment,
-} from "@/studio/links/links"
-import { endKey, linksOf, type LinkEnd } from "@/studio/links/model"
-import { categoryIdOf, kindOf } from "@/studio/pages/categories"
-import { registerShapeLabel } from "@/studio/lib/shape-labels"
+  registerShapeLabel,
+  type LinkEnd,
+} from "@/sdk"
 
 import { layoutAll, NODE, placeNew } from "./layout"
 

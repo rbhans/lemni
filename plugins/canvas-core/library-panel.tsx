@@ -15,12 +15,14 @@ import {
 } from "@/components/ui/input-group"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { cn } from "@/lib/utils"
-import { currentPageKind } from "@/studio/pages/page-categories"
-import { usePluginRuntime } from "@/studio/plugins/runtime"
-import type { LibraryItem } from "@/studio/plugins/types"
-import { PanelHeader } from "@/studio/shell/fields"
-import { Icon } from "@/studio/shell/icon"
-import { useStudioContext } from "@/studio/studio-context"
+import {
+  currentPageKind,
+  Icon,
+  PanelHeader,
+  usePluginRuntime,
+  useStudioContext,
+  type LibraryItem,
+} from "@/sdk"
 
 const DRAG_TYPE = "application/x-lemscape-library-item"
 

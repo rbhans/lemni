@@ -4,7 +4,7 @@ import { atom, react } from "tldraw"
 
 import type { StationNode } from "../shared"
 import { stationApi } from "./api"
-import { studioState } from "@/studio/state"
+import { shell } from "@/sdk"
 
 import { connection, onReveal } from "./store"
 
@@ -93,10 +93,7 @@ export function revealOrd(ord: string) {
   }))
   for (const p of ["slot:/", ...parents]) void loadBranch(p)
   selectedOrd.set(ord)
-  studioState.leftPanels.update((panels) => ({
-    ...panels,
-    [studioState.workspace.get()]: "station",
-  }))
+  shell.showPanel("station")
 }
 
 onReveal(revealOrd)

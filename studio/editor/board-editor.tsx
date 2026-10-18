@@ -34,6 +34,7 @@ import {
 import { PasteSpecialDialog, rememberCopy } from "./paste"
 import { TargetPickLayer } from "../navigation/target-field"
 import { PointDrop } from "./point-drop"
+import { TextImportMenu } from "./text-import"
 
 const editorOptions: Partial<TldrawOptions> = {
   text: {
@@ -153,6 +154,7 @@ function EditorScope({ slots }: { slots: ShellSlots | null }) {
         )}
         <ToolDock />
         <PointDrop />
+        <TextImportMenu />
         <TargetPickLayer />
         <PasteSpecialDialog />
         {slots ? <ShellChrome slots={slots} /> : null}

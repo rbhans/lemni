@@ -10,29 +10,27 @@ import { useEditor, useValue, type Editor } from "tldraw"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import {
+  connects,
   deleteLink,
+  endKey,
   endLabel,
   endPlace,
   getLinks,
   goToEnd,
+  Icon,
   linkMark,
+  linksOf,
   linkToMark,
   markForLink,
+  otherEnd,
+  sameEnd,
   selectedEnd,
   selectedLink,
   setLinkComment,
-} from "@/studio/links/links"
-import {
-  connects,
-  endKey,
-  linksOf,
-  otherEnd,
-  sameEnd,
   sideOf,
   type BoardLink,
   type LinkEnd,
-} from "@/studio/links/model"
-import { Icon } from "@/studio/shell/icon"
+} from "@/sdk"
 
 import { isNodeShape } from "./wire-sheet"
 

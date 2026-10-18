@@ -14,8 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { cn } from "@/lib/utils"
-import { Icon } from "@/studio/shell/icon"
-import { useStudioContext } from "@/studio/studio-context"
+import { Icon, useStudioContext } from "@/sdk"
 
 import { connection, disconnect } from "../client/store"
 

@@ -2,11 +2,7 @@
 // both enforce. Pure (no React, no DOM, relative imports only) so the server side of
 // this plugin can import it and `node --test` can run it.
 
-import type {
-  AiAccessLevel,
-  AiToolAccess,
-  JsonSchema,
-} from "../../studio/ai/schema.ts"
+import type { AiAccessLevel, AiToolAccess, JsonSchema } from "../../sdk/core.ts"
 
 export type { AiAccessLevel, AiToolAccess }
 

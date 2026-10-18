@@ -10,10 +10,14 @@ import {
   type TLShapePartial,
 } from "tldraw"
 
-import { pageForInsert, pageIdSchema } from "@/studio/ai/pages"
-import type { JsonSchema } from "@/studio/ai/schema"
-import { customShapeName } from "@/studio/lib/shape-names"
-import type { AiBoardTool, AiContribution } from "@/studio/plugins/types"
+import {
+  customShapeName,
+  pageForInsert,
+  pageIdSchema,
+  type AiBoardTool,
+  type AiContribution,
+  type JsonSchema,
+} from "@/sdk"
 
 import {
   DEFAULT_STATE,
@@ -921,13 +925,7 @@ const checkLayout: AiBoardTool<{
 export const hvacAi: AiContribution = {
   guide:
     "HVAC equipment for UI pages. list_symbols describes every piece (ports, states, point roles). place_run lays out an air or water path in one call; place_symbols and connect_ports handle branches, sensors and anything off the main line; check_layout finds overlaps and loose ports. Bind points with add_behavior using each role's behaviors.",
-  tools: [
-    listSymbols,
-    placeSymbols,
-    connectPorts,
-    placeRun,
-    checkLayout,
-  ] as AiContribution["tools"],
+  tools: [listSymbols, placeSymbols, connectPorts, placeRun, checkLayout],
   shapes: {
     [SYMBOL_TYPE]: (editor, shape) => {
       if (!isSymbolShape(shape)) return null

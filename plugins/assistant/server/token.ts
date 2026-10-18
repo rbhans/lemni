@@ -3,7 +3,7 @@ import "server-only"
 import { createHash, randomBytes, timingSafeEqual } from "node:crypto"
 import { readFile, writeFile } from "node:fs/promises"
 
-import { localDataPath } from "@/server/local-data"
+import { localDataPath } from "@/sdk/server"
 
 // The MCP endpoint answers only AI apps that present this token. It's made on first
 // use and kept in `.lemscape/mcp-token` (or set LEMSCAPE_MCP_TOKEN). The AI panel shows

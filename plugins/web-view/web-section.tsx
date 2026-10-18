@@ -12,8 +12,7 @@ import {
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { PropertyRow } from "@/studio/shell/fields"
-import { Icon } from "@/studio/shell/icon"
+import { Icon, PropertyRow } from "@/sdk"
 
 import { normalizeAddress, siteLabel } from "./model"
 import { isWebShape, WEB_TYPE, type WebShapeProps } from "./web-shape"
@@ -21,8 +20,8 @@ import { isWebShape, WEB_TYPE, type WebShapeProps } from "./web-shape"
 export const hasWebSelected = (editor: Editor) =>
   editor.getSelectedShapes().some(isWebShape)
 
-/** Adds a web view and opens its address bar. */
-export function createWebView(editor: Editor, at: VecLike) {
+/** Adds a web view centered at `at`: showing `url`, or with its address bar open. */
+export function createWebView(editor: Editor, at: VecLike, url = "") {
   const w = 800
   const h = 520
   const id = createShapeId()
@@ -32,10 +31,10 @@ export function createWebView(editor: Editor, at: VecLike) {
     type: WEB_TYPE,
     x: at.x - w / 2,
     y: at.y - h / 2,
-    props: { w, h },
+    props: { w, h, url },
   })
   editor.select(id)
-  editor.setEditingShape(id)
+  if (!url) editor.setEditingShape(id)
 }
 
 export function WebSection() {

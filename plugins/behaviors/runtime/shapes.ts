@@ -2,7 +2,7 @@
 
 import { Mat, Vec, type Editor, type TLShape, type TLShapeId } from "tldraw"
 
-import { getDataSource } from "@/studio/data/live-points"
+import { getDataSource } from "@/sdk"
 
 import type { OwnerFrame } from "../core/effects"
 import type { InputValue } from "../core/evaluate"

@@ -15,12 +15,14 @@ import { Switch } from "@/components/ui/switch"
 import { cn } from "@/lib/utils"
 import {
   ColorField,
+  Icon,
   NumberField,
+  PointField,
   Segmented,
   SelectField,
-} from "@/studio/shell/fields"
-import { Icon } from "@/studio/shell/icon"
-import { Tip } from "@/studio/shell/tip"
+  TargetField,
+  Tip,
+} from "@/sdk"
 
 import type { InputValue } from "../core/evaluate"
 import type {
@@ -34,8 +36,6 @@ import type {
 } from "../core/model"
 import { setTestValue, testValues } from "../runtime/state"
 import type { FieldDef } from "./effect-ui"
-import { PointField } from "@/studio/data/point-field"
-import { TargetField } from "@/studio/navigation/target-field"
 
 export function Row({
   label,

@@ -20,21 +20,21 @@ import {
 } from "@/components/ui/dialog"
 import { Textarea } from "@/components/ui/textarea"
 import {
+  currentPageKind,
   endLabel,
   getLinks,
+  Icon,
   linkMark,
   pendingComment,
+  Segmented,
   setLinkComment,
-} from "@/studio/links/links"
-import { currentPageKind } from "@/studio/pages/page-categories"
-import { Segmented } from "@/studio/shell/fields"
-import { Icon } from "@/studio/shell/icon"
-import { studioState } from "@/studio/state"
+  shell,
+} from "@/sdk"
 
 import { findWireSheet, nodesOn, resortWireSheet } from "./wire-sheet"
 
 export function LinkOverlays() {
-  const presenting = useValue(studioState.presenting)
+  const presenting = useValue(shell.presenting)
   if (presenting) return null
   return (
     <>

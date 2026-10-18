@@ -18,7 +18,7 @@ import {
 
 import { Slider } from "@/components/ui/slider"
 import { cn } from "@/lib/utils"
-import { PropertyRow, Segmented } from "@/studio/shell/fields"
+import { PropertyRow, Segmented } from "@/sdk"
 
 const DRAWING_TOOLS = [
   "draw",

@@ -3,13 +3,15 @@
 import type { TLShapeId } from "tldraw"
 
 import {
+  pageForInsert,
+  pageIdSchema,
   pickSource,
   pointIdSchema,
   pointLabel,
   sourceSchema,
-} from "@/studio/ai/points"
-import { pageForInsert, pageIdSchema } from "@/studio/ai/pages"
-import type { AiBoardTool, AiContribution } from "@/studio/plugins/types"
+  type AiBoardTool,
+  type AiContribution,
+} from "@/sdk"
 
 import {
   createElement,
@@ -309,11 +311,7 @@ const describe = (el: UiElement) => ({
 export const uiElementsAi: AiContribution = {
   guide:
     "create_ui_elements and create_ui_panel build operator UIs from the app's own components: value readouts, switches, setpoints, selects, badges, progress bars, buttons that go somewhere or write a fixed value, and dropdowns and nav bars of links for moving between pages. Any element can take an accent color; buttons and dropdowns can carry a Hugeicons icon. They're live in Present mode; every write a person makes with them is confirmed first. You can't press them.",
-  tools: [
-    createUiElements,
-    createUiPanel,
-    updateUiElement,
-  ] as AiContribution["tools"],
+  tools: [createUiElements, createUiPanel, updateUiElement],
   shapes: {
     [ELEMENT_TYPE]: (_editor, shape) =>
       isElementShape(shape)

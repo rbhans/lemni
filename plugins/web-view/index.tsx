@@ -2,11 +2,19 @@
 
 import { BrowserIcon } from "@hugeicons/core-free-icons"
 
-import type { BoardPlugin } from "@/studio/plugins/types"
+import { definePlugin, type BoardPlugin } from "@/sdk"
 
 import { webViewAi } from "./ai-tools"
+import { normalizeAddress } from "./model"
 import { createWebView, hasWebSelected, WebSection } from "./web-section"
 import { WebShapeUtil } from "./web-shape"
+
+/** A pasted link the web view may show (not the board itself, no login in it). */
+function viewable(url: URL | undefined): string | null {
+  if (!url) return null
+  const result = normalizeAddress(url.href, window.location.origin)
+  return "url" in result ? result.url : null
+}
 
 const insert: BoardPlugin["toolbar"] = [
   {
@@ -21,7 +29,7 @@ const insert: BoardPlugin["toolbar"] = [
   },
 ]
 
-export const webView: BoardPlugin = {
+export default definePlugin({
   id: "web-view",
   name: "Web view",
   version: "0.1.0",
@@ -33,6 +41,19 @@ export const webView: BoardPlugin = {
   ai: webViewAi,
   shapeUtils: [WebShapeUtil],
   toolbar: insert,
+  textImporters: [
+    {
+      id: "web-view",
+      order: 20,
+      label: "Web view",
+      icon: BrowserIcon,
+      accepts: ({ url }) => viewable(url) !== null,
+      import: ({ editor }, { url }, at) => {
+        const address = viewable(url)
+        if (address) createWebView(editor, at, address)
+      },
+    },
+  ],
   menuItems: [
     {
       id: "insert-web-view",
@@ -54,4 +75,4 @@ export const webView: BoardPlugin = {
       component: WebSection,
     },
   ],
-}
+})

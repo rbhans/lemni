@@ -5,15 +5,14 @@ import { useValue } from "tldraw"
 
 import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
-import { Icon } from "@/studio/shell/icon"
-import { studioState } from "@/studio/state"
+import { Icon, shell } from "@/sdk"
 
 import { liveEffects } from "../runtime/state"
 
 /** Top-right of the canvas: live effects on/off, and Present. */
 export function LiveControls() {
   const live = useValue(liveEffects)
-  const presenting = useValue(studioState.presenting)
+  const presenting = useValue(shell.presenting)
 
   if (presenting) {
     return (
@@ -21,7 +20,7 @@ export function LiveControls() {
         <Button
           variant="outline"
           className="gap-1.5 bg-popover shadow-sm"
-          onClick={() => studioState.presenting.set(false)}
+          onClick={() => shell.presenting.set(false)}
         >
           <Icon icon={Cancel01Icon} className="size-3.5" />
           Exit present
@@ -52,7 +51,7 @@ export function LiveControls() {
         variant="ghost"
         size="sm"
         className="gap-1.5"
-        onClick={() => studioState.presenting.set(true)}
+        onClick={() => shell.presenting.set(true)}
       >
         <Icon icon={PlayIcon} className="size-3.5" />
         Present

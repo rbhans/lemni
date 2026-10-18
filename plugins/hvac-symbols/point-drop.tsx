@@ -5,19 +5,15 @@ import { toast } from "sonner"
 import { createShapeId, type Editor, type VecLike } from "tldraw"
 
 import {
-  getDataSource,
-  kindOfValue,
-  type PointDragData,
-  type PointKind,
-} from "@/studio/data/live-points"
-import {
   bindBehavior,
   canBindBehaviors,
-} from "@/studio/editor/behavior-binding"
-import type {
-  PointCreateOption,
-  PointDropContribution,
-} from "@/studio/plugins/types"
+  getDataSource,
+  kindOfValue,
+  type PointCreateOption,
+  type PointDragData,
+  type PointDropContribution,
+  type PointKind,
+} from "@/sdk"
 
 import {
   CATEGORIES,

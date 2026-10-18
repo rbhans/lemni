@@ -2,10 +2,12 @@
 
 import { ZapIcon } from "@hugeicons/core-free-icons"
 
-import { registerBehaviorBinder } from "@/studio/editor/behavior-binding"
-import { currentPageKind } from "@/studio/pages/page-categories"
-import type { BoardPlugin } from "@/studio/plugins/types"
-import { studioState } from "@/studio/state"
+import {
+  currentPageKind,
+  definePlugin,
+  registerBehaviorBinder,
+  shell,
+} from "@/sdk"
 
 import { behaviorsAi } from "./ai-tools"
 import { BehaviorDecorator } from "./components/behavior-decorator"
@@ -18,7 +20,7 @@ import { savedBehaviors } from "./runtime/shapes"
 import { liveEffects } from "./runtime/state"
 import { BehaviorTab } from "./ui/behavior-tab"
 
-export const behaviors: BoardPlugin = {
+export default definePlugin({
   id: "behaviors",
   name: "Behaviors",
   version: "0.1.0",
@@ -56,8 +58,8 @@ export const behaviors: BoardPlugin = {
       order: 10,
       kbd: "alt+p",
       keywords: ["presentation", "view", "kiosk", "run"],
-      when: () => !studioState.presenting.get(),
-      run: () => studioState.presenting.set(true),
+      when: () => !shell.presenting.get(),
+      run: () => shell.presenting.set(true),
     },
     {
       id: "toggle-live-effects",
@@ -91,4 +93,4 @@ export const behaviors: BoardPlugin = {
       stopBinder()
     }
   },
-}
+})

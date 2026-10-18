@@ -59,6 +59,58 @@ async function storeFile(editor: Editor, file: File) {
 
 type Partial = TLShapePartial<DocShape> | TLShapePartial<SheetShape>
 
+/** A sheet card for rows (headings first), or null when there are no columns. */
+function sheetPartial(
+  title: string,
+  rows: readonly (readonly unknown[])[]
+): TLShapePartial<SheetShape> | null {
+  const sheet = sheetFromRows(rows)
+  if (!sheet.columns.length) return null
+  return {
+    id: createShapeId(),
+    type: SHEET_TYPE,
+    props: {
+      w: Math.min(Math.max(320, sheet.columns.length * 110), 900),
+      h: 360,
+      title,
+      ...sheet,
+    },
+  }
+}
+
+/** Adds one sheet card centered at `at` (rows pasted from a spreadsheet, say). */
+export function addSheet(
+  editor: Editor,
+  title: string,
+  rows: readonly (readonly unknown[])[],
+  at: VecLike
+) {
+  const partial = sheetPartial(title, rows)
+  if (!partial) return
+  const { w = 560, h = 360 } = partial.props ?? {}
+  editor.markHistoryStoppingPoint("add table")
+  editor.createShape({ ...partial, x: at.x - w / 2, y: at.y - h / 2 })
+  editor.select(partial.id)
+  if ((partial.props?.totalRows ?? 0) > SHEET_LIMITS.rows)
+    toast.info(`Large sheets keep their first ${SHEET_LIMITS.rows} rows.`)
+}
+
+/** A CSV's or spreadsheet's tables (one per sheet), rows as read; none for other files. */
+export async function readTables(
+  file: File
+): Promise<{ title: string; rows: unknown[][] }[]> {
+  const kind = documentKind(file)
+  const name = baseName(file.name)
+  if (kind === "csv")
+    return [{ title: name, rows: parseCsv(await file.text()) }]
+  if (kind !== "sheet") return []
+  const sheets = await (await import("read-excel-file/browser")).default(file)
+  return sheets.map((sheet, _i, all) => ({
+    title: all.length > 1 ? `${name} · ${sheet.sheet}` : name,
+    rows: sheet.data as unknown[][],
+  }))
+}
+
 async function shapesFor(editor: Editor, file: File): Promise<Partial[]> {
   const kind = documentKind(file)
   const name = baseName(file.name)
@@ -104,32 +156,10 @@ async function shapesFor(editor: Editor, file: File): Promise<Partial[]> {
       },
     ]
   }
-  const tables =
-    kind === "csv"
-      ? [{ title: name, rows: parseCsv(await file.text()) }]
-      : kind === "sheet"
-        ? (await (await import("read-excel-file/browser")).default(file)).map(
-            (sheet, _i, all) => ({
-              title: all.length > 1 ? `${name} · ${sheet.sheet}` : name,
-              rows: sheet.data,
-            })
-          )
-        : []
+  const tables = await readTables(file)
   return tables.flatMap(({ title, rows }) => {
-    const sheet = sheetFromRows(rows)
-    if (!sheet.columns.length) return []
-    return [
-      {
-        id: createShapeId(),
-        type: SHEET_TYPE,
-        props: {
-          w: Math.min(Math.max(320, sheet.columns.length * 110), 900),
-          h: 360,
-          title,
-          ...sheet,
-        },
-      },
-    ]
+    const partial = sheetPartial(title, rows)
+    return partial ? [partial] : []
   })
 }
 

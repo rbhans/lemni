@@ -8,13 +8,11 @@ import {
   getDataSource,
   kindOfValue,
   type PointDragData,
+  type PointDropContribution,
   type PointKind,
+  type PointMenuGroup,
   type PointRef,
-} from "@/studio/data/live-points"
-import type {
-  PointDropContribution,
-  PointMenuGroup,
-} from "@/studio/plugins/types"
+} from "@/sdk"
 
 import { CHART_TYPE, isChartShape, type ChartShape } from "./chart-shape"
 import { MAX_SERIES, nextSlot, sameSeries, type ChartSeries } from "./model"

@@ -22,6 +22,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Switch } from "@/components/ui/switch"
 import { cn } from "@/lib/utils"
 
+import { safeUrl } from "../navigation/targets"
 import { dependenciesOf, dependentsOf } from "../plugins/registry"
 import { usePluginRuntime } from "../plugins/runtime"
 import {
@@ -162,6 +163,29 @@ function CategoryButton({
 const offersPointOptions = (plugin: BoardPlugin) =>
   (plugin.pointDrops ?? []).some((drop) => drop.create || drop.creates?.length)
 
+/** Who made a plugin and where it lives, when the plugin says. */
+function Byline({ plugin }: { plugin: BoardPlugin }) {
+  const url = plugin.url ? safeUrl(plugin.url) : null
+  if (!plugin.author && !url) return null
+  const place = url ? new URL(url) : null
+  return (
+    <p className="text-[11px] text-muted-foreground">
+      {plugin.author ? `By ${plugin.author}` : null}
+      {plugin.author && place ? " · " : null}
+      {place ? (
+        <a
+          href={place.toString()}
+          target="_blank"
+          rel="noreferrer"
+          className="underline-offset-2 hover:text-foreground hover:underline"
+        >
+          {`${place.host}${place.pathname === "/" ? "" : place.pathname}`}
+        </a>
+      ) : null}
+    </p>
+  )
+}
+
 function PluginRow({ plugin }: { plugin: BoardPlugin }) {
   const { plugins, enabled, setEnabled } = usePluginRuntime()
   const isOn = enabled.has(plugin.id)
@@ -188,7 +212,14 @@ function PluginRow({ plugin }: { plugin: BoardPlugin }) {
       <div className="flex min-w-0 flex-1 flex-col gap-1">
         <div className="flex items-center gap-1.5">
           <span className="text-[13px] font-semibold">{plugin.name}</span>
-          <span className="font-mono text-[10.5px] text-muted-foreground">
+          <span
+            className="font-mono text-[10.5px] text-muted-foreground"
+            title={
+              plugin.requiresSdk
+                ? `Written for plugin SDK ${plugin.requiresSdk}`
+                : undefined
+            }
+          >
             {plugin.version}
           </span>
           {plugin.stage === "preview" ? (
@@ -205,6 +236,7 @@ function PluginRow({ plugin }: { plugin: BoardPlugin }) {
         <p className="text-xs leading-snug text-muted-foreground">
           {plugin.description}
         </p>
+        <Byline plugin={plugin} />
         {contributes.length ? (
           <div className="flex flex-wrap gap-1">
             {contributes.map((item) => (

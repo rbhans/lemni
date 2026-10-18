@@ -1,25 +1,28 @@
 import "server-only"
 
-import { guardRequest } from "@/server/request-guard"
-
 import { isDatabaseName } from "../model"
 import type { SctConnectRequest, SctServerProfile } from "../shared"
 import { friendlySqlError, getSctHub } from "./hub"
 
-// /api/sct: connect to SQL Server, list archives, browse the network tree, search,
-// describe points and read their stored values. Read only.
+// /api/plugins/metasys-sct/…: connect to SQL Server, list archives, browse the network
+// tree, search, describe points and read their stored values. Read only.
 
 const json = (data: unknown, status = 200) => Response.json(data, { status })
 const bad = (message: string) => json({ error: message }, 400)
 const fail = (error: unknown) => {
   const status = (error as { status?: number })?.status
-  return json({ error: friendlySqlError(error) }, status && status >= 400 ? status : 502)
+  return json(
+    { error: friendlySqlError(error) },
+    status && status >= 400 ? status : 502
+  )
 }
 
 async function body(request: Request): Promise<Record<string, unknown>> {
   try {
     const parsed: unknown = await request.json()
-    return parsed && typeof parsed === "object" ? (parsed as Record<string, unknown>) : {}
+    return parsed && typeof parsed === "object"
+      ? (parsed as Record<string, unknown>)
+      : {}
   } catch {
     return {}
   }
@@ -27,11 +30,15 @@ async function body(request: Request): Promise<Record<string, unknown>> {
 
 const isString = (v: unknown): v is string => typeof v === "string"
 
-function parseServer(data: Record<string, unknown>): (SctServerProfile & { password: string }) | string {
+function parseServer(
+  data: Record<string, unknown>
+): (SctServerProfile & { password: string }) | string {
   const { server, port, username, password, trustCertificate } = data
-  if (!isString(server) || !server.trim() || server.length > 255) return "Enter the SQL Server address."
+  if (!isString(server) || !server.trim() || server.length > 255)
+    return "Enter the SQL Server address."
   const p = typeof port === "number" ? port : Number(port)
-  if (!Number.isInteger(p) || p < 1 || p > 65535) return "Enter a port from 1 to 65535."
+  if (!Number.isInteger(p) || p < 1 || p > 65535)
+    return "Enter a port from 1 to 65535."
   if (!isString(username) || !username.trim()) return "Enter a username."
   if (!isString(password) || !password) return "Enter the password."
   return {
@@ -43,11 +50,13 @@ function parseServer(data: Record<string, unknown>): (SctServerProfile & { passw
   }
 }
 
-const isFqr = (v: unknown): v is string => isString(v) && v.length > 0 && v.length < 2000
+const isFqr = (v: unknown): v is string =>
+  isString(v) && v.length > 0 && v.length < 2000
 
-export async function handleSctRequest(request: Request, path: string[]): Promise<Response> {
-  const denied = guardRequest(request)
-  if (denied) return denied
+export async function handleSctRequest(
+  request: Request,
+  path: string[]
+): Promise<Response> {
   const hub = getSctHub()
   try {
     if (request.method === "GET") {
@@ -57,8 +66,10 @@ export async function handleSctRequest(request: Request, path: string[]): Promis
       const url = new URL(request.url)
       if (action === "children") {
         const parent = url.searchParams.get("parent")
-        const parentId = parent === null || parent === "" ? null : Number(parent)
-        if (parentId !== null && !Number.isInteger(parentId)) return bad("Bad parent.")
+        const parentId =
+          parent === null || parent === "" ? null : Number(parent)
+        if (parentId !== null && !Number.isInteger(parentId))
+          return bad("Bad parent.")
         return json({ nodes: await connection.children(parentId) })
       }
       if (action === "search") {
@@ -92,7 +103,8 @@ export async function handleSctRequest(request: Request, path: string[]): Promis
         const server = parseServer(data)
         if (isString(server)) return bad(server)
         const database = data.database
-        if (!isString(database) || !isDatabaseName(database)) return bad("Choose an archive database.")
+        if (!isString(database) || !isDatabaseName(database))
+          return bad("Choose an archive database.")
         const connectRequest: SctConnectRequest = { ...server, database }
         return json({ connection: await hub.connect(connectRequest) })
       }

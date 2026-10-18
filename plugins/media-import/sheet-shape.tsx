@@ -13,8 +13,7 @@ import {
 } from "tldraw"
 
 import { cn } from "@/lib/utils"
-import { registerLinkable } from "@/studio/links/links"
-import { registerShapeLabel } from "@/studio/lib/shape-labels"
+import { registerLinkable, registerShapeLabel } from "@/sdk"
 
 export const SHEET_TYPE = "bas-sheet"
 

@@ -1,10 +1,10 @@
 import { Pdf01Icon } from "@hugeicons/core-free-icons"
 
-import type { BoardPlugin } from "@/studio/plugins/types"
+import { definePlugin } from "@/sdk"
 
-// Listed so the plugin manager shows where the product is going. They cannot be
-// turned on until they ship.
-export const vectorPdf: BoardPlugin = {
+// Listed so the plugin manager shows where the product is going. It can't be turned
+// on until it ships.
+export default definePlugin({
   id: "vector-pdf",
   name: "Vector PDF",
   version: "0.0.0",
@@ -14,4 +14,4 @@ export const vectorPdf: BoardPlugin = {
   icon: Pdf01Icon,
   stage: "planned",
   dependencies: ["media-import"],
-}
+})

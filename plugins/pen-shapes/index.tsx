@@ -18,7 +18,7 @@ import {
 } from "@hugeicons/core-free-icons"
 import { GeoShapeGeoStyle } from "tldraw"
 
-import type { BoardPlugin } from "@/studio/plugins/types"
+import { definePlugin } from "@/sdk"
 
 import {
   hasStyleTarget,
@@ -29,7 +29,7 @@ import {
 
 const GEO_TOOLS = [...GeoShapeGeoStyle.values]
 
-export const penShapes: BoardPlugin = {
+export default definePlugin({
   id: "pen-shapes",
   name: "Pen & shapes",
   version: "0.1.0",
@@ -152,4 +152,4 @@ export const penShapes: BoardPlugin = {
       component: TextSection,
     },
   ],
-}
+})

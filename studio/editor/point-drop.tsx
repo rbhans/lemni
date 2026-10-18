@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import type { IconSvgElement } from "@hugeicons/react"
 import { toast } from "sonner"
 import { useEditor, useValue, type VecLike } from "tldraw"
 
@@ -31,6 +32,7 @@ import type {
   PointCreateOption,
   PointDropContribution,
   PointMenuGroup,
+  StudioContext,
 } from "../plugins/types"
 import { Icon } from "../shell/icon"
 import { studioState } from "../state"
@@ -39,15 +41,52 @@ import { useStudioContext } from "../studio-context"
 /** Most points a dropped folder brings in. */
 const MAX_FOLDER_POINTS = 300
 
-interface Pending {
-  points: PointDragData[]
-  /** What was dragged, for the menu heading. */
+/** A choice `offerPoints` adds next to what plugins make of points (keep a file as a sheet). */
+export interface PointOfferExtra {
+  id: string
   label: string
-  /** Drop position on the page. */
+  icon: IconSvgElement
+  run(ctx: StudioContext, at: VecLike): void
+}
+
+export interface PointOffer {
+  points: PointDragData[]
+  /** What the points are, for the menu's heading: "Add {label} as". */
+  label: string
+  /** Where they go on the page. */
   at: VecLike
-  /** Drop position on screen, for the menu. */
+  /** Where the menu opens on screen (default: at `at`). */
+  client?: { x: number; y: number }
+  extras?: PointOfferExtra[]
+}
+
+interface Pending extends PointOffer {
   client: { x: number; y: number }
 }
+
+/** Set while the point menu is mounted (inside the studio). */
+let present: ((offer: PointOffer) => void) | null = null
+
+/**
+ * Offers what points can become, as when they're dropped on empty canvas: a live
+ * table, a trend, a panel, a symbol… With one choice it just runs; otherwise a menu
+ * opens where they'll go. False when the studio isn't there to offer it.
+ */
+export function offerPoints(offer: PointOffer): boolean {
+  if (!present) return false
+  present(offer)
+  return true
+}
+
+const extraOptions = (extras: readonly PointOfferExtra[] = []): MenuOption[] =>
+  extras.map((extra) => ({
+    key: `extra:${extra.id}`,
+    label: extra.label,
+    icon: extra.icon,
+    group: null,
+    suggested: false,
+    run: (ctx, _points, at) => extra.run(ctx, at),
+  }))
 
 /** The points in a dropped folder, read from its source. */
 async function folderPoints(folder: FolderDragData) {
@@ -145,6 +184,35 @@ export function PointDrop() {
   const hidden = useValue(studioState.pointMenuHidden)
   const [pending, setPending] = useState<Pending | null>(null)
 
+  // Points on empty canvas (dropped, or offered by a plugin): run the only choice, or
+  // open the menu.
+  useEffect(() => {
+    present = (offer) => {
+      const options = [
+        ...menuOptions(drops, offer.points, studioState.pointMenuHidden.get()),
+        ...extraOptions(offer.extras),
+      ]
+      if (!options.length) {
+        toast.info(
+          offer.points.length > 1
+            ? "Nothing here takes a whole folder. Drop single points instead."
+            : "Drop the point onto a shape."
+        )
+        return
+      }
+      if (options.length === 1) {
+        options[0].run(ctx, offer.points, offer.at)
+        editor.focus()
+        return
+      }
+      const client = offer.client ?? editor.pageToScreen(offer.at)
+      setPending({ ...offer, client: { x: client.x, y: client.y } })
+    }
+    return () => {
+      present = null
+    }
+  }, [editor, ctx, drops])
+
   useEffect(() => {
     const container = editor.getContainer()
 
@@ -210,25 +278,7 @@ export function PointDrop() {
         editor.focus()
         return
       }
-      const options = menuOptions(
-        drops,
-        points,
-        studioState.pointMenuHidden.get()
-      )
-      if (!options.length) {
-        toast.info(
-          many
-            ? "Nothing here takes a whole folder. Drop single points instead."
-            : "Drop the point onto a shape."
-        )
-        return
-      }
-      if (options.length === 1) {
-        options[0].run(ctx, points, at)
-        editor.focus()
-        return
-      }
-      setPending({
+      present?.({
         points,
         label: point
           ? point.label
@@ -250,7 +300,12 @@ export function PointDrop() {
   }, [editor, ctx, drops])
 
   const close = () => setPending(null)
-  const options = pending ? menuOptions(drops, pending.points, hidden) : []
+  const options = pending
+    ? [
+        ...menuOptions(drops, pending.points, hidden),
+        ...extraOptions(pending.extras),
+      ]
+    : []
   const choose = (option: MenuOption) => {
     if (!pending) return
     option.run(ctx, pending.points, pending.at)

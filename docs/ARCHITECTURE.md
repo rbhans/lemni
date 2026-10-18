@@ -116,31 +116,38 @@ ports need our own shape utils (planned for the symbol and widget shapes).
 
 ## Plugins
 
-`studio/plugins/*`, built-ins in `plugins/*`.
+The runtime and registry are in `studio/plugins/*`, the SDK in `sdk/`, and the
+built-in plugins in `plugins/*`. How to write a plugin, and every contribution point:
+[`PLUGINS.md`](PLUGINS.md). Every way content comes in, and what's left there:
+[`INTAKE.md`](INTAKE.md).
 
-A plugin is a typed descriptor (`BoardPlugin`). Contribution points:
+A plugin is a folder, `plugins/<id>/`, whose `index.tsx` default-exports a typed
+descriptor (`definePlugin({ … })`, a `BoardPlugin`). `scripts/plugins.mjs` finds the
+folders and writes two files: `plugins/index.generated.ts` (the descriptors) and
+`plugins/server.generated.ts` (each plugin's `server/routes.ts`, imported on first
+use). `npm run dev` (`scripts/dev.mjs`) reruns it as plugin folders come and go,
+`npm run build` runs it first, `npm run check` fails when the files are stale, and
+`npm run new-plugin` scaffolds a new folder. `plugins/index.ts` orders the
+plugins: required first, then by id.
 
-| Point | Purpose |
-| --- | --- |
-| `shapeUtils`, `bindingUtils`, `tools` | Engine registrations (always registered) |
-| `ownsTldrawTools` | tldraw tools hidden (with shortcuts) when the plugin is off |
-| `toolbar` | Tool dock items; tldraw tool ids or custom `onSelect` |
-| `panels` | Left/right dock panels per workspace |
-| `inspectorTabs`, `inspectorSections` | Properties panel tabs and sections |
-| `menuItems` | Menubar entries (tldraw action ids or callbacks) |
-| `pointDrops` | Points dropped on the canvas: claim a shape (`target` + `drop`) or offer to `create` something on empty canvas |
-| `pageCategories` | Page categories a plugin brings (the wire sheet); `kind` decides tools and panels |
-| `contextMenuItems` | Canvas right-click entries (shown above the standard ones) |
-| `pasteOptions` | What a pasted shape can carry: `strip` for plain paste, `capture` / `restore` for Paste special |
-| `fileImporters` | Files dropped or added (PDF, Word, sheets); the rest go to tldraw's default handling |
-| `ai` | Tools, a short guide and shape descriptions for AI apps connected over MCP (see AI) |
-| `commands` | Command palette entries (and their shortcuts) that aren't in a menu |
-| `topbarItems`, `statusItems`, `canvasOverlays` | Small UI slots |
-| `shapeDecorators` | Wrap every shape's rendered content (runtime effects) |
-| `canvasLayers` | Page-space layers that pan and zoom with the board (value labels) |
-| `workspaces` | Layouts |
-| `libraryCollections` | Library tiles |
-| `providers`, `onEditorMount` | React providers and editor lifecycle hooks |
+- **The SDK boundary.** Plugins import the studio only through `@/sdk` (browser) and
+  `@/sdk/server` (server), plus shadcn components and `cn`. `sdk/` is a curated
+  re-export layer over `studio/` and `server/`, so the insides can move without
+  breaking plugins. ESLint (`no-restricted-imports`) and `plugins/boundaries.test.ts`
+  enforce it. The test also catches relative imports that leave a plugin's folder,
+  and browser code that server code can reach. `sdk/core.ts` is the pure part, for
+  modules tested with `node --test`.
+- **Server routes.** `app/api/plugins/[plugin]/[[...path]]/route.ts` hands every
+  request to `server/plugin-dispatch.ts`. That runs the request guard first, so no
+  plugin can skip it, then the plugin's routes (`server/plugin-routes.ts`:
+  `"METHOD /path"` keys, `:params`, a trailing `*rest`, 404 and 405 answers).
+  `/api/mcp` keeps its own route because AI apps call it with a token, not as this
+  browser; it checks the host with `guardHost`.
+- **Storage.** `pluginStorage(id)` keeps settings under `lemscape.plugin.<id>.<name>`
+  (moving older keys over), and a plugin's files on disk go in
+  `.lemscape/plugins/<id>/` (`pluginDataPath`).
+- **Versions.** Each plugin has `requiresSdk`, checked against `SDK_VERSION` in
+  `registry.ts`: the same major version, and at least as new.
 
 Rules (carried from v1, where they worked):
 
@@ -154,10 +161,19 @@ Rules (carried from v1, where they worked):
 - **Stages.** `preview` plugins are usable but incomplete; `planned` ones are listed so
   the manager shows the roadmap but cannot be enabled.
 - **Isolation.** Every contribution renders inside a `PluginBoundary`.
-- **Tests.** `registry.test.ts` validates the graph and checks every enable/disable
-  combination resolves to a dependency-safe set.
+- **Names.** Shape and binding types and tool ids are unique across plugins (tldraw
+  would silently let a second util for a type replace the first). They should start
+  with the plugin id; otherwise startup warns in development. The built-ins keep their
+  `bas-*` types so boards load. Contribution ids are unique per list. The registry
+  checks all of this at startup (`checkNames`).
+- **Tests.** `registry.test.ts` validates the graph and the name checks, and checks
+  every enable/disable combination resolves to a dependency-safe set.
 
-Planned: data-source contributions, settings pages, and loading third-party plugins.
+Connections keep calling `registerDataSource` rather than listing sources in a
+contribution: a source exists only while its connection is open and is keyed by the
+system it reaches, so a contribution would have to carry a signal and every connection
+plugin would still manage its own connect and disconnect (decided October 2026). Not
+yet: loading plugins without rebuilding the app (plugins are compiled in).
 
 ## Behaviors
 
@@ -266,10 +282,22 @@ Implemented in `plugins/niagara-baskstream` (see
 - **One watch per connection.** Each browser tab (a random session id) declares the
   points it needs; the hub watches the union with one leased group. A tab's points are
   kept 30 s after its stream drops so reloads don't thrash subscriptions.
-- **API.** `app/api/stations/[[...path]]` delegates to the plugin's handler. Everything
-  is guarded by `server/request-guard.ts`: loopback hosts only (override with
+- **API.** `/api/plugins/niagara-baskstream/…` (the plugin's `server/routes.ts`)
+  hands everything to the plugin's handler, behind the shared request guard
+  (`server/request-guard.ts`): loopback hosts only (override with
   `LEMSCAPE_ALLOWED_HOSTS`), same-origin, JSON bodies. Live values stream over
   server-sent events, batched every 100 ms.
+- **Connect…** (`studio/shell/connect-dialog.tsx`; File → Connect…, the + under the
+  connection panels, a pasted link). One address, checked by every enabled plugin's
+  `connectionProbes` in parallel; exactly one match opens that connection's form filled
+  in, several are listed, none offers the forms anyway. Probes ask through their own
+  plugin's routes with `probeHttp` (`server/http-probe.ts`): https then http when no
+  scheme was typed, plain GETs only, no credentials, redirects not followed, a
+  certificate the computer doesn't trust reported instead of refused. The Niagara probe
+  reads `/prelogin` and `/stream/health` signed out: a Niagara server header or
+  baskStream's health answer is certain, a Niagara sign-in page likely
+  (`plugins/niagara-baskstream/probe-model.ts`). Its form opens with the address and
+  says when the certificate needs "Allow self-signed"; it never turns that on itself.
 - **Connection icons.** `studio/shell/source-icon.ts` builds them from the vendor's letter
   (N Niagara, M Metasys, B BACnet) and a badge notched into the corner for how it
   connects: a dot for live, a cylinder for a SQL database, a page for a backup file.
@@ -321,7 +349,7 @@ to SQL Server) as a read-only data source.
   the password is only in the pool's config. Every query is a fixed, parameterized
   `SELECT` (nothing writes). TLS is on; "Trust the server certificate" accepts a
   self-signed one, and an IP address gets `serverName: localhost` so TLS accepts it.
-  `/api/sct` (same guard as stations) lists archives (online databases with
+  `/api/plugins/metasys-sct` (same guard as stations) lists archives (online databases with
   `dbo.Item` and `dbo.ItemDefinition`, read from `master`), opens one, and serves
   `children`, `search`, `describe`, `under` and `values`.
 - **Model.** `dbo.Item` rows (parent by `parentItemID`, engine by `DeviceItemID`) typed
@@ -435,11 +463,28 @@ Details and decisions: [`PROJECT-MODEL.md`](PROJECT-MODEL.md).
 - **Paste** (`studio/editor/paste.tsx`): the "tldraw" paste handler applies every
   option's `strip`; copies are also remembered in memory so Paste special can paste them
   again with chosen options and remap captured data (e.g. links) to the new ids.
+- **Pasted and dropped text** (`studio/editor/text-import.tsx`): tldraw's "url" and
+  "text" content goes to plugins' `textImporters` (a web view for a link, a table for
+  rows copied from a spreadsheet) alongside tldraw's own link card or text, which stays
+  the default. One fitting choice runs at once; several open a menu where the content
+  lands, the first highlighted so Enter takes it. A link a connection probe recognizes
+  also offers Connect…; several links pasted at once become link cards.
 - **Documents** (`plugins/media-import`): files are stored as board assets (data URLs,
   so a board stays one file). PDFs render a page at a time with pdf.js (loaded on
   demand, pages cached as images); Word files convert with mammoth and are sanitized
   (no scripts, handlers, or non-web links); sheets parse with read-excel-file or a
-  small CSV parser and keep up to 2,000 rows.
+  small CSV parser (comma, semicolon or tab, worked out from the first line) and keep
+  up to 2,000 rows. Files no importer takes, and that aren't images or video, get a
+  message listing what opens.
+- **Points lists** (`plugins/media-import/points-list.ts`, tested). A CSV or
+  spreadsheet whose rows name points (an ORD or Metasys reference, a path like
+  `AHU-1/DA-T`, or a point name beside an Equipment column) dropped on a UI page while
+  a station is connected is matched to its points: each distinct name searched once,
+  names compared exactly (`DA-T` isn't `DA-T-SP`, `VAV-2-1` is `VAV_2_01` but never
+  `VAV-2-10`), narrowed by equipment, ambiguous rows left out. The matches go to the
+  same menu as points dropped on empty canvas (`offerPoints`), with "Sheet, as it is"
+  next to the live table, panel and trend. A sheet that came in earlier offers the same
+  from its Live points section.
 
 ## Web view
 
@@ -448,13 +493,14 @@ inert (pointer events off) so clicks select and move the shape; double-click ent
 tldraw's editing state and hands the pointer to the page, and Present mode keeps it
 live. The iframe is sandboxed without `allow-top-navigation`, so a page can't navigate
 the board away. Addresses must be http(s), may not contain a login (it would be saved
-in the board), and can't be the board itself.
+in the board), and can't be the board itself. A pasted or dropped link offers a web
+view next to the link card (a text importer).
 
 Sites decide whether they may be framed (`X-Frame-Options`, CSP `frame-ancestors`),
 and browsers don't tell the embedding page why a frame is blank. So
-`/api/web-view/check` (guarded like the station API) reads just those headers from the
-local server and the shape explains a refusal instead of showing a blank frame. It
-skips certificate checks because it only reads two headers and stations often use
+`/api/plugins/web-view/check` (guarded like every plugin route) reads just those
+headers from the local server and the shape explains a refusal instead of showing a
+blank frame. It skips certificate checks because it only reads two headers and stations often use
 self-signed certificates; the iframe itself still needs the certificate accepted in the
 browser. Cookies set inside the frame are third-party cookies and may be blocked by
 the browser, which can stop a login from sticking; a desktop shell would avoid both
@@ -474,8 +520,8 @@ panel with an API key could come later as a plugin for people without an AI app
 ```
 AI app ──MCP (Streamable HTTP, Bearer token)──▶ /api/mcp ─┐   plugins/assistant/server/*
                                                           │   bridge (globalThis)
-board tab ◀──SSE: tool calls── /api/ai/bridge ◀───────────┘
-board tab ──POST: tool list, results, focus──▶ /api/ai/bridge
+board tab ◀──SSE: tool calls── /api/plugins/assistant/bridge
+board tab ──POST: tool list, results, focus──▶ /api/plugins/assistant/bridge
 ```
 
 Where things live: each plugin's tools in `plugins/<id>/ai-tools.ts`; the connection
@@ -534,8 +580,8 @@ helpers, and `safeBatch`.
   comments are labeled as source material, not instructions. Known limit: an AI app
   that can also click in the browser could click Allow once itself, so don't give it
   that permission for the board.
-- **Clients.** Sessions report their names (Claude Code, Codex, …); the panel lists
-  them and the top bar shows which one is working. Claude Code supports
+- **Clients.** Sessions report their names (Claude Code, Codex, …); the AI panel
+  lists them and shows which one is working. Claude Code supports
   `list_changed` and waits ~28 h for a tool call by default, so approvals don't time out
   on its side.
 

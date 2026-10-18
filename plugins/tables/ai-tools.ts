@@ -3,14 +3,16 @@
 import type { TLShapeId } from "tldraw"
 
 import {
+  pageForInsert,
+  pageIdSchema,
   pickSource,
   pointIdSchema,
   pointLabel,
   sourceSchema,
-} from "@/studio/ai/points"
-import { pageForInsert, pageIdSchema } from "@/studio/ai/pages"
-import type { PointRef } from "@/studio/data/live-points"
-import type { AiBoardTool, AiContribution } from "@/studio/plugins/types"
+  type AiBoardTool,
+  type AiContribution,
+  type PointRef,
+} from "@/sdk"
 
 import { addRows, createTable } from "./table-points"
 import { isTableShape, TABLE_TYPE, type TableShape } from "./table-shape"
@@ -116,7 +118,7 @@ const addTableRows: AiBoardTool<{
 export const tablesAi: AiContribution = {
   guide:
     "create_live_table shows many points at once (status, value, age); good for VAV boxes or a device's points. add_table_rows extends one.",
-  tools: [createLiveTable, addTableRows] as AiContribution["tools"],
+  tools: [createLiveTable, addTableRows],
   shapes: {
     [TABLE_TYPE]: (_editor, shape) =>
       isTableShape(shape)

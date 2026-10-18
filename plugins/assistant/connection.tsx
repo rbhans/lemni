@@ -29,12 +29,15 @@ import {
   type BridgeEvent,
   type BridgeMessage,
 } from "./protocol"
-import { customCategories } from "@/studio/pages/categories"
-import { usePluginRuntime } from "@/studio/plugins/runtime"
-import type { AiShapeDescriber } from "@/studio/plugins/types"
-import { Icon } from "@/studio/shell/icon"
-import { studioState } from "@/studio/state"
-import { useStudioContext } from "@/studio/studio-context"
+import {
+  customCategories,
+  Icon,
+  pluginApiUrl,
+  shell,
+  usePluginRuntime,
+  useStudioContext,
+  type AiShapeDescriber,
+} from "@/sdk"
 
 import { runCall, type CallEnv } from "./run-call"
 import {
@@ -54,7 +57,7 @@ const TAB_ID = crypto.randomUUID()
 
 async function post(message: BridgeMessage) {
   try {
-    await fetch("/api/ai/bridge", {
+    await fetch(pluginApiUrl("assistant", "/bridge"), {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(message),
@@ -99,7 +102,7 @@ function Bridge() {
   const ctx = useStudioContext()
   const { contributions } = usePluginRuntime()
   const access = useValue(aiAccess)
-  const board = useValue(studioState.boardName)
+  const board = useValue(shell.boardName)
   const [opened, setOpened] = useState(0)
 
   const env = useMemo<CallEnv>(
@@ -129,7 +132,7 @@ function Bridge() {
   useEffect(() => {
     const running = new Map<string, AbortController>()
     const source = new EventSource(
-      `/api/ai/bridge?tab=${encodeURIComponent(TAB_ID)}`
+      pluginApiUrl("assistant", `/bridge?tab=${encodeURIComponent(TAB_ID)}`)
     )
     bridgeState.set("connecting")
     source.onopen = () => {
@@ -379,7 +382,7 @@ function ApprovalCard({
 
 /** "Claude Code · Adding a trend chart" while a call runs. */
 function WorkingChip() {
-  const presenting = useValue(studioState.presenting)
+  const presenting = useValue(shell.presenting)
   const running = useValue(
     "ai running",
     () => aiActivity.get().filter((entry) => entry.status === "running"),

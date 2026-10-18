@@ -1,12 +1,12 @@
 "use client"
 
-import type { BoardPlugin } from "@/studio/plugins/types"
+import { definePlugin } from "@/sdk"
 
 import { detach, restore, SCT_ICON, sctRailIcon } from "./client/store"
 import "./client/tree-state"
 import { ArchivePanel } from "./components/archive-panel"
 
-export const metasysSct: BoardPlugin = {
+export default definePlugin({
   id: "metasys-sct",
   name: "Metasys · SCT archive",
   version: "0.1.0",
@@ -35,4 +35,4 @@ export const metasysSct: BoardPlugin = {
     // The server keeps the archive open, so turning the plugin back on picks it up.
     return () => void detach()
   },
-}
+})

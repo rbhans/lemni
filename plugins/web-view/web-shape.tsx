@@ -20,9 +20,7 @@ import {
 } from "tldraw"
 
 import { cn } from "@/lib/utils"
-import { registerShapeLabel } from "@/studio/lib/shape-labels"
-import { Icon } from "@/studio/shell/icon"
-import { studioState } from "@/studio/state"
+import { Icon, pluginApiUrl, registerShapeLabel, shell } from "@/sdk"
 
 import { normalizeAddress, siteLabel } from "./model"
 
@@ -158,7 +156,7 @@ function useFramingCheck(url: string) {
   useEffect(() => {
     if (!url) return
     let cancelled = false
-    fetch(`/api/web-view/check?url=${encodeURIComponent(url)}`)
+    fetch(pluginApiUrl("web-view", `/check?url=${encodeURIComponent(url)}`))
       .then((response) => response.json())
       .then(
         (result: { checked: boolean; allowed?: boolean; reason?: string }) => {
@@ -190,7 +188,7 @@ function WebView({ shape }: { shape: WebShape }) {
     () => editor.getEditingShapeId() === shape.id,
     [editor, shape.id]
   )
-  const presenting = useValue(studioState.presenting)
+  const presenting = useValue(shell.presenting)
   const live = editing || presenting
   const [reloads, setReloads] = useState(0)
 

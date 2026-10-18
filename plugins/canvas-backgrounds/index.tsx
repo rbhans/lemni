@@ -2,10 +2,7 @@
 
 import { BackgroundIcon } from "@hugeicons/core-free-icons"
 
-import type {
-  BoardPlugin,
-  CanvasBackgroundContribution,
-} from "@/studio/plugins/types"
+import { definePlugin, type CanvasBackgroundContribution } from "@/sdk"
 
 import { BackgroundSettings } from "./background-settings"
 import { ShaderCanvas } from "./shader-canvas"
@@ -22,7 +19,7 @@ const canvasBackgrounds: CanvasBackgroundContribution[] = shaderBackgrounds.map(
   })
 )
 
-export const canvasBackgroundsPlugin: BoardPlugin = {
+export default definePlugin({
   id: "canvas-backgrounds",
   name: "Canvas backgrounds",
   version: "0.1.0",
@@ -42,4 +39,4 @@ export const canvasBackgroundsPlugin: BoardPlugin = {
       component: BackgroundSettings,
     },
   ],
-}
+})

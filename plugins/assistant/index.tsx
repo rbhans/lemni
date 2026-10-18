@@ -2,13 +2,11 @@
 
 import { AiMagicIcon } from "@hugeicons/core-free-icons"
 
-import { groupPages } from "@/studio/pages/categories"
-import type { AiBoardTool, BoardPlugin } from "@/studio/plugins/types"
-import { studioState } from "@/studio/state"
+import { definePlugin, groupPages, shell, type AiBoardTool } from "@/sdk"
 
 import { AiPanel } from "./ai-panel"
 import { AiConnection } from "./connection"
-import { AiStatus, TouchedLayer } from "./status"
+import { TouchedLayer } from "./status"
 
 // No chat in the board: people use the AI app they already have (Claude Code, Claude
 // Desktop, Codex) over MCP. This plugin is the connection: it serves the tools other
@@ -35,7 +33,7 @@ const boardOverview: AiBoardTool = {
     const view = editor.getViewportPageBounds()
     const selected = editor.getSelectedShapes()
     return {
-      text: `Board "${studioState.boardName.get()}". ${ACCESS_NOTES[ctx.access]}`,
+      text: `Board "${shell.boardName.get()}". ${ACCESS_NOTES[ctx.access]}`,
       data: {
         categories: groups.map((group) => ({
           id: group.id,
@@ -63,7 +61,7 @@ const boardOverview: AiBoardTool = {
             w: Math.round(view.w),
             h: Math.round(view.h),
           },
-          presenting: studioState.presenting.get(),
+          presenting: shell.presenting.get(),
         },
         selection: selected
           .slice(0, 30)
@@ -74,7 +72,7 @@ const boardOverview: AiBoardTool = {
   },
 }
 
-export const assistant: BoardPlugin = {
+export default definePlugin({
   id: "assistant",
   name: "AI connection",
   version: "0.2.0",
@@ -96,7 +94,6 @@ export const assistant: BoardPlugin = {
       component: AiPanel,
     },
   ],
-  topbarItems: [{ id: "ai-status", order: 5, component: AiStatus }],
   canvasOverlays: [{ id: "ai-connection", order: 50, component: AiConnection }],
   canvasLayers: [{ id: "ai-touched", order: 50, component: TouchedLayer }],
   ai: {
@@ -104,4 +101,4 @@ export const assistant: BoardPlugin = {
       "Tools come from the board's plugins and run in the open board. Read first (board_overview, read_page, screenshot), then change. Keep related things in frames: frames are what people link and navigate to.",
     tools: [boardOverview],
   },
-}
+})

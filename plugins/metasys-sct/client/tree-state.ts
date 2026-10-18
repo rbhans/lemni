@@ -2,7 +2,7 @@
 
 import { atom, react } from "tldraw"
 
-import { studioState } from "@/studio/state"
+import { shell } from "@/sdk"
 
 import type { SctNode } from "../shared"
 import { sctApi } from "./api"
@@ -66,10 +66,7 @@ export function toggleBranch(key: string) {
 /** Opens the Archive panel on a point, expanding the tree down to it. */
 export async function revealFqr(fqr: string) {
   selectedFqr.set(fqr)
-  studioState.leftPanels.update((panels) => ({
-    ...panels,
-    [studioState.workspace.get()]: "sct-archive",
-  }))
+  shell.showPanel("sct-archive")
   const info = sctConnection.get()
   if (!info) return
   try {

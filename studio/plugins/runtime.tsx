@@ -4,6 +4,7 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   type ReactNode,
 } from "react"
@@ -11,7 +12,13 @@ import { useValue } from "tldraw"
 
 import { TOOL_NAME } from "../ai/schema"
 import { studioState } from "../state"
-import { resolveEnabled, setPluginEnabled, validatePlugins } from "./registry"
+import {
+  checkNames,
+  resolveEnabled,
+  setPluginEnabled,
+  validatePlugins,
+  type PluginNames,
+} from "./registry"
 import type {
   AiShapeDescriber,
   AiTool,
@@ -20,6 +27,7 @@ import type {
   InspectorTabContribution,
   LibraryCollectionContribution,
   CommandContribution,
+  ConnectionProbeContribution,
   ContextMenuContribution,
   FileImporterContribution,
   MenuItemContribution,
@@ -32,6 +40,7 @@ import type {
   ShapeDecoratorContribution,
   SlotContribution,
   StatusContribution,
+  TextImporterContribution,
   ToolbarContribution,
   WorkspaceContribution,
 } from "./types"
@@ -59,6 +68,8 @@ export interface Contributions {
   contextMenuItems: Owned<ContextMenuContribution>[]
   pasteOptions: Owned<PasteOptionContribution>[]
   fileImporters: Owned<FileImporterContribution>[]
+  textImporters: Owned<TextImporterContribution>[]
+  connectionProbes: Owned<ConnectionProbeContribution>[]
   aiTools: Owned<AiTool>[]
   aiGuides: { plugin: string; name: string; guide: string }[]
   /** Shape type (or "*") → describers from every enabled plugin. */
@@ -79,20 +90,60 @@ export interface PluginRuntime {
 
 const PluginRuntimeContext = createContext<PluginRuntime | null>(null)
 
-function collect<K extends keyof Contributions>(
+/** The contributions that are lists of `{ id, order }` items, sorted by `order`. */
+const LISTS = [
+  "toolbar",
+  "panels",
+  "inspectorTabs",
+  "inspectorSections",
+  "menuItems",
+  "commands",
+  "topbarItems",
+  "statusItems",
+  "workspaces",
+  "libraryCollections",
+  "canvasOverlays",
+  "canvasLayers",
+  "canvasBackgrounds",
+  "settingsSections",
+  "shapeDecorators",
+  "pointDrops",
+  "pageCategories",
+  "contextMenuItems",
+  "pasteOptions",
+  "fileImporters",
+  "textImporters",
+  "connectionProbes",
+] as const satisfies readonly (keyof Contributions & keyof BoardPlugin)[]
+type ListKey = (typeof LISTS)[number]
+
+const listOf = (plugin: BoardPlugin, key: ListKey) =>
+  (plugin[key] ?? []) as readonly { id: string; order: number }[]
+
+function collect<K extends ListKey>(
   plugins: readonly BoardPlugin[],
   key: K
 ): Contributions[K] {
   const items = plugins.flatMap((plugin) =>
-    (
-      (plugin[key as keyof BoardPlugin] as { order: number }[] | undefined) ??
-      []
-    ).map((item) => ({
-      ...item,
-      pluginId: plugin.id,
-    }))
+    listOf(plugin, key).map((item) => ({ ...item, pluginId: plugin.id }))
   )
   return items.sort((a, b) => a.order - b.order) as Contributions[K]
+}
+
+/** Every name a plugin brings that must not clash with another plugin's. */
+function namesOf(plugin: BoardPlugin): PluginNames {
+  return {
+    id: plugin.id,
+    required: plugin.required,
+    engine: {
+      shapes: (plugin.shapeUtils ?? []).map((util) => util.type),
+      bindings: (plugin.bindingUtils ?? []).map((util) => util.type),
+      tools: (plugin.tools ?? []).map((tool) => tool.id),
+    },
+    contributions: Object.fromEntries(
+      LISTS.map((key) => [key, listOf(plugin, key).map((item) => item.id)])
+    ),
+  }
 }
 
 /** AI tool names are what AI apps call, so they must be valid and unique. */
@@ -141,9 +192,16 @@ export function PluginRuntimeProvider({
   children: ReactNode
 }) {
   useMemo(() => {
-    const errors = [...validatePlugins(plugins), ...validateAiTools(plugins)]
+    const names = checkNames(plugins.map(namesOf))
+    const errors = [
+      ...validatePlugins(plugins),
+      ...validateAiTools(plugins),
+      ...names.errors,
+    ]
     if (errors.length)
       throw new Error(`Invalid plugin registry:\n${errors.join("\n")}`)
+    if (process.env.NODE_ENV === "development" && names.warnings.length)
+      console.warn(`Plugin names:\n${names.warnings.join("\n")}`)
   }, [plugins])
 
   const preferences = useValue(studioState.pluginPreferences)
@@ -159,26 +217,9 @@ export function PluginRuntimeProvider({
 
   const contributions = useMemo<Contributions>(
     () => ({
-      toolbar: collect(active, "toolbar"),
-      panels: collect(active, "panels"),
-      inspectorTabs: collect(active, "inspectorTabs"),
-      inspectorSections: collect(active, "inspectorSections"),
-      menuItems: collect(active, "menuItems"),
-      commands: collect(active, "commands"),
-      topbarItems: collect(active, "topbarItems"),
-      statusItems: collect(active, "statusItems"),
-      workspaces: collect(active, "workspaces"),
-      libraryCollections: collect(active, "libraryCollections"),
-      canvasOverlays: collect(active, "canvasOverlays"),
-      canvasLayers: collect(active, "canvasLayers"),
-      canvasBackgrounds: collect(active, "canvasBackgrounds"),
-      settingsSections: collect(active, "settingsSections"),
-      shapeDecorators: collect(active, "shapeDecorators"),
-      pointDrops: collect(active, "pointDrops"),
-      pageCategories: collect(active, "pageCategories"),
-      contextMenuItems: collect(active, "contextMenuItems"),
-      pasteOptions: collect(active, "pasteOptions"),
-      fileImporters: collect(active, "fileImporters"),
+      ...(Object.fromEntries(
+        LISTS.map((key) => [key, collect(active, key)])
+      ) as Pick<Contributions, ListKey>),
       aiTools: active.flatMap((plugin) =>
         (plugin.ai?.tools ?? []).map((tool) => ({
           ...tool,
@@ -234,6 +275,13 @@ export function PluginRuntimeProvider({
       setEnabled,
     ]
   )
+
+  // Handy for poking at plugins from devtools (`lemscapePlugins.contributions`); never
+  // shipped in production builds.
+  useEffect(() => {
+    if (process.env.NODE_ENV === "development")
+      Object.assign(window, { lemscapePlugins: value })
+  }, [value])
 
   return (
     <PluginRuntimeContext.Provider value={value}>

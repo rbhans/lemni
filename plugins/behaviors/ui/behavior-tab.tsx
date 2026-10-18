@@ -32,13 +32,17 @@ import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
 import { cn } from "@/lib/utils"
 import {
+  getShapeStates,
+  Icon,
   kindOfValue,
+  LiveValueBadge,
+  PointField,
+  pointName,
+  Segmented,
+  SelectField,
   useLivePoint,
   type PointKind,
-} from "@/studio/data/live-points"
-import { getShapeStates } from "@/studio/editor/shape-states"
-import { Segmented, SelectField } from "@/studio/shell/fields"
-import { Icon } from "@/studio/shell/icon"
+} from "@/sdk"
 
 import {
   EFFECT_ORDER,
@@ -79,11 +83,6 @@ import {
   SwitchEditor,
   TestControl,
 } from "./editors"
-import {
-  LiveValueBadge,
-  PointField,
-  pointName,
-} from "@/studio/data/point-field"
 
 export function BehaviorTab() {
   const editor = useEditor()

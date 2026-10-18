@@ -10,7 +10,15 @@ import {
   type TLShapeId,
 } from "tldraw"
 
-import type { JsonSchema } from "@/studio/ai/schema"
+import {
+  categoryIdOf,
+  createPageIn,
+  kindOf,
+  type AiBoardTool,
+  type AiContribution,
+  type AiToolContext,
+  type JsonSchema,
+} from "@/sdk"
 import {
   applyUpdates,
   createFromSpecs,
@@ -20,13 +28,6 @@ import {
   type ShapeSpec,
   type ShapeUpdate,
 } from "./ai-shapes"
-import { categoryIdOf, kindOf } from "@/studio/pages/categories"
-import { createPageIn } from "@/studio/pages/page-categories"
-import type {
-  AiBoardTool,
-  AiContribution,
-  AiToolContext,
-} from "@/studio/plugins/types"
 
 // Canvas tools for AI apps: read pages, see them, draw, change, arrange, and manage
 // pages and the library. Coordinates are page coordinates (x right, y down).
@@ -642,6 +643,6 @@ export const canvasAi: AiContribution = {
     goTo,
     listLibrary,
     insertLibraryItem,
-  ] as AiContribution["tools"],
+  ],
   shapes: { "*": summarizeShape },
 }

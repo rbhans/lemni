@@ -20,13 +20,13 @@ import {
   type TLShapePartial,
 } from "tldraw"
 
-import type { JsonSchema } from "@/studio/ai/schema"
 import {
   customShapeName,
   isHidden,
+  pageKindOf,
   shapeDisplayName,
-} from "@/studio/lib/shape-names"
-import { pageKindOf } from "@/studio/pages/page-categories"
+  type JsonSchema,
+} from "@/sdk"
 
 // How shapes look to an AI app (a compact summary in page coordinates) and the simple
 // specs it uses to draw: rectangles and other geo kinds, text, notes, frames, arrows and

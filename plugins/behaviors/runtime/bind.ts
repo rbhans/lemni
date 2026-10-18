@@ -2,8 +2,7 @@
 
 import type { Editor, TLShapeId } from "tldraw"
 
-import type { BindingRequest } from "@/studio/editor/behavior-binding"
-import { getShapeStates } from "@/studio/editor/shape-states"
+import { getShapeStates, type BindingRequest } from "@/sdk"
 
 import {
   defaultsFor,

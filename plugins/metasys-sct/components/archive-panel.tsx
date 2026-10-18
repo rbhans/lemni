@@ -24,12 +24,7 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import {
-  POINT_DRAG_TYPE,
-  type PointDragData,
-} from "@/studio/data/live-points"
-import { PanelHeader } from "@/studio/shell/fields"
-import { Icon } from "@/studio/shell/icon"
+import { Icon, PanelHeader, POINT_DRAG_TYPE, type PointDragData } from "@/sdk"
 
 import type { SctNode } from "../shared"
 import { sctApi } from "../client/api"

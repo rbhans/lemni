@@ -1,7 +1,6 @@
 import "server-only"
 
-import { guardRequest } from "@/server/request-guard"
-import { TOOL_NAME } from "@/studio/ai/schema"
+import { TOOL_NAME } from "@/sdk/server"
 
 import {
   DEFAULT_TIMEOUT_MS,
@@ -117,8 +116,6 @@ function events(request: Request, tab: string): Response {
 }
 
 export async function handleBridgeRequest(request: Request): Promise<Response> {
-  const denied = guardRequest(request)
-  if (denied) return denied
   const bridge = getAiBridge()
 
   if (request.method === "GET") {
@@ -166,8 +163,6 @@ export async function handleBridgeRequest(request: Request): Promise<Response> {
 
 /** Connect details for the AI panel. Same-origin only, so other sites can't read it. */
 export async function handleSetupRequest(request: Request): Promise<Response> {
-  const denied = guardRequest(request)
-  if (denied) return denied
   try {
     if (request.method === "POST") await rotateMcpToken()
     else if (request.method !== "GET")

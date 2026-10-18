@@ -23,13 +23,18 @@ async function prepare() {
   await mkdir(folder, { recursive: true, mode: 0o700 })
 }
 
-export async function localDataPath(
-  name: "mcp-token" | "audit.log"
-): Promise<string> {
+/** Makes sure `.lemscape/` exists (moving an older one over) before anything uses it. */
+export async function ensureLocalData(): Promise<void> {
   ready ??= prepare().catch((error: unknown) => {
     ready = null
     throw error
   })
   await ready
+}
+
+export async function localDataPath(
+  name: "mcp-token" | "audit.log"
+): Promise<string> {
+  await ensureLocalData()
   return path.join(process.cwd(), ".lemscape", name)
 }

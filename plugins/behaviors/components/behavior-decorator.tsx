@@ -18,11 +18,12 @@ import {
   type TLShape,
 } from "tldraw"
 
-import { getDataSource, useDataSources } from "@/studio/data/live-points"
 import {
+  getDataSource,
   ShapeStateContext,
   ShapeStatusContext,
-} from "@/studio/editor/shape-states"
+  useDataSources,
+} from "@/sdk"
 import { cn } from "@/lib/utils"
 
 import type { Presentation } from "../core/effects"

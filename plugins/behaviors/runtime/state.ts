@@ -1,33 +1,19 @@
 "use client"
 
-import { atom, react } from "tldraw"
+import { atom } from "tldraw"
 
-import type { PointKind } from "@/studio/data/live-points"
+import { pluginStorage, type PointKind } from "@/sdk"
 
 import type { InputValue } from "../core/evaluate"
 import type { Behavior, PointRef } from "../core/model"
 
-function persistedFlag(key: string, initial: boolean) {
-  let start = initial
-  try {
-    const raw = localStorage.getItem(key)
-    if (raw === "true" || raw === "false") start = raw === "true"
-  } catch {
-    // Storage blocked; use the default.
-  }
-  const flag = atom(key, start)
-  react(`persist ${key}`, () => {
-    try {
-      localStorage.setItem(key, String(flag.get()))
-    } catch {
-      // Ignore.
-    }
-  })
-  return flag
-}
-
 /** Live effects on the canvas. Off shows the saved drawing, e.g. for arranging. */
-export const liveEffects = persistedFlag("lemscape.live-effects.v1", true)
+export const liveEffects = pluginStorage("behaviors").atom(
+  "live-effects",
+  true,
+  (value): value is boolean => typeof value === "boolean",
+  { from: ["lemscape.live-effects.v1"] }
+)
 
 /** Session-only test values per behavior, so effects can be checked without a station. */
 export const testValues = atom<Record<string, InputValue | undefined>>(

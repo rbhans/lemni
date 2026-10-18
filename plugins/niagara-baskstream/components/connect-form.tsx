@@ -1,10 +1,7 @@
 "use client"
 
 import { useState, type FormEvent } from "react"
-import {
-  Alert02Icon,
-  Cancel01Icon,
-} from "@hugeicons/core-free-icons"
+import { Alert02Icon, Cancel01Icon } from "@hugeicons/core-free-icons"
 import { useValue } from "tldraw"
 
 import { Button } from "@/components/ui/button"
@@ -17,15 +14,19 @@ import {
 import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
 import { cn } from "@/lib/utils"
-import { Icon } from "@/studio/shell/icon"
+import { Icon } from "@/sdk"
 
+import { sameStation } from "../probe-model"
 import type { StationProfile } from "../shared"
 import {
   connect,
+  connectDraft,
+  connection,
   connectionError,
   forgetProfile,
   NIAGARA_ICON,
   stationProfiles,
+  type ConnectDraft,
 } from "../client/store"
 
 const EMPTY: StationProfile = {
@@ -35,10 +36,30 @@ const EMPTY: StationProfile = {
   allowSelfSigned: false,
 }
 
+/** What the form starts with: a draft's station (with its saved login, if any), else the last station. */
+function startingProfile(
+  profiles: StationProfile[],
+  draft: ConnectDraft | null
+): StationProfile {
+  if (!draft) return profiles[0] ?? EMPTY
+  if (!draft.station) return EMPTY
+  return (
+    profiles.find((saved) => sameStation(saved.station, draft.station)) ?? {
+      ...EMPTY,
+      station: draft.station,
+    }
+  )
+}
+
 export function ConnectForm() {
   const profiles = useValue(stationProfiles)
   const lostMessage = useValue(connectionError)
-  const [profile, setProfile] = useState<StationProfile>(profiles[0] ?? EMPTY)
+  // Read once: the panel remounts the form for a new draft.
+  const [draft] = useState(() => connectDraft.get())
+  const connected = useValue(connection) !== null
+  const [profile, setProfile] = useState<StationProfile>(() =>
+    startingProfile(profiles, draft)
+  )
   const [password, setPassword] = useState("")
   const [remember, setRemember] = useState(true)
   const [busy, setBusy] = useState(false)
@@ -143,6 +164,8 @@ export function ConnectForm() {
               id="station-user"
               required
               autoComplete="username"
+              // Connect… filled in the address: the login is what's left.
+              autoFocus={Boolean(draft?.station) && !profile.username}
               value={profile.username}
               onChange={(e) => update({ username: e.target.value })}
             />
@@ -154,6 +177,7 @@ export function ConnectForm() {
               type="password"
               required
               autoComplete="current-password"
+              autoFocus={Boolean(draft?.station) && Boolean(profile.username)}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
@@ -169,6 +193,13 @@ export function ConnectForm() {
             Allow self-signed certificate
           </FieldLabel>
         </Field>
+        {draft?.certificateProblem && !profile.allowSelfSigned ? (
+          <FieldDescription className="-mt-1 text-[11px]">
+            This computer doesn&apos;t trust the station&apos;s certificate:{" "}
+            {draft.certificateProblem}. Connecting needs the switch above; turn
+            it on only if you trust this network.
+          </FieldDescription>
+        ) : null}
         {profile.allowSelfSigned ? (
           <FieldDescription className="-mt-1 rounded-md bg-amber-500/10 px-2 py-1.5 text-[11px] text-amber-800 dark:text-amber-300">
             Certificate checks are off for this station. Anyone on the network
@@ -201,6 +232,16 @@ export function ConnectForm() {
       <Button type="submit" disabled={busy} className="h-8">
         {busy ? "Connecting…" : "Connect"}
       </Button>
+      {connected && draft ? (
+        <Button
+          type="button"
+          variant="ghost"
+          className="-mt-1 h-7"
+          onClick={() => connectDraft.set(null)}
+        >
+          Cancel and stay connected
+        </Button>
+      ) : null}
 
       {process.env.NODE_ENV !== "production" ? (
         <p className="text-[11px] leading-snug text-muted-foreground">

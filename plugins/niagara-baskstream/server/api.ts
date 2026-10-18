@@ -2,8 +2,7 @@ import "server-only"
 
 import { randomUUID } from "node:crypto"
 
-import { appendAudit } from "@/server/audit"
-import { guardRequest } from "@/server/request-guard"
+import { appendAudit } from "@/sdk/server"
 
 import type {
   ConnectRequest,
@@ -383,13 +382,11 @@ const HANDLERS: Record<string, Handler> = {
   DELETE: handleDelete,
 }
 
-/** Entry point for app/api/stations/[[...path]]. */
+/** Entry point for /api/plugins/niagara-baskstream/… (see ./routes.ts). */
 export async function handleStationsRequest(
   request: Request,
   path: string[] = []
 ): Promise<Response> {
-  const denied = guardRequest(request)
-  if (denied) return denied
   const handler = HANDLERS[request.method]
   if (!handler) return json({ error: "Method not allowed." }, 405)
   try {

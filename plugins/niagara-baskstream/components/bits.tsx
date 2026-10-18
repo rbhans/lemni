@@ -15,13 +15,8 @@ import {
 import type { IconSvgElement } from "@hugeicons/react"
 import { useValue } from "tldraw"
 
-import {
-  useLivePoint,
-  type LiveValue,
-  type StatusKind,
-} from "@/studio/data/live-points"
+import { Icon, useLivePoint, type LiveValue, type StatusKind } from "@/sdk"
 import { cn } from "@/lib/utils"
-import { Icon } from "@/studio/shell/icon"
 
 import type { StationNode } from "../shared"
 import { connection, sourceIdFor } from "../client/store"

@@ -1,8 +1,13 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
-import { Cancel01Icon, Search01Icon } from "@hugeicons/core-free-icons"
+import {
+  Cancel01Icon,
+  PlugSocketIcon,
+  Search01Icon,
+} from "@hugeicons/core-free-icons"
 
+import { Button } from "@/components/ui/button"
 import {
   InputGroup,
   InputGroupAddon,
@@ -15,6 +20,7 @@ import {
 } from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
 import { Icon } from "@/studio/shell/icon"
+import { openConnect } from "@/studio/state"
 
 import {
   POINT_DRAG_TYPE,
@@ -148,6 +154,10 @@ export function PointField({
             )
             setOpen(false)
           }}
+          onConnect={() => {
+            setOpen(false)
+            openConnect()
+          }}
         />
       </PopoverContent>
     </Popover>
@@ -156,8 +166,10 @@ export function PointField({
 
 function PointSearch({
   onPick,
+  onConnect,
 }: {
   onPick(option: PointOption, source: string): void
+  onConnect(): void
 }) {
   const all = useDataSources()
   const sources = useMemo(() => all.filter((source) => source.search), [all])
@@ -172,35 +184,52 @@ function PointSearch({
     const q = query.trim()
     if (q.length < 2) return
     const timer = setTimeout(() => {
-      Promise.all(
+      // One connection failing shouldn't hide what the others found.
+      void Promise.allSettled(
         sources.map(async (source) =>
           (await source.search!(q)).map((option) => ({
             option,
             source: source.id,
           }))
         )
-      )
-        .then((lists) =>
-          setResults({ query: q, items: lists.flat().slice(0, 60) })
+      ).then((settled) => {
+        const items = settled.flatMap((result) =>
+          result.status === "fulfilled" ? result.value : []
         )
-        .catch((error) =>
-          setResults({
-            query: q,
-            items: [],
-            error: error instanceof Error ? error.message : "Search failed.",
-          })
+        const failed = settled.find(
+          (result): result is PromiseRejectedResult =>
+            result.status === "rejected"
         )
+        setResults({
+          query: q,
+          items: items.slice(0, 60),
+          error:
+            failed && !items.length
+              ? failed.reason instanceof Error
+                ? failed.reason.message
+                : "Search failed."
+              : undefined,
+        })
+      })
     }, 250)
     return () => clearTimeout(timer)
   }, [query, sources])
 
   if (!sources.length) {
     return (
-      <p className="px-1 py-2 text-[11.5px] text-muted-foreground">
-        Connect a station to choose points. Saved points keep working offline.
-      </p>
+      <div className="flex flex-col items-start gap-2 px-1 py-2">
+        <p className="text-[11.5px] text-muted-foreground">
+          Connect a station to choose points. Saved points keep working offline.
+        </p>
+        <Button variant="outline" size="sm" onClick={onConnect}>
+          <Icon icon={PlugSocketIcon} className="size-3" />
+          Connect…
+        </Button>
+      </div>
     )
   }
+  const iconOf = (id: string) =>
+    sources.length > 1 ? sources.find((s) => s.id === id)?.icon : undefined
 
   const q = query.trim()
   return (
@@ -249,25 +278,36 @@ function PointSearch({
           </p>
         ) : (
           <ul className="flex flex-col">
-            {results.items.map(({ option, source }) => (
-              <li key={`${source}|${option.point}`}>
-                <button
-                  type="button"
-                  onClick={() => onPick(option, source)}
-                  className="flex w-full items-center gap-2 rounded px-1.5 py-1 text-left hover:bg-muted"
-                >
-                  <span className="flex min-w-0 flex-1 flex-col">
-                    <span className="truncate font-mono text-[11.5px]">
-                      {option.label}
+            {results.items.map(({ option, source }) => {
+              const sourceIcon = iconOf(source)
+              return (
+                <li key={`${source}|${option.point}`}>
+                  <button
+                    type="button"
+                    onClick={() => onPick(option, source)}
+                    className="flex w-full items-center gap-2 rounded px-1.5 py-1 text-left hover:bg-muted"
+                  >
+                    {sourceIcon ? (
+                      <Icon
+                        icon={sourceIcon}
+                        className="size-3.5 shrink-0 text-muted-foreground"
+                      />
+                    ) : null}
+                    <span className="flex min-w-0 flex-1 flex-col">
+                      <span className="truncate font-mono text-[11.5px]">
+                        {option.label}
+                      </span>
+                      <span className="truncate text-[10.5px] text-muted-foreground">
+                        {option.path}
+                      </span>
                     </span>
-                    <span className="truncate text-[10.5px] text-muted-foreground">
-                      {option.path}
-                    </span>
-                  </span>
-                  <LiveValueBadge pointRef={{ source, point: option.point }} />
-                </button>
-              </li>
-            ))}
+                    <LiveValueBadge
+                      pointRef={{ source, point: option.point }}
+                    />
+                  </button>
+                </li>
+              )
+            })}
           </ul>
         )}
       </div>

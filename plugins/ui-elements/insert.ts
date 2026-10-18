@@ -21,12 +21,10 @@ import {
   getDataSource,
   kindOfValue,
   type PointDragData,
+  type PointDropContribution,
   type PointKind,
-} from "@/studio/data/live-points"
-import type {
-  PointDropContribution,
-  PointMenuGroup,
-} from "@/studio/plugins/types"
+  type PointMenuGroup,
+} from "@/sdk"
 
 import {
   designHeight,

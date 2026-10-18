@@ -5,6 +5,8 @@ import { useTheme } from "next-themes"
 import { toast } from "sonner"
 import {
   defaultHandleExternalFileContent,
+  defaultHandleExternalTextContent,
+  defaultHandleExternalUrlContent,
   registerDefaultExternalContentHandlers,
   registerDefaultSideEffects,
   useEditor,
@@ -17,8 +19,10 @@ import {
 
 import { installBoardFiles } from "../files/board-files"
 import { usePluginRuntime } from "../plugins/runtime"
+import type { FileImporterContribution } from "../plugins/types"
 import { useStudioHotkeys } from "../shell/use-studio-hotkeys"
 import { usePasteHandling } from "./paste"
+import { createTextImport, pastedText } from "./text-import"
 import { useStudioContext } from "../studio-context"
 
 export const ACCEPTED_IMAGE_TYPES = [
@@ -35,6 +39,25 @@ export const ACCEPTED_VIDEO_TYPES = [
   "video/quicktime",
 ] as const
 
+const MEDIA_TYPES = new Set<string>([
+  ...ACCEPTED_IMAGE_TYPES,
+  ...ACCEPTED_VIDEO_TYPES,
+])
+
+const names = (files: File[]) => files.map((file) => file.name).join(", ")
+
+/** "PDF, DOCX, XLSX, CSV, images and video": the file types plugins open, plus media. */
+function openableKinds(importers: readonly FileImporterContribution[]) {
+  const extensions = new Set(
+    importers.flatMap((importer) =>
+      importer.accept
+        .filter((type) => type.startsWith("."))
+        .map((type) => type.slice(1).toUpperCase())
+    )
+  )
+  return [...extensions, "images and video"].join(", ")
+}
+
 /**
  * Everything `<Tldraw>` normally wires up besides its visual UI: shortcuts,
  * clipboard, dropped/pasted content, store side effects, toasts and theme.
@@ -49,11 +72,26 @@ export function EngineBridge() {
 
   const ctx = useStudioContext()
   const { contributions } = usePluginRuntime()
-  // Read at drop time, so the handler below always sees the current plugins.
-  const importers = useRef({ list: contributions.fileImporters, ctx })
+  // Read at drop time, so the handlers below always see the current plugins.
+  const importers = useRef({
+    list: contributions.fileImporters,
+    text: contributions.textImporters,
+    probes: contributions.connectionProbes,
+    ctx,
+  })
   useEffect(() => {
-    importers.current = { list: contributions.fileImporters, ctx }
-  }, [contributions.fileImporters, ctx])
+    importers.current = {
+      list: contributions.fileImporters,
+      text: contributions.textImporters,
+      probes: contributions.connectionProbes,
+      ctx,
+    }
+  }, [
+    contributions.fileImporters,
+    contributions.textImporters,
+    contributions.connectionProbes,
+    ctx,
+  ])
 
   useEffect(() => {
     const options = {
@@ -66,28 +104,62 @@ export function EngineBridge() {
     }
     registerDefaultExternalContentHandlers(editor, options)
     // Plugins open the files they understand (PDFs, spreadsheets, ...); tldraw
-    // handles the rest (images, video) as before.
+    // handles images and video as before, and anything else gets a clear "no".
     editor.registerExternalContentHandler("files", async ({ files, point }) => {
       const { list, ctx: current } = importers.current
-      const rest: File[] = []
+      const media: File[] = []
+      const unknown: File[] = []
       const claimed = new Map<string, File[]>()
       for (const file of files) {
         const importer = list.find((candidate) => candidate.accepts(file))
         if (importer)
           claimed.set(importer.id, [...(claimed.get(importer.id) ?? []), file])
-        else rest.push(file)
+        else if (MEDIA_TYPES.has(file.type)) media.push(file)
+        else unknown.push(file)
       }
       for (const importer of list) {
         const mine = claimed.get(importer.id)
-        if (mine) await importer.import(current, mine, point)
+        if (!mine) continue
+        try {
+          await importer.import(current, mine, point)
+        } catch (error) {
+          console.error(`[plugin:${importer.pluginId}] import failed`, error)
+          toast.error(`Couldn't open ${names(mine)}`)
+        }
       }
-      if (rest.length)
+      if (unknown.length)
+        toast.error(`Can't open ${names(unknown)}`, {
+          description: `Lemscape opens ${openableKinds(list)}.`,
+        })
+      if (media.length)
         await defaultHandleExternalFileContent(
           editor,
-          { files: rest, point },
+          { files: media, point },
           options
         )
     })
+    // Links and text: plugins offer what they can become (a web view, a table) next to
+    // tldraw's own handling, which stays the default.
+    const text = createTextImport(() => ({
+      ctx: importers.current.ctx,
+      importers: importers.current.text,
+      probes: importers.current.probes,
+    }))
+    editor.registerExternalContentHandler("url", (content) =>
+      text.url({
+        content: pastedText(content),
+        point: content.point,
+        fallback: () =>
+          defaultHandleExternalUrlContent(editor, content, options),
+      })
+    )
+    editor.registerExternalContentHandler("text", (content) =>
+      text.text({
+        content: pastedText(content),
+        point: content.point,
+        fallback: () => defaultHandleExternalTextContent(editor, content),
+      })
+    )
     return registerDefaultSideEffects(editor)
   }, [editor, toasts, msg])
 

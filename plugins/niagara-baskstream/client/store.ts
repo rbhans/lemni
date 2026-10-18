@@ -3,7 +3,10 @@
 import { atom, computed, react, type Atom } from "tldraw"
 
 import {
+  PluginApiError,
+  pluginStorage,
   registerDataSource,
+  sourceIcon,
   type DataSource,
   type HistoryBucket,
   type HistoryQuery,
@@ -14,8 +17,7 @@ import {
   type WriteCapability,
   type WriteOutcome,
   type WriteRequester,
-} from "@/studio/data/live-points"
-import { sourceIcon } from "@/studio/shell/source-icon"
+} from "@/sdk"
 
 import {
   statusKind,
@@ -25,14 +27,18 @@ import {
   type StationNode,
   type StationProfile,
 } from "../shared"
-import { stationApi, StationApiError } from "./api"
+import { stationApi } from "./api"
 
 /** A live Niagara station. */
 export const NIAGARA_ICON = sourceIcon("N", "live")
 
 const SESSION_ID = crypto.randomUUID()
-const ACTIVE_KEY = "lemscape.station.active"
-const PROFILES_KEY = "lemscape.station-profiles.v1"
+const storage = pluginStorage("niagara-baskstream")
+/** The connection this tab shows (per tab, so sessionStorage). */
+const ACTIVE_KEY = storage.key("active", { from: ["lemscape.station.active"] })
+const PROFILES_KEY = storage.key("profiles", {
+  from: ["lemscape.station-profiles.v1"],
+})
 
 function toLiveValue(value: PointValue): LiveValue {
   return {
@@ -139,6 +145,8 @@ class NiagaraLiveSource implements DataSource {
   private readonly interest = new Map<string, number>()
   private syncTimer: ReturnType<typeof setTimeout> | null = null
   private events: EventSource | null = null
+  /** Set once the connection closes: widgets letting go of points mustn't ask again. */
+  private stopped = false
   private unregister: (() => void) | null = null
 
   constructor(
@@ -164,7 +172,7 @@ class NiagaraLiveSource implements DataSource {
     this.events.onerror = () => {
       // EventSource retries by itself; stop if the server no longer knows this connection.
       stationApi.get(this.connectionId).catch((error) => {
-        if (error instanceof StationApiError && error.status === 404)
+        if (error instanceof PluginApiError && error.status === 404)
           void detach("The station connection closed.")
       })
     }
@@ -172,6 +180,7 @@ class NiagaraLiveSource implements DataSource {
   }
 
   stop() {
+    this.stopped = true
     this.events?.close()
     this.events = null
     if (this.syncTimer) clearTimeout(this.syncTimer)
@@ -279,6 +288,7 @@ class NiagaraLiveSource implements DataSource {
   }
 
   private scheduleSync() {
+    if (this.stopped) return
     if (this.syncTimer) clearTimeout(this.syncTimer)
     this.syncTimer = setTimeout(() => void this.sync(), 150)
   }
@@ -292,6 +302,7 @@ class NiagaraLiveSource implements DataSource {
       for (const value of points)
         this.value(value.point).set(toLiveValue(value))
     } catch (error) {
+      if (this.stopped) return
       connectionError.set(
         error instanceof Error ? error.message : "Couldn't update live points."
       )
@@ -305,6 +316,20 @@ export const connection = atom<ConnectionInfo | null>(
 )
 export const connectionError = atom<string | null>(
   "station connection error",
+  null
+)
+
+/** A station to fill into the connect form (from Connect…, or "Connect to another station"). */
+export interface ConnectDraft {
+  /** The station's address; empty for a blank form. */
+  station: string
+  /** Why this computer doesn't trust its certificate, when Connect… found out. */
+  certificateProblem: string | null
+}
+
+/** While set, the Station panel shows its connect form with this filled in. */
+export const connectDraft = atom<ConnectDraft | null>(
+  "station connect draft",
   null
 )
 let source: NiagaraLiveSource | null = null
@@ -346,12 +371,17 @@ export async function connect(
   password: string,
   remember: boolean
 ) {
+  const previous = connection.get()
   const { connection: info } = await stationApi.connect({
     ...profile,
     password,
   })
   if (remember) rememberProfile(profile)
   attach(info)
+  connectDraft.set(null)
+  // A tab shows one station: close the one this replaced, or the server keeps it open.
+  if (previous && previous.id !== info.id)
+    void stationApi.disconnect(previous.id).catch(() => {})
   return info
 }
 

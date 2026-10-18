@@ -7,24 +7,27 @@ import {
   type AiAccessLevel,
   type AiClientInfo,
 } from "./protocol"
-import type { AiWritePlan } from "@/studio/plugins/types"
-import { persistentAtom } from "@/studio/state"
+import { pluginStorage, type AiWritePlan } from "@/sdk"
 
 // AI connection state for this browser: what AI apps may do, who's connected, what
 // they've done, and writes waiting for the person.
 
+const storage = pluginStorage("assistant")
+
 /** How much AI apps may do. Kept per browser, not in the board. */
-export const aiAccess = persistentAtom<AiAccessLevel>(
-  "lemscape.ai-access.v1",
+export const aiAccess = storage.atom<AiAccessLevel>(
+  "access",
   "edit",
-  isAccessLevel
+  isAccessLevel,
+  { from: ["lemscape.ai-access.v1"] }
 )
 
 /** Bring the AI's changes into view as they happen. */
-export const aiFollow = persistentAtom(
-  "lemscape.ai-follow.v1",
+export const aiFollow = storage.atom(
+  "follow",
   true,
-  (value): value is boolean => typeof value === "boolean"
+  (value): value is boolean => typeof value === "boolean",
+  { from: ["lemscape.ai-follow.v1"] }
 )
 
 /** The board's line to the server's MCP endpoint. */

@@ -2,10 +2,13 @@ import assert from "node:assert/strict"
 import { test } from "node:test"
 
 import {
+  checkNames,
   dependentsOf,
   EMPTY_PREFERENCES,
   resolveEnabled,
   setPluginEnabled,
+  sdkCompatible,
+  SDK_VERSION,
   validatePlugins,
   type PluginNode,
 } from "./registry.ts"
@@ -106,4 +109,67 @@ test("every combination of choices resolves to a dependency-safe set", () => {
       }
     }
   }
+})
+
+test("plugins load on the SDK major they were written for, if it's new enough", () => {
+  assert.equal(sdkCompatible("1.0.0", "1.0.0"), true)
+  assert.equal(sdkCompatible("1.0.0", "1.4.2"), true)
+  assert.equal(sdkCompatible("1.2.0", "1.1.9"), false)
+  assert.equal(sdkCompatible("1.1.3", "1.1.2"), false)
+  assert.equal(sdkCompatible("1.0.0", "2.0.0"), false)
+  const [major] = SDK_VERSION.split(".")
+  assert.deepEqual(
+    validatePlugins([
+      { id: "ok", version: "1.0.0", requiresSdk: `${major}.0.0` },
+      {
+        id: "future",
+        version: "1.0.0",
+        requiresSdk: `${Number(major) + 1}.0.0`,
+      },
+      { id: "bad", version: "1.0.0", requiresSdk: "one" },
+    ]),
+    [
+      `future: needs plugin SDK ${Number(major) + 1}.0.0; this Lemscape has ${SDK_VERSION}`,
+      "bad: requiresSdk must be semver",
+    ]
+  )
+})
+
+test("shape, binding and tool names and contribution ids can't clash", () => {
+  const names = (
+    id: string,
+    shapes: string[],
+    contributions: Record<string, string[]> = {},
+    required = false
+  ) => ({
+    id,
+    required,
+    engine: { shapes, bindings: [], tools: [] },
+    contributions,
+  })
+  assert.deepEqual(
+    checkNames([
+      names("canvas-core", ["geo", "arrow"], {}, true),
+      names("gauges", ["gauges-dial", "gauges-bar"], { panels: ["gauges"] }),
+      names("charts", ["bas-chart"], { panels: ["charts"] }),
+    ]),
+    { errors: [], warnings: [] }
+  )
+
+  const { errors, warnings } = checkNames([
+    names("canvas-core", ["geo"], {}, true),
+    names("gauges", ["geo", "dial"], { panels: ["points", "points"] }),
+    names("meters", ["dial"], { panels: ["points"] }),
+  ])
+  assert.deepEqual(errors, [
+    'gauges: shape type "geo" is already defined by canvas-core',
+    'gauges: two of its panels have the id "points"',
+    'meters: shape type "dial" is already defined by gauges',
+    'meters: panels id "points" is already used by gauges',
+  ])
+  assert.deepEqual(warnings, [
+    'gauges: shape type "geo" should start with "gauges-" so it can\'t clash with another plugin\'s',
+    'gauges: shape type "dial" should start with "gauges-" so it can\'t clash with another plugin\'s',
+    'meters: shape type "dial" should start with "meters-" so it can\'t clash with another plugin\'s',
+  ])
 })

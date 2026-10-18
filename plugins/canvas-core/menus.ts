@@ -1,13 +1,14 @@
 import {
+  isHidden,
   newBoard,
   openBoard,
+  pasteSpecialOpen,
   saveBoard,
+  setHidden,
+  shell,
   supportsFileAccess,
-} from "@/studio/files/board-files"
-import { pasteSpecialOpen } from "@/studio/editor/paste"
-import { isHidden, setHidden } from "@/studio/lib/shape-names"
-import type { MenuItemContribution } from "@/studio/plugins/types"
-import { studioState } from "@/studio/state"
+  type MenuItemContribution,
+} from "@/sdk"
 
 type Item = Omit<MenuItemContribution, "order"> & { order?: number }
 
@@ -33,7 +34,14 @@ const items: Item[] = [
     group: "board",
     label: "Open recent…",
     disabled: () => !supportsFileAccess(),
-    onSelect: () => studioState.commandPalette.set("recent"),
+    onSelect: () => shell.openCommandPalette("recent"),
+  },
+  {
+    id: "file-connect",
+    menu: "file",
+    group: "connect",
+    label: "Connect…",
+    onSelect: () => shell.openConnect(),
   },
   {
     id: "file-save",
@@ -439,15 +447,15 @@ const items: Item[] = [
     menu: "window",
     group: "panels",
     label: "Properties panel",
-    checked: () => studioState.rightPanelOpen.get(),
-    onSelect: () => studioState.rightPanelOpen.update((open) => !open),
+    checked: () => shell.rightPanelOpen.get(),
+    onSelect: () => shell.rightPanelOpen.update((open) => !open),
   },
   {
     id: "window-plugins",
     menu: "window",
     group: "plugins",
     label: "Plugins…",
-    onSelect: () => studioState.pluginManagerOpen.set(true),
+    onSelect: () => shell.openPlugins(),
   },
 
   {
@@ -456,7 +464,7 @@ const items: Item[] = [
     group: "help",
     label: "Command palette",
     kbd: "cmd+k",
-    onSelect: () => studioState.commandPalette.set("open"),
+    onSelect: () => shell.openCommandPalette(),
   },
   {
     id: "help-shortcuts",
@@ -464,7 +472,7 @@ const items: Item[] = [
     group: "help",
     label: "Keyboard shortcuts",
     kbd: "shift+/",
-    onSelect: () => studioState.shortcutSheetOpen.set(true),
+    onSelect: () => shell.openShortcuts(),
   },
   // Last, so it sits at the bottom of File.
   {
@@ -473,7 +481,7 @@ const items: Item[] = [
     group: "settings",
     label: "Settings…",
     kbd: "cmd+comma",
-    onSelect: () => studioState.settingsPage.set(""),
+    onSelect: () => shell.openSettings(),
   },
 ]
 

@@ -9,8 +9,7 @@ import {
 import { useActions, useEditor, useValue } from "tldraw"
 
 import { cn } from "@/lib/utils"
-import { Icon } from "@/studio/shell/icon"
-import { Tip } from "@/studio/shell/tip"
+import { Icon, Tip } from "@/sdk"
 
 export function PageStatus() {
   const editor = useEditor()

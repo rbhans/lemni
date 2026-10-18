@@ -4,8 +4,7 @@ import type { ReactNode } from "react"
 import { useEditor, useValue } from "tldraw"
 
 import { Slider } from "@/components/ui/slider"
-import { ColorField, SelectField } from "@/studio/shell/fields"
-import { studioState } from "@/studio/state"
+import { ColorField, SelectField, shell } from "@/sdk"
 
 import { resolveColor } from "./shader-canvas"
 import { shaderBackgrounds } from "./shaders"
@@ -49,7 +48,7 @@ export function BackgroundSettings() {
   const editor = useEditor()
   const chosen = useValue(
     "canvas background",
-    () => studioState.canvasBackground.get(),
+    () => shell.canvasBackground.get(),
     []
   )
   const intensity = useValue(
@@ -102,7 +101,7 @@ export function BackgroundSettings() {
           label="Background style"
           value={chosen}
           options={backgroundChoices}
-          onChange={(value) => studioState.canvasBackground.set(value)}
+          onChange={(value) => shell.canvasBackground.set(value)}
         />
       </Row>
       {plain ? null : (

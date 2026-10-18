@@ -2,7 +2,7 @@
 
 import { DashboardSquare01Icon } from "@hugeicons/core-free-icons"
 
-import type { BoardPlugin, LibraryItem } from "@/studio/plugins/types"
+import { definePlugin, type LibraryItem } from "@/sdk"
 
 import { uiElementsAi } from "./ai-tools"
 import {
@@ -378,7 +378,7 @@ const items: LibraryItem[] = [
   },
 ]
 
-export const uiElements: BoardPlugin = {
+export default definePlugin({
   id: "ui-elements",
   name: "UI elements",
   version: "0.1.0",
@@ -421,4 +421,4 @@ export const uiElements: BoardPlugin = {
       component: PanelSection,
     },
   ],
-}
+})

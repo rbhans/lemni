@@ -1,14 +1,18 @@
 "use client"
 
 import { Fragment } from "react"
-import { PuzzleIcon, Settings01Icon } from "@hugeicons/core-free-icons"
+import {
+  PlusSignIcon,
+  PuzzleIcon,
+  Settings01Icon,
+} from "@hugeicons/core-free-icons"
 import { useValue } from "tldraw"
 
 import { cn } from "@/lib/utils"
 
 import { usePluginRuntime } from "../plugins/runtime"
 import { PANEL_GROUPS, type PanelContribution } from "../plugins/types"
-import { studioState } from "../state"
+import { openConnect, studioState } from "../state"
 import { Icon } from "./icon"
 import { Tip } from "./tip"
 import {
@@ -83,6 +87,27 @@ export function PanelRail() {
                 </Tip>
               )
             })}
+            {group.id === "connections" &&
+            contributions.connectionProbes.length ? (
+              <Tip label="Connect…" side="right">
+                <button
+                  type="button"
+                  aria-label="Connect to a station or server"
+                  onClick={() => openConnect()}
+                  className={labels ? labelledButton : railButton}
+                >
+                  <Icon icon={PlusSignIcon} className="size-[17px]" />
+                  {labels ? (
+                    <span
+                      aria-hidden
+                      className="w-full truncate px-0.5 text-center text-[9.5px] leading-none"
+                    >
+                      Connect
+                    </span>
+                  ) : null}
+                </button>
+              </Tip>
+            ) : null}
           </div>
         </Fragment>
       ))}

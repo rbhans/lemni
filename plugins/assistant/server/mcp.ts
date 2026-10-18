@@ -1,6 +1,6 @@
 import "server-only"
 
-import { guardHost } from "@/server/request-guard"
+import { guardHost } from "@/sdk/server"
 import type { AiToolInfo } from "../protocol"
 
 import { getAiBridge } from "./bridge"

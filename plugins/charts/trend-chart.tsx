@@ -27,13 +27,14 @@ import {
 import { react, useDelaySvgExport } from "tldraw"
 
 import { cn } from "@/lib/utils"
-import { pointKey, usePointHistories } from "@/studio/data/history"
 import {
+  Icon,
   numericValue,
+  pointKey,
   useDataSources,
+  usePointHistories,
   type LiveValue,
-} from "@/studio/data/live-points"
-import { Icon } from "@/studio/shell/icon"
+} from "@/sdk"
 
 import type { ChartShape } from "./chart-shape"
 import {

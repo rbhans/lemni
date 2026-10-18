@@ -250,6 +250,79 @@ export interface FileImporterContribution {
   ): Promise<void>
 }
 
+/** Text pasted or dropped on the board, as text importers see it. */
+export interface PastedText {
+  /** The plain text (rows copied from a spreadsheet come tab-separated). */
+  text: string
+  /** The HTML that came with it, when the source sent some (a spreadsheet's table). */
+  html?: string
+  /** Set when the text is one web address. */
+  url?: URL
+}
+
+/**
+ * Something pasted or dropped text can become: a link as a web view, rows copied from
+ * a spreadsheet as a table. When more than one thing suits the text, counting the
+ * board's own default (a link card, or plain text), a menu at the drop point offers
+ * them.
+ */
+export interface TextImporterContribution {
+  id: string
+  order: number
+  label: string
+  icon: IconSvgElement
+  /** Whether it suits this text: a link, rows from a spreadsheet, … */
+  accepts(content: PastedText): boolean
+  /** Listed first, ahead of the board's default, e.g. a table for copied rows. */
+  suggested?(content: PastedText): boolean
+  /** Page kinds it's offered on (default: UI and Documents pages). */
+  pageKinds?: PageKind[]
+  import(
+    ctx: StudioContext,
+    content: PastedText,
+    point: VecLike
+  ): void | Promise<void>
+}
+
+/** What a connection probe found at an address. */
+export interface ConnectionMatch {
+  /** What answered, e.g. "Niagara station". */
+  title: string
+  /** What gave it away, in a few words: "Niagara sign-in page · self-signed certificate". */
+  detail?: string
+  /** The address to connect to, with the scheme and port the probe found. */
+  address: string
+  /** "certain" when the system said what it is, "likely" from signs. */
+  confidence: "certain" | "likely"
+  /** Anything the plugin wants back in `open` (that the certificate is self-signed, say). */
+  data?: unknown
+}
+
+/**
+ * Recognizes one kind of building system at an address, for Connect… (File →
+ * Connect…, the + under the connection panels, a pasted link). Every enabled probe
+ * checks the address; the person picks from what answered and `open` shows that
+ * connection's form, filled in.
+ */
+export interface ConnectionProbeContribution {
+  id: string
+  order: number
+  /** The kind of system, e.g. "Niagara station". */
+  label: string
+  icon: IconSvgElement
+  /** No network: could this pasted web address be one? Then pasting it offers Connect…. */
+  recognizes?(url: URL): boolean
+  /**
+   * Checks the address through the plugin's own server routes (`probeHttp` in
+   * `@/sdk/server` does the asking). Resolves to what it found, or null when something
+   * else answers there; throws an Error with a sentence when nothing answers at all.
+   * `signal` aborts when the person closes Connect.
+   */
+  probe(address: string, signal: AbortSignal): Promise<ConnectionMatch | null>
+  /** Opens the connection's form filled in with the address, and the match when there is one. */
+  open(ctx: StudioContext, address: string, match: ConnectionMatch | null): void
+}
+
 /**
  * Something a pasted shape can carry (behaviors, links, ...). Plain paste leaves it
  * out; Paste special lists it as a checkbox.
@@ -407,6 +480,10 @@ export interface BoardPlugin extends PluginNode {
   description: string
   category: PluginCategoryId
   icon: IconSvgElement
+  /** Who made it, shown in the plugin manager (omit for plugins that ship with the app). */
+  author?: string
+  /** Where to read more about it, shown in the plugin manager. */
+  url?: string
 
   // Engine registrations. Always registered, whether or not the plugin is on,
   // so saved boards keep loading. Enablement gates everything below.
@@ -440,6 +517,10 @@ export interface BoardPlugin extends PluginNode {
   contextMenuItems?: ContextMenuContribution[]
   pasteOptions?: PasteOptionContribution[]
   fileImporters?: FileImporterContribution[]
+  /** What pasted or dropped text and links can become (a web view, a table). */
+  textImporters?: TextImporterContribution[]
+  /** Recognizes a building system at an address someone types, for Connect…. */
+  connectionProbes?: ConnectionProbeContribution[]
   /** Tools, guidance and shape descriptions for AI apps connected over MCP. */
   ai?: AiContribution
   providers?: ComponentType<{ children: ReactNode }>[]

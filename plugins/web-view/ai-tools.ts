@@ -2,8 +2,12 @@
 
 import { createShapeId, type TLParentId } from "tldraw"
 
-import { pageForInsert, pageIdSchema } from "@/studio/ai/pages"
-import type { AiBoardTool, AiContribution } from "@/studio/plugins/types"
+import {
+  pageForInsert,
+  pageIdSchema,
+  type AiBoardTool,
+  type AiContribution,
+} from "@/sdk"
 
 import { normalizeAddress } from "./model"
 import { isWebShape, WEB_TYPE } from "./web-shape"
@@ -57,7 +61,7 @@ const createWebViewTool: AiBoardTool<{
 }
 
 export const webViewAi: AiContribution = {
-  tools: [createWebViewTool] as AiContribution["tools"],
+  tools: [createWebViewTool],
   shapes: {
     [WEB_TYPE]: (_editor, shape) =>
       isWebShape(shape)

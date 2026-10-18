@@ -12,7 +12,7 @@ import {
   defaultTools,
 } from "tldraw"
 
-import type { BoardPlugin } from "@/studio/plugins/types"
+import { definePlugin } from "@/sdk"
 
 import { canvasAi } from "./ai-tools"
 import { RailSettings } from "./interface-settings"
@@ -33,7 +33,7 @@ import {
   ZoomStatus,
 } from "./status"
 
-export const canvasCore: BoardPlugin = {
+export default definePlugin({
   id: "canvas-core",
   name: "Canvas core",
   version: "0.1.0",
@@ -167,4 +167,4 @@ export const canvasCore: BoardPlugin = {
     { id: "guides", align: "end", order: 10, component: GuidesStatus },
     { id: "zoom", align: "end", order: 20, component: ZoomStatus },
   ],
-}
+})

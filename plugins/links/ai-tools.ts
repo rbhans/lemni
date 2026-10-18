@@ -2,8 +2,6 @@
 
 import type { Editor, TLPageId, TLShapeId } from "tldraw"
 
-import { pickSource, pointLabel } from "@/studio/ai/points"
-import type { JsonSchema } from "@/studio/ai/schema"
 import {
   createLink,
   deleteLink,
@@ -11,10 +9,15 @@ import {
   endPlace,
   getLinks,
   isLinkable,
+  linksOf,
+  pickSource,
+  pointLabel,
   setLinkComment,
-} from "@/studio/links/links"
-import { linksOf, type LinkEnd } from "@/studio/links/model"
-import type { AiBoardTool, AiContribution } from "@/studio/plugins/types"
+  type AiBoardTool,
+  type AiContribution,
+  type JsonSchema,
+  type LinkEnd,
+} from "@/sdk"
 
 // Links for AI apps: what's linked to what and why (the comments are the point: they
 // tell an AI how a control drawing, a floor plan and a graphic relate).
@@ -196,12 +199,7 @@ const removeLink: AiBoardTool<{ id: string }> = {
 export const linksAi: AiContribution = {
   guide:
     "Links connect frames, document cards (or single pages of them), pages and station points across the board, each with a comment saying how they relate. Read them (list_links) to understand a project; make them (create_link) with a clear comment. Links have no direction.",
-  tools: [
-    listLinks,
-    createLinkTool,
-    updateLink,
-    removeLink,
-  ] as AiContribution["tools"],
+  tools: [listLinks, createLinkTool, updateLink, removeLink],
   shapes: {
     "*": (editor, shape) => {
       if (!isLinkable(shape)) return null

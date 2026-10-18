@@ -10,11 +10,12 @@ import {
   type VecLike,
 } from "tldraw"
 
-import type { LiveValue, PointRef } from "@/studio/data/live-points"
-import type {
-  PointDropContribution,
-  PointMenuGroup,
-} from "@/studio/plugins/types"
+import {
+  type LiveValue,
+  type PointDropContribution,
+  type PointMenuGroup,
+  type PointRef,
+} from "@/sdk"
 
 import {
   equipmentOf,

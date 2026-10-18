@@ -30,14 +30,14 @@ import { Switch } from "@/components/ui/switch"
 import { cn } from "@/lib/utils"
 import {
   getDataSource,
+  goTo,
+  Icon,
   kindOfValue,
   numericValue,
+  parseTarget,
   useLivePoint,
   type LiveValue,
-} from "@/studio/data/live-points"
-import { goTo } from "@/studio/navigation/navigate"
-import { parseTarget } from "@/studio/navigation/targets"
-import { Icon } from "@/studio/shell/icon"
+} from "@/sdk"
 
 import { useIcon } from "./icons"
 

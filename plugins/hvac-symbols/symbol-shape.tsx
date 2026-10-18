@@ -14,13 +14,13 @@ import {
   type TLShape,
 } from "tldraw"
 
-import { registerShapeLabel } from "@/studio/lib/shape-labels"
 import {
+  registerShapeLabel,
   useShapeStateOverrides,
   useShapeStatus,
   type ShapeStateDef,
   type ShapeStateSource,
-} from "@/studio/editor/shape-states"
+} from "@/sdk"
 
 import {
   DEFAULT_STATE,

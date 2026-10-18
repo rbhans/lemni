@@ -2,12 +2,17 @@
 
 import type { Editor, TLShape, TLShapeId } from "tldraw"
 
-import { safeBatch } from "@/studio/ai/batch"
-import { pointIdSchema, resolvePoints, sourceSchema } from "@/studio/ai/points"
-import type { JsonSchema } from "@/studio/ai/schema"
-import { getShapeStates } from "@/studio/editor/shape-states"
-import { kindOf } from "@/studio/pages/categories"
-import type { AiBoardTool, AiContribution } from "@/studio/plugins/types"
+import {
+  getShapeStates,
+  kindOf,
+  pointIdSchema,
+  resolvePoints,
+  safeBatch,
+  sourceSchema,
+  type AiBoardTool,
+  type AiContribution,
+  type JsonSchema,
+} from "@/sdk"
 
 import {
   defaultsFor,
@@ -410,7 +415,7 @@ export const behaviorsAi: AiContribution = {
     addBehavior,
     updateBehavior,
     removeBehavior,
-  ] as AiContribution["tools"],
+  ],
   shapes: {
     "*": (editor, shape) => {
       const { behaviors } = savedBehaviors(shape)

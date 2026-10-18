@@ -1,3 +1,5 @@
+import { pluginApi } from "@/sdk"
+
 import type {
   SctConnectionInfo,
   SctNode,
@@ -6,67 +8,34 @@ import type {
   SctServerProfile,
 } from "../shared"
 
-const BASE = "/api/sct"
-
-export class SctApiError extends Error {
-  constructor(
-    message: string,
-    readonly status: number
-  ) {
-    super(message)
-  }
-}
-
-async function request<T>(path: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(`${BASE}${path}`, {
-    ...init,
-    headers: init?.body
-      ? { "content-type": "application/json", ...init.headers }
-      : init?.headers,
-  })
-  const data = (await response.json().catch(() => ({}))) as T & {
-    error?: string
-  }
-  if (!response.ok)
-    throw new SctApiError(
-      data.error ?? `Request failed (${response.status}).`,
-      response.status
-    )
-  return data
-}
+const api = pluginApi("metasys-sct")
 
 const enc = encodeURIComponent
 
 export const sctApi = {
-  list: () => request<{ connections: SctConnectionInfo[] }>(""),
+  list: () => api.get<{ connections: SctConnectionInfo[] }>(""),
   /** Archive databases on a server (the password is used once, not kept). */
   archives: (profile: SctServerProfile, password: string) =>
-    request<{ archives: string[] }>("/archives", {
-      method: "POST",
-      body: JSON.stringify({ ...profile, password }),
-    }),
+    api.post<{ archives: string[] }>("/archives", { ...profile, password }),
   connect: (profile: SctServerProfile, password: string, database: string) =>
-    request<{ connection: SctConnectionInfo }>("", {
-      method: "POST",
-      body: JSON.stringify({ ...profile, password, database }),
+    api.post<{ connection: SctConnectionInfo }>("", {
+      ...profile,
+      password,
+      database,
     }),
-  disconnect: (id: string) =>
-    request<{ ok: true }>(`/${id}`, { method: "DELETE" }),
+  disconnect: (id: string) => api.delete<{ ok: true }>(`/${id}`),
   children: (id: string, parent: number | null) =>
-    request<{ nodes: SctNode[] }>(
+    api.get<{ nodes: SctNode[] }>(
       `/${id}/children${parent === null ? "" : `?parent=${parent}`}`
     ),
   search: (id: string, q: string) =>
-    request<{ nodes: SctNode[] }>(`/${id}/search?q=${enc(q)}`),
+    api.get<{ nodes: SctNode[] }>(`/${id}/search?q=${enc(q)}`),
   describe: (id: string, fqr: string) =>
-    request<{ point: SctPointDetail | null }>(
+    api.get<{ point: SctPointDetail | null }>(
       `/${id}/describe?fqr=${enc(fqr)}`
     ),
   under: (id: string, item: number, limit: number) =>
-    request<{ nodes: SctNode[] }>(`/${id}/under?item=${item}&limit=${limit}`),
+    api.get<{ nodes: SctNode[] }>(`/${id}/under?item=${item}&limit=${limit}`),
   values: (id: string, fqrs: string[]) =>
-    request<{ values: SctPointValue[] }>(`/${id}/values`, {
-      method: "POST",
-      body: JSON.stringify({ fqrs }),
-    }),
+    api.post<{ values: SctPointValue[] }>(`/${id}/values`, { fqrs }),
 }

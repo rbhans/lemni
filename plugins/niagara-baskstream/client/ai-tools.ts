@@ -1,11 +1,12 @@
 "use client"
 
-import { pointIdSchema, pointLabel } from "@/studio/ai/points"
-import type {
-  AiBoardTool,
-  AiContribution,
-  AiWriteTool,
-} from "@/studio/plugins/types"
+import {
+  pointIdSchema,
+  pointLabel,
+  type AiBoardTool,
+  type AiContribution,
+  type AiWriteTool,
+} from "@/sdk"
 
 import {
   activeLevelOf,
@@ -257,7 +258,8 @@ interface WriteInput {
   reason: string
 }
 
-const requestedBy = (client: string) => `AI app: ${client} (approved in Lemscape)`
+const requestedBy = (client: string) =>
+  `AI app: ${client} (approved in Lemscape)`
 
 const showValue = (v: PointWrite["value"]) =>
   typeof v === "boolean" ? (v ? "true (on)" : "false (off)") : String(v)
@@ -486,5 +488,5 @@ export const niagaraAi: AiContribution = {
     listAlarms,
     writePoints,
     acknowledgeAlarms,
-  ] as AiContribution["tools"],
+  ],
 }

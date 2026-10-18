@@ -83,7 +83,10 @@ export function inNetworkTree(
     Partial<Pick<ItemRow, "bacnetClassid">>
 ) {
   if (NOT_NETWORK_TYPES.includes(row.type)) return false
-  if (row.bacnetClassid != null && NOT_NETWORK_CLASSES.includes(row.bacnetClassid))
+  if (
+    row.bacnetClassid != null &&
+    NOT_NETWORK_CLASSES.includes(row.bacnetClassid)
+  )
     return false
   if (row.type === "site") return true
   const ref = row.PartialReference ?? ""
@@ -104,7 +107,9 @@ export function shortName(ref: string | null): string {
 }
 
 /** What a node shows: its own name (the reference's last part), not the long display path. */
-export function nodeName(row: Pick<ItemRow, "PartialReference" | "UserName" | "type">) {
+export function nodeName(
+  row: Pick<ItemRow, "PartialReference" | "UserName" | "type">
+) {
   if (row.type === "site" || row.type === "archive")
     return row.UserName || row.PartialReference || "Site"
   const fromRef = shortName(row.PartialReference)
@@ -119,7 +124,9 @@ export function nodeName(row: Pick<ItemRow, "PartialReference" | "UserName" | "t
  * are their own reference.
  */
 export function fqrOf(itemRef: string, deviceRef: string | null) {
-  return deviceRef && deviceRef !== itemRef ? `${deviceRef}/${itemRef}` : itemRef
+  return deviceRef && deviceRef !== itemRef
+    ? `${deviceRef}/${itemRef}`
+    : itemRef
 }
 
 /** Splits an FQR back into the engine's reference and the item's own. */
@@ -197,7 +204,9 @@ export function displayStored(
   if (value === null) return "—"
   if (typeof value === "boolean") return value ? "On" : "Off"
   if (typeof value === "number") {
-    const text = Number.isInteger(value) ? String(value) : String(Math.round(value * 100) / 100)
+    const text = Number.isInteger(value)
+      ? String(value)
+      : String(Math.round(value * 100) / 100)
     return units ? `${text} ${units}` : text
   }
   return value

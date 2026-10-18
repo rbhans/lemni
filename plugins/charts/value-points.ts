@@ -12,13 +12,11 @@ import {
   kindOfValue,
   numericValue,
   type PointDragData,
+  type PointDropContribution,
   type PointKind,
+  type PointMenuGroup,
   type PointRef,
-} from "@/studio/data/live-points"
-import type {
-  PointDropContribution,
-  PointMenuGroup,
-} from "@/studio/plugins/types"
+} from "@/sdk"
 
 import {
   GAUGE_SIZE,

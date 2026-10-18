@@ -33,28 +33,87 @@ test("FQRs join the engine and the item, and split back", () => {
     device: "CJAXMETASYS:NAE55-01",
     item: "FC-2.012074FEC.OA-T",
   })
-  assert.equal(fqrOf("CJAXMETASYS:NAE55-01", "CJAXMETASYS:NAE55-01"), "CJAXMETASYS:NAE55-01")
-  assert.deepEqual(splitFqr("CJAXMETASYS:CJAXMETASYS"), { device: null, item: "CJAXMETASYS:CJAXMETASYS" })
+  assert.equal(
+    fqrOf("CJAXMETASYS:NAE55-01", "CJAXMETASYS:NAE55-01"),
+    "CJAXMETASYS:NAE55-01"
+  )
+  assert.deepEqual(splitFqr("CJAXMETASYS:CJAXMETASYS"), {
+    device: null,
+    item: "CJAXMETASYS:CJAXMETASYS",
+  })
 })
 
 test("names come from the reference's last part", () => {
   assert.equal(shortName("FC-2.012074FEC.OA-T"), "OA-T")
   assert.equal(shortName("CJAXMETASYS:NAE55-01"), "NAE55-01")
-  assert.equal(nodeName({ type: "point", PartialReference: "FC-2.012074FEC.SF-C", UserName: "Site.AHU-8.SF-C" }), "SF-C")
-  assert.equal(nodeName({ type: "site", PartialReference: "$site", UserName: "Jacksonville" }), "Jacksonville")
+  assert.equal(
+    nodeName({
+      type: "point",
+      PartialReference: "FC-2.012074FEC.SF-C",
+      UserName: "Site.AHU-8.SF-C",
+    }),
+    "SF-C"
+  )
+  assert.equal(
+    nodeName({
+      type: "site",
+      PartialReference: "$site",
+      UserName: "Jacksonville",
+    }),
+    "Jacksonville"
+  )
 })
 
 test("the network tree leaves out other views' folders", () => {
-  assert.equal(inNetworkTree({ type: "folder", PartialReference: "equipment" }), false)
-  assert.equal(inNetworkTree({ type: "folder", PartialReference: "$FacilityGraphics" }), false)
-  assert.equal(inNetworkTree({ type: "folder", PartialReference: "Graphics" }), false)
-  assert.equal(inNetworkTree({ type: "folder", PartialReference: "Schedule" }), true)
+  assert.equal(
+    inNetworkTree({ type: "folder", PartialReference: "equipment" }),
+    false
+  )
+  assert.equal(
+    inNetworkTree({ type: "folder", PartialReference: "$FacilityGraphics" }),
+    false
+  )
+  assert.equal(
+    inNetworkTree({ type: "folder", PartialReference: "Graphics" }),
+    false
+  )
+  assert.equal(
+    inNetworkTree({ type: "folder", PartialReference: "Schedule" }),
+    true
+  )
   assert.equal(inNetworkTree({ type: "site", PartialReference: "$site" }), true)
-  assert.equal(inNetworkTree({ type: "controller", PartialReference: "FC-2.012074FEC" }), true)
-  assert.equal(inNetworkTree({ type: "extension", PartialReference: "Event Rate Alarm" }), false)
-  assert.equal(inNetworkTree({ type: "object", PartialReference: "Site 1", bacnetClassid: 806 }), false)
-  assert.equal(inNetworkTree({ type: "site", PartialReference: "$site", bacnetClassid: 2004 }), false)
-  assert.equal(inNetworkTree({ type: "object", PartialReference: "Programming.AV1", bacnetClassid: 2 }), true)
+  assert.equal(
+    inNetworkTree({ type: "controller", PartialReference: "FC-2.012074FEC" }),
+    true
+  )
+  assert.equal(
+    inNetworkTree({ type: "extension", PartialReference: "Event Rate Alarm" }),
+    false
+  )
+  assert.equal(
+    inNetworkTree({
+      type: "object",
+      PartialReference: "Site 1",
+      bacnetClassid: 806,
+    }),
+    false
+  )
+  assert.equal(
+    inNetworkTree({
+      type: "site",
+      PartialReference: "$site",
+      bacnetClassid: 2004,
+    }),
+    false
+  )
+  assert.equal(
+    inNetworkTree({
+      type: "object",
+      PartialReference: "Programming.AV1",
+      bacnetClassid: 2,
+    }),
+    true
+  )
 })
 
 test("stored values read as their point kind", () => {

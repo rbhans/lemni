@@ -2,7 +2,7 @@
 
 import { ChartLineData01Icon } from "@hugeicons/core-free-icons"
 
-import type { BoardPlugin } from "@/studio/plugins/types"
+import { definePlugin } from "@/sdk"
 
 import { chartsAi } from "./ai-tools"
 import { chartPointDrop, createChart } from "./chart-points"
@@ -162,7 +162,7 @@ function TrendPreview() {
   )
 }
 
-export const charts: BoardPlugin = {
+export default definePlugin({
   id: "charts",
   name: "Charts",
   version: "0.1.0",
@@ -239,4 +239,4 @@ export const charts: BoardPlugin = {
       component: GaugeSection,
     },
   ],
-}
+})

@@ -6,7 +6,7 @@ import { useEditor, useValue, type Editor } from "tldraw"
 import { Input } from "@/components/ui/input"
 import { Slider } from "@/components/ui/slider"
 import { Switch } from "@/components/ui/switch"
-import { PropertyRow } from "@/studio/shell/fields"
+import { PropertyRow } from "@/sdk"
 
 import { getSymbol, type SymbolFeature, type SymbolState } from "./library"
 import { isSymbolShape, type SymbolShape } from "./symbol-shape"

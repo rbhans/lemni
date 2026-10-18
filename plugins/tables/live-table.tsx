@@ -28,13 +28,13 @@ import {
 } from "@/components/ui/table"
 import { cn } from "@/lib/utils"
 import {
+  Icon,
   numericValue,
   pointKey,
   useLiveValues,
   type LiveValue,
   type StatusKind,
-} from "@/studio/data/live-points"
-import { Icon } from "@/studio/shell/icon"
+} from "@/sdk"
 
 import { age, equipmentOf, pivotByEquipment, type TableRowRef } from "./model"
 import { TABLE_TYPE, type TableShape } from "./table-shape"

@@ -14,12 +14,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
-import {
-  getDataSource,
-  kindOfValue,
-  type WriteCapability,
-} from "@/studio/data/live-points"
-import { Icon } from "@/studio/shell/icon"
+import { getDataSource, Icon, kindOfValue, type WriteCapability } from "@/sdk"
 
 import {
   actionLabel,

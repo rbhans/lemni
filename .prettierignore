@@ -6,3 +6,4 @@ coverage/
 pnpm-lock.yaml
 .pnpm-store/
 plugins/hvac-symbols/library.generated.ts
+plugins/hvac-symbols/manifest.generated.ts

@@ -90,4 +90,11 @@ export const studioState = {
     "closed"
   ),
   shortcutSheetOpen: atom("shortcut sheet open", false),
+  /** Connect…: the address to check ("" for an empty form), or `null` while closed. */
+  connect: atom<{ address: string; key: number } | null>("connect", null),
+}
+
+/** Opens Connect…, checking `address` straight away when one is given. */
+export function openConnect(address = "") {
+  studioState.connect.set({ address, key: Date.now() })
 }

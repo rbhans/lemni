@@ -3,6 +3,7 @@
 import { createPortal } from "react-dom"
 
 import { CommandPalette } from "./command-palette"
+import { ConnectDialog } from "./connect-dialog"
 import { LeftDock, RightDock } from "./docks"
 import { PanelRail } from "./panel-rail"
 import { PluginManagerDialog } from "./plugin-manager"
@@ -25,6 +26,7 @@ export function ShellChrome({ slots }: { slots: ShellSlots }) {
       <SettingsDialog />
       <CommandPalette />
       <ShortcutSheet />
+      <ConnectDialog />
       <UnsavedChangesDialog />
     </>
   )

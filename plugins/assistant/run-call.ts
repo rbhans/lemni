@@ -10,16 +10,16 @@ import {
   type AiContent,
   type AiToolOutput,
 } from "./protocol"
-import { safeBatch } from "@/studio/ai/batch"
-import { validateInput } from "@/studio/ai/schema"
-import type {
-  AiReply,
-  AiTool,
-  AiToolContext,
-  AiWritePlan,
-  StudioContext,
-} from "@/studio/plugins/types"
-import { studioState } from "@/studio/state"
+import {
+  safeBatch,
+  shell,
+  validateInput,
+  type AiReply,
+  type AiTool,
+  type AiToolContext,
+  type AiWritePlan,
+  type StudioContext,
+} from "@/sdk"
 
 import {
   aiApprovals,
@@ -285,7 +285,7 @@ export async function runCall(
       return toOutput(reply)
     }
 
-    if (studioState.presenting.get() || editor.getIsReadonly())
+    if (shell.presenting.get() || editor.getIsReadonly())
       throw new Error(
         "The board is in Present mode, which is read only. Ask the person to leave Present mode first."
       )

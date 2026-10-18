@@ -5,6 +5,10 @@ import { react, type Editor } from "tldraw"
 
 import {
   addLinks,
+  connects,
+  createPageIn,
+  currentPageKind,
+  definePlugin,
   endLabel,
   getLinks,
   installLinkPruning,
@@ -12,19 +16,14 @@ import {
   linkToMark,
   markForLink,
   newLinkId,
-  selectedLink,
-} from "@/studio/links/links"
-import {
-  connects,
   remapLinks,
   sameEnd,
+  selectedLink,
   shapeOf,
   type BoardLink,
   type LinkEnd,
-} from "@/studio/links/model"
-import type { PageCategory } from "@/studio/pages/categories"
-import { createPageIn, currentPageKind } from "@/studio/pages/page-categories"
-import type { BoardPlugin } from "@/studio/plugins/types"
+  type PageCategory,
+} from "@/sdk"
 
 import { linksAi } from "./ai-tools"
 import { LinkBadges } from "./badges"
@@ -105,7 +104,7 @@ function installWireSheetDrop(editor: Editor): () => void {
   }
 }
 
-export const links: BoardPlugin = {
+export default definePlugin({
   id: "links",
   name: "Links",
   version: "0.1.0",
@@ -264,4 +263,4 @@ export const links: BoardPlugin = {
       stopSelection()
     }
   },
-}
+})

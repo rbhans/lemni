@@ -20,15 +20,15 @@ import {
 } from "tldraw"
 
 import { cn } from "@/lib/utils"
-import { usePointHistories } from "@/studio/data/history"
 import {
+  Icon,
   numericValue,
   pointKey,
+  registerShapeLabel,
   useLivePoint,
+  usePointHistories,
   type LiveValue,
-} from "@/studio/data/live-points"
-import { registerShapeLabel } from "@/studio/lib/shape-labels"
-import { Icon } from "@/studio/shell/icon"
+} from "@/sdk"
 
 import {
   formatNumber,

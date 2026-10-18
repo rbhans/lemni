@@ -9,22 +9,20 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import {
+  currentPageKind,
+  endKey,
   endLabel,
   endPlace,
   getLinks,
   goToEnd,
+  Icon,
   isLinkable,
-} from "@/studio/links/links"
-import {
-  endKey,
   linksOf,
   otherEnd,
+  shell,
   sideOf,
   type LinkEnd,
-} from "@/studio/links/model"
-import { currentPageKind } from "@/studio/pages/page-categories"
-import { Icon } from "@/studio/shell/icon"
-import { studioState } from "@/studio/state"
+} from "@/sdk"
 
 /**
  * A small link count on each linked frame or document, just above its top-right
@@ -32,7 +30,7 @@ import { studioState } from "@/studio/state"
  */
 export function LinkBadges() {
   const editor = useEditor()
-  const presenting = useValue(studioState.presenting)
+  const presenting = useValue(shell.presenting)
   const badges = useValue(
     "link badges",
     () => {

@@ -33,16 +33,17 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { cn } from "@/lib/utils"
 import {
+  connects,
   endLabel,
   getLinks,
+  Icon,
   linkMark,
   linkToMark,
   markForLink,
   registerLinkable,
-} from "@/studio/links/links"
-import { connects, type LinkEnd } from "@/studio/links/model"
-import { registerShapeLabel } from "@/studio/lib/shape-labels"
-import { Icon } from "@/studio/shell/icon"
+  registerShapeLabel,
+  type LinkEnd,
+} from "@/sdk"
 
 import { pageImage } from "./pdf"
 import { wordDocument, type WordDocument } from "./word"

@@ -1,14 +1,15 @@
 "use client"
 
-import type { BoardPlugin } from "@/studio/plugins/types"
+import { definePlugin } from "@/sdk"
 
 import { niagaraAi } from "./client/ai-tools"
 import { disconnectLocal, restore } from "./client/lifecycle"
+import { stationProbe } from "./client/probe"
 import { NIAGARA_ICON, niagaraRailIcon } from "./client/store"
 import { ConnectionPill, LivePointsStatus } from "./components/connection-pill"
 import { StationPanel } from "./components/station-panel"
 
-export const niagaraBaskstream: BoardPlugin = {
+export default definePlugin({
   id: "niagara-baskstream",
   name: "Niagara · baskStream",
   version: "0.1.0",
@@ -34,6 +35,7 @@ export const niagaraBaskstream: BoardPlugin = {
       component: StationPanel,
     },
   ],
+  connectionProbes: [stationProbe],
   topbarItems: [{ id: "connection", order: 10, component: ConnectionPill }],
   statusItems: [
     { id: "live-points", align: "end", order: 5, component: LivePointsStatus },
@@ -44,4 +46,4 @@ export const niagaraBaskstream: BoardPlugin = {
     // connection so turning it back on (or reloading) picks it up again.
     return () => disconnectLocal()
   },
-}
+})

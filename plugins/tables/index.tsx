@@ -2,7 +2,7 @@
 
 import { Table01Icon } from "@hugeicons/core-free-icons"
 
-import type { BoardPlugin } from "@/studio/plugins/types"
+import { definePlugin } from "@/sdk"
 
 import { tablesAi } from "./ai-tools"
 import { createTable, tablePointDrop } from "./table-points"
@@ -53,7 +53,7 @@ function TablePreview() {
   )
 }
 
-export const tables: BoardPlugin = {
+export default definePlugin({
   id: "tables",
   name: "Tables",
   version: "0.1.0",
@@ -93,4 +93,4 @@ export const tables: BoardPlugin = {
       component: TableSection,
     },
   ],
-}
+})

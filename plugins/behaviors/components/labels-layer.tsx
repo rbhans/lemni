@@ -3,7 +3,7 @@
 import type { CSSProperties } from "react"
 import { useEditor, useValue, type TLShapeId } from "tldraw"
 
-import { useLivePoint } from "@/studio/data/live-points"
+import { useLivePoint } from "@/sdk"
 import { cn } from "@/lib/utils"
 
 import { statusKindOf } from "../core/status"

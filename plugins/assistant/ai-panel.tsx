@@ -19,8 +19,7 @@ import { Switch } from "@/components/ui/switch"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { cn } from "@/lib/utils"
 import { ACCESS_LEVELS } from "./protocol"
-import { PanelHeader } from "@/studio/shell/fields"
-import { Icon } from "@/studio/shell/icon"
+import { Icon, PanelHeader, pluginApiUrl } from "@/sdk"
 
 import {
   aiAccess,
@@ -231,7 +230,7 @@ function Connect() {
 
   useEffect(() => {
     let live = true
-    fetch("/api/ai/setup")
+    fetch(pluginApiUrl("assistant", "/setup"))
       .then(async (response) => {
         const data = (await response.json()) as Setup & { error?: string }
         if (!live) return
@@ -247,7 +246,7 @@ function Connect() {
 
   const rotate = async () => {
     setConfirming(false)
-    const response = await fetch("/api/ai/setup", {
+    const response = await fetch(pluginApiUrl("assistant", "/setup"), {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: "{}",
